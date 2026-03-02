@@ -1,107 +1,122 @@
+-- Witchcrafter Hisho - Madame
 local s,id=GetID()
+local SET_WITCHCRAFTER = 0x128
+
 function s.initial_effect(c)
-	-- Fusion Summon: 2 Spellcasters including WIND
-	c:EnableReviveLimit()
-	-- Sử dụng AddProcMix chuẩn để Profusion dễ nhận diện
-	Fusion.AddProcMix(c,true,true,aux.FilterBoolFunctionEx(Card.IsRace,RACE_SPELLCASTER),s.ffilter)
-	
-	-- EFFECT 1: Send 1 "Witchcrafter" Spell from HAND or DECK and copy effect
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_TOGRAVE)
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e1:SetCountLimit(1,id)
-	e1:SetCondition(s.cpcon)
-	e1:SetTarget(s.cptg)
-	e1:SetOperation(s.cpop)
-	c:RegisterEffect(e1)
-	
-	-- EFFECT 2: Quick Effect return to hand (Giữ nguyên)
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
-	e2:SetCountLimit(1,id+100)
-	e2:SetTarget(s.rthtg)
-	e2:SetOperation(s.rthop)
-	c:RegisterEffect(e2)
+    c:EnableReviveLimit()
+
+    -- Fusion: 2 Spellcasters, include WIND
+    -- Nguyên liệu 1: WIND Spellcaster | Nguyên liệu 2: Any Spellcaster
+    Fusion.AddProcMix(c,true,true,s.matfilter_wind,s.matfilter_any)
+
+    -- 1. On Fusion Summon: Copy Witchcrafter Spell
+    local e1=Effect.CreateEffect(c)
+    e1:SetDescription(aux.Stringid(id,0))
+    e1:SetCategory(CATEGORY_TOGRAVE)
+    e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+    e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+    e1:SetProperty(EFFECT_FLAG_DELAY)
+    e1:SetCountLimit(1,id)
+    e1:SetCondition(s.spcon)
+    e1:SetTarget(s.sptg)
+    e1:SetOperation(s.spop)
+    c:RegisterEffect(e1)
+
+    -- 2. Quick Bounce Effect
+    local e2=Effect.CreateEffect(c)
+    e2:SetDescription(aux.Stringid(id,1))
+    e2:SetCategory(CATEGORY_TOHAND)
+    e2:SetType(EFFECT_TYPE_QUICK_O)
+    e2:SetCode(EVENT_FREE_CHAIN)
+    e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+    e2:SetRange(LOCATION_MZONE)
+    e2:SetCountLimit(1,id+100)
+    e2:SetTarget(s.bntg)
+    e2:SetOperation(s.bnop)
+    c:RegisterEffect(e2)
 end
 
--- Bộ lọc nguyên liệu hệ WIND cho Madame
-function s.ffilter(c,fc,sumtype,tp)
-	return c:IsAttribute(ATTRIBUTE_WIND,fc,sumtype,tp) and c:IsRace(RACE_SPELLCASTER,fc,sumtype,tp)
+-- Filter nguyên liệu
+function s.matfilter_wind(c,fc,sumtype,tp)
+    return c:IsRace(RACE_SPELLCASTER,fc,sumtype,tp) and c:IsAttribute(ATTRIBUTE_WIND,fc,sumtype,tp)
+end
+function s.matfilter_any(c,fc,sumtype,tp)
+    return c:IsRace(RACE_SPELLCASTER,fc,sumtype,tp)
 end
 
--- ==========================================
--- LOGIC COPY EFFECT (GỬI TỪ TAY HOẶC DECK)
--- ==========================================
-
-function s.cpcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
+-- Logic Copy Effect
+function s.spcon(e,tp,eg,ep,ev,re,r,rp)
+    return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end
 
-function s.cpfilter(c)
-	return c:IsSetCard(0x128) and c:IsType(TYPE_SPELL) and c:IsAbleToGrave()
-		and c:CheckActivateEffect(false,true,true)~=nil
+function s.spfilter(c)
+    return c:IsSetCard(SET_WITCHCRAFTER) and c:IsType(TYPE_SPELL) and c:IsAbleToGrave()
+        and c:CheckActivateEffect(false,true,false)~=nil
 end
 
-function s.cptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then 
-		-- Kiểm tra cả tay (HAND) và bộ bài (DECK)
-		return Duel.IsExistingMatchingCard(s.cpfilter,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil) 
-	end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	-- Cho phép chọn từ HAND hoặc DECK
-	local g=Duel.SelectMatchingCard(tp,s.cpfilter,tp,LOCATION_HAND+LOCATION_DECK,0,1,1,nil)
-	local tc=g:GetFirst()
-	
-	local te,ceg,cep,cev,cre,cr,crp=tc:CheckActivateEffect(false,true,true)
-	Duel.SendtoGrave(g,REASON_EFFECT)
-	
-	e:SetProperty(te:GetProperty())
-	local tg=te:GetTarget()
-	if tg then tg(e,tp,ceg,cep,cev,cre,cr,crp,1) end
-	
-	e:SetLabelObject(te)
-	Duel.ClearOperationInfo(0)
+function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil) end
+    Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 
-function s.cpop(e,tp,eg,ep,ev,re,r,rp)
-	local te=e:GetLabelObject()
-	if not te then return end
-	local op=te:GetOperation()
-	if op then op(e,tp,eg,ep,ev,re,r,rp) end
+function s.spop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler() -- Lấy lá bài Madame
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+    local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_DECK,0,1,1,nil)
+    local tc=g:GetFirst()
+    
+    if tc and Duel.SendtoGrave(tc,REASON_EFFECT)>0 and tc:IsLocation(LOCATION_GRAVE) then
+        local te=tc:GetActivateEffect()
+        if not te then return end
+        
+        -- Copy thuộc tính của Spell
+        e:SetCategory(te:GetCategory())
+        e:SetProperty(te:GetProperty())
+        
+        local tg=te:GetTarget()
+        local op=te:GetOperation()
+        
+        -- Thực hiện chọn Target (nếu Spell có yêu cầu)
+        Duel.ClearTargetCard()
+        if tg then tg(e,tp,Group.CreateGroup(),0,0,e,0,0,1) end
+        
+        -- FIX LỖI: Liên kết các target với lá bài Madame (c) thay vì Effect (e)
+        local targets=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
+        if targets then
+            for etc in aux.Next(targets) do
+                etc:CreateRelation(c,RESET_EVENT+RESETS_STANDARD)
+            end
+        end
+        
+        Duel.BreakEffect()
+        -- Thực hiện hiệu ứng thực tế
+        if op then op(e,tp,Group.CreateGroup(),0,0,e,0,0) end
+    end
 end
 
--- ==========================================
--- LOGIC RETURN TO HAND (QUICK EFFECT)
--- ==========================================
-function s.rthfilter(c)
-	return c:IsSetCard(0x128) and c:IsType(TYPE_SPELL+TYPE_TRAP)
+-- Logic Bounce
+function s.stfilter(c)
+    return c:IsSetCard(SET_WITCHCRAFTER) and c:IsType(TYPE_SPELL+TYPE_TRAP)
 end
-function s.rthtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local c=e:GetHandler()
-	if chkc then return chkc:IsOnField() and chkc:IsAbleToHand() and chkc~=c end
-	local gy_count=Duel.GetMatchingGroupCount(s.rthfilter,tp,LOCATION_GRAVE,0,nil)
-	if chk==0 then 
-		return gy_count>0 and c:IsAbleToHand()
-			and Duel.IsExistingTarget(Card.IsAbleToHand,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c) 
-	end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
-	local g=Duel.SelectTarget(tp,Card.IsAbleToHand,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,gy_count,c)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,#g+1,tp,LOCATION_ONFIELD)
+
+function s.bntg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+    if chkc then return chkc:IsOnField() and chkc:IsAbleToHand() and chkc~=e:GetHandler() end
+    local ct=Duel.GetMatchingGroupCount(s.stfilter,tp,LOCATION_GRAVE,0,nil)
+    if chk==0 then return ct>0 and Duel.IsExistingTarget(Card.IsAbleToHand,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,e:GetHandler()) end
+    
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
+    local g=Duel.SelectTarget(tp,Card.IsAbleToHand,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,ct,e:GetHandler())
+    Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,#g,0,0)
+    Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),1,0,0)
 end
-function s.rthop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tg=Duel.GetTargetCards(e)
-	if #tg>0 then
-		if c:IsRelateToEffect(e) then tg:AddCard(c) end
-		Duel.SendtoHand(tg,nil,REASON_EFFECT)
-	end
+
+function s.bnop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    local g=Duel.GetTargetCards(e)
+    if #g>0 then
+        Duel.SendtoHand(g,nil,REASON_EFFECT)
+    end
+    if c:IsRelateToEffect(e) then
+        Duel.SendtoHand(c,nil,REASON_EFFECT)
+    end
 end
