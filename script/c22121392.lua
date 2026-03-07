@@ -6,10 +6,10 @@ function s.initial_effect(c)
     e0:SetType(EFFECT_TYPE_SINGLE)
     e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
     e0:SetCode(EFFECT_ADD_SETCODE)
-    e0:SetValue(0x128) -- Witchcrafter theo ảnh của bạn
+    e0:SetValue(0x128) 
     c:RegisterEffect(e0)
     local e1=e0:Clone()
-    e1:SetValue(0x152) -- Magistus theo ảnh của bạn
+    e1:SetValue(0x152) 
     c:RegisterEffect(e1)
 
     -- Hiệu ứng kích hoạt
@@ -29,20 +29,21 @@ local ID_MADAME_VERRE = 21522601
 local ID_RILLIONA_MAIN = 72498838
 local ID_RILLIONA_XYZ  = 74689476
 
--- Filter check Rilliona
 function s.rill_filter(c)
     return c:IsFaceup() 
         and (c:IsCode(ID_RILLIONA_MAIN) or c:IsCode(ID_RILLIONA_XYZ) or c:IsSetCard(0x152)) 
         and c:IsAbleToDeck()
 end
 
--- Filter Witchcrafter S/T (Mã 0x128)
 function s.st_filter(c)
     return c:IsSetCard(0x128) and c:IsType(TYPE_SPELL+TYPE_TRAP) 
         and (c:IsAbleToHand() or c:IsSSetable())
 end
 
--- Hiệu ứng chính
+function s.lv4_filter(c,e,tp) 
+    return c:IsLevel(4) and c:IsRace(RACE_SPELLCASTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) 
+end
+
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
     local b1=Duel.IsExistingMatchingCard(s.rill_filter,tp,LOCATION_MZONE,0,1,nil)
         and Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil,ID_MADAME_VERRE)
@@ -60,6 +61,7 @@ end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
     local op=e:GetLabel()
     if op==1 then
+        -- Return Rilliona -> SS Madame Verre
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
         local g=Duel.SelectMatchingCard(tp,s.rill_filter,tp,LOCATION_MZONE,0,1,1,nil)
         if #g>0 and Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 then
@@ -77,14 +79,25 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
             end
         end
     elseif op==2 then
+        -- Return Madame Verre -> SS Rilliona + 1 Level 4 Spellcaster
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
         local g=Duel.SelectMatchingCard(tp,aux.FaceupFilter(Card.IsCode,ID_MADAME_VERRE),tp,LOCATION_MZONE,0,1,1,nil)
         if #g>0 and Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 then
+            -- Kiểm tra vị trí sân (Cần 2 chỗ trống)
             if Duel.GetLocationCount(tp,LOCATION_MZONE)<2 or Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then return end
-            local g1=Duel.GetFirstMatchingCard(Card.IsCode,tp,LOCATION_HAND+LOCATION_DECK,0,nil,ID_RILLIONA_MAIN)
-            local g2=Duel.GetFirstMatchingCard(s.lv4_filter,tp,LOCATION_HAND+LOCATION_DECK,0,g1,e,tp)
-            if g1 and g2 then Duel.SpecialSummon(Group.FromCards(g1,g2),0,tp,tp,false,false,POS_FACEUP) end
+            
+            -- Bước 1: Chọn Rilliona
+            Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+            local g1=Duel.SelectMatchingCard(tp,Card.IsCode,tp,LOCATION_HAND+LOCATION_DECK,0,1,1,nil,ID_RILLIONA_MAIN)
+            
+            -- Bước 2: Chọn Manual quái Level 4 Spellcaster (Đã sửa lỗi chọn ngẫu nhiên)
+            Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+            local g2=Duel.SelectMatchingCard(tp,s.lv4_filter,tp,LOCATION_HAND+LOCATION_DECK,0,1,1,g1:GetFirst(),e,tp)
+            
+            if #g1>0 and #g2>0 then
+                g1:Merge(g2)
+                Duel.SpecialSummon(g1,0,tp,tp,false,false,POS_FACEUP)
+            end
         end
     end
 end
-function s.lv4_filter(c,e,tp) return c:IsLevel(4) and c:IsRace(RACE_SPELLCASTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) end

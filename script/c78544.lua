@@ -28,41 +28,57 @@ function s.initial_effect(c)
     c:RegisterEffect(e2)
 end
 
--- CHẶN KÍCH HOẠT KHI KHÔNG CÓ QUÁI
+-- Điều kiện: Có quái vật khác trên Tay/Sân (Trừ handler)
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
     return Duel.IsExistingMatchingCard(Card.IsType,tp,LOCATION_HAND+LOCATION_MZONE,0,1,e:GetHandler(),TYPE_MONSTER)
 end
 
-function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(s.ffilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+function s.ffilter(c,e,tp,mg)
+    return c:IsRace(RACE_SPELLCASTER) and c:IsType(TYPE_FUSION) 
+        and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
+        and Duel.GetLocationCountFromEx(tp,tp,mg,c)>0
 end
 
-function s.ffilter(c,e,tp)
-    return c:IsRace(RACE_SPELLCASTER) and c:IsType(TYPE_FUSION) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+    local c=e:GetHandler()
+    if chk==0 then 
+        local mg=Duel.GetMatchingGroup(Card.IsCanBeFusionMaterial,tp,LOCATION_HAND+LOCATION_MZONE,0,c)
+        local res=Duel.IsExistingMatchingCard(Card.CheckFusionMaterial,tp,LOCATION_EXTRA,0,1,nil,mg,nil,tp)
+        if res then return true end
+        
+        local sg=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_HAND,0,c,TYPE_SPELL)
+        if #sg>0 and Duel.IsExistingMatchingCard(Card.IsSetCard,tp,LOCATION_EXTRA,0,1,nil,SET_WITCHCRAFTER) then
+            if #mg>0 then return true end
+        end
+        return false
+    end
+    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    local fgc=Duel.GetMatchingGroup(s.ffilter,tp,LOCATION_EXTRA,0,nil,e,tp)
+    -- Lấy group quái vật thực sự từ TAY và SÂN (Loại trừ lá bài này)
+    local mg=Duel.GetMatchingGroup(Card.IsCanBeFusionMaterial,tp,LOCATION_HAND+LOCATION_MZONE,0,c)
+    
+    local fgc=Duel.GetMatchingGroup(s.ffilter,tp,LOCATION_EXTRA,0,nil,e,tp,mg)
     if #fgc==0 then return end
     
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
     local tc=fgc:Select(tp,1,1,nil):GetFirst()
     if not tc then return end
 
-    local mg=Duel.GetMatchingGroup(Card.IsCanBeFusionMaterial,tp,LOCATION_HAND+LOCATION_MZONE,0,c)
     local sub_effects={}
 
-    -- XỬ LÝ BIẾN HÌNH SPELL (NẾU LÀ WITCHCRAFTER)
+    -- BƯỚC 1: CHỌN SPELL TRÊN TAY ĐỂ THẾ THÂN (KHÔNG HỎI YES/NO)
     if tc:IsSetCard(SET_WITCHCRAFTER) then
         local sg=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_HAND,0,c,TYPE_SPELL)
-        if #sg>0 and Duel.SelectEffectYesNo(tp,c,aux.Stringid(id,0)) then
+        if #sg>0 then
             Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
-            local mat_spell=sg:Select(tp,1,1,nil):GetFirst()
+            local g=sg:Select(tp,0,1,nil) -- Cho phép chọn 0 lá (nhấn Finish) để không dùng Spell
             
-            if mat_spell then
-                -- Biến thành quái vật đa hệ, đúng chỉ số Verre yêu cầu
+            if #g>0 then
+                local mat_spell=g:GetFirst()
+                -- 6 hiệu ứng biến hình giả
                 local e1=Effect.CreateEffect(c)
                 e1:SetType(EFFECT_TYPE_SINGLE)
                 e1:SetCode(EFFECT_ADD_TYPE)
@@ -76,7 +92,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 
                 local e3=e1:Clone()
                 e3:SetCode(EFFECT_ADD_ATTRIBUTE)
-                e3:SetValue(ATTRIBUTE_LIGHT+ATTRIBUTE_WIND) -- Đa hệ để Madame cũng nhận
+                e3:SetValue(ATTRIBUTE_LIGHT+ATTRIBUTE_WIND)
                 mat_spell:RegisterEffect(e3)
 
                 local e4=e1:Clone()
@@ -89,22 +105,20 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
                 e5:SetValue(2800)
                 mat_spell:RegisterEffect(e5)
 
-                -- ÉP ENGINE CHẤP NHẬN ĐÂY LÀ NGUYÊN LIỆU THAY THẾ
                 local e6=e1:Clone()
                 e6:SetCode(EFFECT_FUSION_SUBSTITUTE)
                 mat_spell:RegisterEffect(e6)
 
                 table.insert(sub_effects,{e1,e2,e3,e4,e5,e6,mat_spell})
-                mg:AddCard(mat_spell)
+                mg:AddCard(mat_spell) -- Đưa lá Spell đã biến hình vào group nguyên liệu
             end
         end
     end
 
-    -- SỬ DỤNG HÀM CHỌN CHUẨN ĐỂ KHÔNG BỊ TỊT NGÒI
+    -- BƯỚC 2: CHỌN NGUYÊN LIỆU (QUÁI TRÊN TAY/SÂN + SPELL TRÊN TAY NẾU ĐÃ CHỌN)
     local mat=Duel.SelectFusionMaterial(tp,tc,mg,nil,tp)
     if #mat>0 then
         tc:SetMaterial(mat)
-        -- Chuyển nguyên liệu xuống mộ
         Duel.SendtoGrave(mat,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
         Duel.BreakEffect()
         Duel.SpecialSummon(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
@@ -117,12 +131,12 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 
--- PHẦN GY (GIỮ NGUYÊN)
+-- PHẦN GY GIỮ NGUYÊN
 function s.gycon(e,tp,eg,ep,ev,re,r,rp)
     return rp==tp and (r&REASON_DISCARD)>0 and eg:IsExists(Card.IsType,1,nil,TYPE_SPELL)
 end
 function s.tgfilter(c,tp)
-    return c:IsType(TYPE_SPELL) and (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup())
+    return c:IsType(TYPE_SPELL) and (c:IsLocation(LOCATION_GRAVE) or (c:IsFaceup() and c:IsLocation(LOCATION_REMOVED)))
         and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,c:GetOriginalCode())
 end
 function s.thfilter(c,code)
