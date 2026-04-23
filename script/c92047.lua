@@ -90,7 +90,7 @@ function s.damcon(e,tp,eg,ep,ev,re,r,rp)
     return ep==tp and ev and ev>0 and e:GetHandler():GetDefense()>=math.floor(ev/2)
 end
 
--- Nếu người chơi đồng ý: trừ DEF bằng 1/2 sát thương và hủy sát thương (LP không bị giảm)
+-- HU3a operation: trừ DEF và hủy sát thương chiến đấu
 function s.damop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
@@ -101,7 +101,34 @@ function s.damop(e,tp,eg,ep,ev,re,r,rp)
         e1:SetValue(-math.floor(ev/2))
         e1:SetReset(RESET_EVENT+RESETS_STANDARD)
         c:RegisterEffect(e1)
-        Duel.ChangeDamage(tp,0)
+        Duel.ChangeBattleDamage(tp,0)
+    end
+end
+
+-- HU3b operation: trừ DEF và hủy sát thương từ hiệu ứng
+-- EVENT_PRE_DAMAGE cho phép thay đổi damage trước khi LP bị trừ
+function s.edamop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    if (r&REASON_EFFECT)==0 then return end
+    if not (ep==tp and ev and ev>0) then return end
+    if c:GetDefense()<math.floor(ev/2) then return end
+    if Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+        Duel.Hint(HINT_CARD,0,id)
+        local e1=Effect.CreateEffect(c)
+        e1:SetType(EFFECT_TYPE_SINGLE)
+        e1:SetCode(EFFECT_UPDATE_DEFENSE)
+        e1:SetValue(-math.floor(ev/2))
+        e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+        c:RegisterEffect(e1)
+        -- Đăng ký EFFECT_CHANGE_DAMAGE tạm thời để hủy sát thương hiệu ứng
+        local e2=Effect.CreateEffect(c)
+        e2:SetType(EFFECT_TYPE_FIELD)
+        e2:SetCode(EFFECT_CHANGE_DAMAGE)
+        e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+        e2:SetTargetRange(1,0)
+        e2:SetValue(0)
+        e2:SetReset(RESET_CHAIN)
+        Duel.RegisterEffect(e2,tp)
     end
 end
 
@@ -132,10 +159,10 @@ function s.lfop(e,tp,eg,ep,ev,re,r,rp)
     if not c:IsRelateToEffect(e) then return end
     local atk=c:GetPreviousAttackOnField() or 0
     local def=c:GetPreviousDefenseOnField() or 0
-    -- Trả về Extra Deck nếu là Fusion Monster
-    -- (Duel.SendtoDeck gửi về Main Deck nên phải dùng ReturnToExtraDeck)
+    -- Trả về Extra Deck (face-down) nếu là Fusion Monster
+    -- SendtoDeck tự động gửi Extra Deck monster về Extra Deck thay vì Main Deck
     if c:IsType(TYPE_FUSION) then
-        Duel.ReturnToExtraDeck(c,REASON_EFFECT)
+        Duel.SendtoDeck(c,nil,SEQ_DECKTOP,REASON_EFFECT)
     end
     -- Hồi phục LP bằng DEF hiện tại khi rời sân
     Duel.Recover(tp,def,REASON_EFFECT)
@@ -182,9 +209,12 @@ function s.initial_effect(c)
     e4:SetCondition(s.damcon)
     e4:SetOperation(s.damop)
     c:RegisterEffect(e4)
-    -- HU3b: Bắt sát thương từ hiệu ứng (EVENT_DAMAGE) - dùng chung logic với HU3a
-    local e4b=e4:Clone()
-    e4b:SetCode(EVENT_DAMAGE)
+    -- HU3b: Bắt sát thương từ hiệu ứng (EVENT_PRE_DAMAGE) - dùng logic riêng
+    local e4b=Effect.CreateEffect(c)
+    e4b:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e4b:SetCode(EVENT_PRE_DAMAGE)
+    e4b:SetRange(LOCATION_MZONE)
+    e4b:SetOperation(s.edamop)
     c:RegisterEffect(e4b)
 
     -- HU4: Khi rời sân: hồi LP, trả Extra Deck, phá hủy quái thú đối thủ
