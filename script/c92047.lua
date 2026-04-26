@@ -105,8 +105,7 @@ function s.damop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 
--- HU3b operation: trừ DEF và hủy sát thương từ hiệu ứng
--- EVENT_PRE_DAMAGE cho phép thay đổi damage trước khi LP bị trừ
+-- HU3b operation: trừ DEF và bù lại LP để không mất LP từ sát thương hiệu ứng
 function s.edamop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if (r&REASON_EFFECT)==0 then return end
@@ -120,21 +119,19 @@ function s.edamop(e,tp,eg,ep,ev,re,r,rp)
         e1:SetValue(-math.floor(ev/2))
         e1:SetReset(RESET_EVENT+RESETS_STANDARD)
         c:RegisterEffect(e1)
-        -- Đăng ký EFFECT_CHANGE_DAMAGE tạm thời để hủy sát thương hiệu ứng
-        local e2=Effect.CreateEffect(c)
-        e2:SetType(EFFECT_TYPE_FIELD)
-        e2:SetCode(EFFECT_CHANGE_DAMAGE)
-        e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-        e2:SetTargetRange(1,0)
-        e2:SetValue(0)
-        e2:SetReset(RESET_CHAIN)
-        Duel.RegisterEffect(e2,tp)
+        -- Hồi phục đúng bằng lượng sát thương để bù lại, không mất LP
+        Duel.Recover(tp,ev,REASON_EFFECT)
     end
 end
 
 ---------------------------------------------------
 -- HU4: HIỆU ỨNG KHI RỜI SÂN (TRIGGER_F)
 ---------------------------------------------------
+
+-- Chỉ kích hoạt khi lá này thật sự vừa rời khỏi sân
+function s.lfcon(e,tp,eg,ep,ev,re,r,rp)
+    return e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD)
+end
 
 -- Khai báo các danh mục hiệu ứng sẽ thực hiện khi rời sân
 function s.lftg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -155,10 +152,9 @@ end
 -- Thực thi hiệu ứng khi rời sân
 function s.lfop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    -- Kiểm tra tính hợp lệ: bắt buộc cho TRIGGER_F để tránh xử lý sai khi chain thay đổi
-    if not c:IsRelateToEffect(e) then return end
     local atk=c:GetPreviousAttackOnField() or 0
     local def=c:GetPreviousDefenseOnField() or 0
+    local removed_by_opponent=c:GetReasonPlayer()==1-tp
     -- Trả về Extra Deck (face-down) nếu là Fusion Monster
     -- SendtoDeck tự động gửi Extra Deck monster về Extra Deck thay vì Main Deck
     if c:IsType(TYPE_FUSION) then
@@ -167,7 +163,7 @@ function s.lfop(e,tp,eg,ep,ev,re,r,rp)
     -- Hồi phục LP bằng DEF hiện tại khi rời sân
     Duel.Recover(tp,def,REASON_EFFECT)
     -- Nếu bị đối thủ loại bỏ: phá hủy toàn bộ quái thú đối thủ có ATK thấp hơn ATK của lá này
-    if c:GetReasonPlayer()==1-tp then
+    if removed_by_opponent then
         local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
         local dg=g:Filter(function(tc) return tc:GetAttack()<atk end,nil)
         if #dg>0 then
@@ -209,10 +205,10 @@ function s.initial_effect(c)
     e4:SetCondition(s.damcon)
     e4:SetOperation(s.damop)
     c:RegisterEffect(e4)
-    -- HU3b: Bắt sát thương từ hiệu ứng (EVENT_PRE_DAMAGE) - dùng logic riêng
+    -- HU3b: Bắt sát thương từ hiệu ứng (EVENT_DAMAGE) - dùng logic riêng
     local e4b=Effect.CreateEffect(c)
     e4b:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-    e4b:SetCode(EVENT_PRE_DAMAGE)
+    e4b:SetCode(EVENT_DAMAGE)
     e4b:SetRange(LOCATION_MZONE)
     e4b:SetOperation(s.edamop)
     c:RegisterEffect(e4b)
@@ -222,6 +218,7 @@ function s.initial_effect(c)
     e5:SetCategory(CATEGORY_RECOVER+CATEGORY_DESTROY+CATEGORY_TOEXTRA)
     e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
     e5:SetCode(EVENT_LEAVE_FIELD)
+    e5:SetCondition(s.lfcon)
     e5:SetTarget(s.lftg)
     e5:SetOperation(s.lfop)
     c:RegisterEffect(e5)
