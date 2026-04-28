@@ -24,17 +24,10 @@ s.listed_series = {0x17f}
 
 function s.initial_effect(c)
 
-    -- HOPT chung: ngăn bị vô hiệu hóa để bảo vệ giới hạn OPT
-    local e0 = Effect.CreateEffect(c)
-    e0:SetType(EFFECT_TYPE_SINGLE)
-    e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE + EFFECT_FLAG_UNCOPYABLE)
-    e0:SetCode(EFFECT_CANNOT_DISABLE)
-    c:RegisterEffect(e0)
-
     -- Hiệu ứng 1: ACTIVATE - đặt hiệu ứng phí gửi bài cho cả lượt
     local e1 = Effect.CreateEffect(c)
     e1:SetDescription(aux.Stringid(id, 0))
-    e1:SetCategory(CATEGORY_HANDES + CATEGORY_TOGRAVE)
+    e1:SetCategory(CATEGORY_TOGRAVE)
     e1:SetType(EFFECT_TYPE_ACTIVATE)
     e1:SetCode(EVENT_FREE_CHAIN)
     e1:SetCountLimit(1, id, EFFECT_COUNT_CODE_OATH)
@@ -48,7 +41,7 @@ function s.initial_effect(c)
     e2:SetCategory(CATEGORY_TOGRAVE)
     e2:SetType(EFFECT_TYPE_IGNITION)
     e2:SetRange(LOCATION_GRAVE)
-    e2:SetCountLimit(1, id, EFFECT_COUNT_CODE_OATH)
+    e2:SetCountLimit(1, id + 1, EFFECT_COUNT_CODE_OATH)
     e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
     e2:SetCost(s.gycost)
     e2:SetTarget(s.gytg)
@@ -79,7 +72,7 @@ function s.activate(e, tp, eg, ep, ev, re, r, rp)
     -- Đăng ký 1 hiệu ứng field: mỗi khi có kích hoạt, người đó gửi 1 lá vào Mộ
     -- Hiệu ứng tự động áp dụng cho cả 2 người (rp xác định ai phải trả)
     local e1 = Effect.CreateEffect(e:GetHandler())
-    e1:SetType(EFFECT_TYPE_FIELD + EFFECT_TYPE_CONTINUOUS)
+    e1:SetType(EFFECT_TYPE_FIELD)
     e1:SetCode(EVENT_CHAINING)
     e1:SetReset(RESET_PHASE + PHASE_END)
     e1:SetOperation(s.chainop)
@@ -88,20 +81,20 @@ end
 
 function s.chainop(e, tp, eg, ep, ev, re, r, rp)
     -- rp = người vừa kích hoạt lá trong chain
-    if Duel.IsExistingMatchingCard(Card.IsDiscardable, rp, LOCATION_HAND, 0, 1, nil) then
+    if Duel.IsExistingMatchingCard(Card.IsAbleToGrave, rp, LOCATION_HAND, 0, 1, nil) then
         -- Có lá trên tay → gửi 1 lá vào Mộ (không phải "bỏ", là "gửi" theo văn bản lá)
         Duel.Hint(HINT_SELECTMSG, rp, HINTMSG_TOGRAVE)
-        local sg = Duel.SelectMatchingCard(rp, Card.IsDiscardable, rp, LOCATION_HAND, 0, 1, 1, nil)
+        local sg = Duel.SelectMatchingCard(rp, Card.IsAbleToGrave, rp, LOCATION_HAND, 0, 1, 1, nil)
         if #sg > 0 then
             Duel.SendtoGrave(sg, REASON_EFFECT)
         end
     else
-        -- Không có lá trên tay → chuyển thẳng đến End Phase
-        -- Bỏ qua Main Phase 1, Battle Phase, Main Phase 2 còn lại
-        local curr_tp = Duel.GetTurnPlayer()
-        Duel.SkipPhase(curr_tp, PHASE_MAIN1, RESET_PHASE + PHASE_END, 1)
-        Duel.SkipPhase(curr_tp, PHASE_BATTLE, RESET_PHASE + PHASE_END, 1)
-        Duel.SkipPhase(curr_tp, PHASE_MAIN2, RESET_PHASE + PHASE_END, 1)
+        -- Không có lá trên tay → chuyển thẳng đến End Phase (chỉ có tác dụng nếu rp là turn player)
+        if rp == Duel.GetTurnPlayer() then
+            Duel.SkipPhase(rp, PHASE_MAIN1, RESET_PHASE+PHASE_END, 1)
+            Duel.SkipPhase(rp, PHASE_BATTLE, RESET_PHASE+PHASE_END, 1)
+            Duel.SkipPhase(rp, PHASE_MAIN2, RESET_PHASE+PHASE_END, 1)
+        end
     end
 end
 
@@ -117,8 +110,8 @@ function s.gycost(e, tp, eg, ep, ev, re, r, rp, chk)
 end
 
 function s.removedfilter(c)
-    -- Bất kỳ lá nào đang bị Trục xuất đều có thể làm mục tiêu
-    return true
+    -- Bất kỳ lá nào đang bị Trục xuất và có thể về GY
+    return c:IsAbleToGrave()
 end
 
 function s.gytg(e, tp, eg, ep, ev, re, r, rp, chk)

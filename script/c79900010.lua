@@ -80,6 +80,7 @@ function s.lktg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then
         return g and g:IsExists(s.lkcon2,1,nil)
     end
+    if not g then return end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,g:GetCount(),0,0)
 end
 
@@ -93,13 +94,14 @@ function s.lkop(e,tp,eg,ep,ev,re,r,rp)
 
     -- Lọc các lá có thể Special Summon từ GY
     local sg=g:Filter(s.lkcon2,nil)
-    if #sg==0 then return end
+    if sg:GetCount()==0 then return end
 
     -- Special Summon về các zone lá này trỏ tới
-    Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+    local zone=c:GetLinkedZone(tp)
+    local summon_count=Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP,zone)
 
     -- Nếu Summon thành công ít nhất 1 lá → lock Spellcaster only (cả hai player)
-    if sg:GetCount()>0 then
+    if summon_count>0 then
         -- Restrict summon: chỉ Spellcaster
         local function spellcaster_only(c)
             return not c:IsRace(RACE_SPELLCASTER)
@@ -111,7 +113,8 @@ function s.lkop(e,tp,eg,ep,ev,re,r,rp)
             eflock:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_IGNORE_IMMUNE)
             eflock:SetTargetRange(1,1)
             eflock:SetTarget(spellcaster_only)
-            eflock:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+            -- Lock đến hết Duel (không có reset theo turn/phase)
+            eflock:SetReset(RESET_EVENT+0x1fe0000)
             Duel.RegisterEffect(eflock,i)
 
             local eflocksp=Effect.CreateEffect(c)
@@ -120,7 +123,8 @@ function s.lkop(e,tp,eg,ep,ev,re,r,rp)
             eflocksp:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_IGNORE_IMMUNE)
             eflocksp:SetTargetRange(1,1)
             eflocksp:SetTarget(spellcaster_only)
-            eflocksp:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+            -- Lock đến hết Duel (không có reset theo turn/phase)
+            eflocksp:SetReset(RESET_EVENT+0x1fe0000)
             Duel.RegisterEffect(eflocksp,i)
         end
     end
@@ -178,21 +182,24 @@ end
 -- HU2: Target - chọn 1 trong 3 hiệu ứng
 -------------------------------------------------
 function s.qtg(e,tp,eg,ep,ev,re,r,rp,chk)
+    local opp = 1 - tp
     if chk==0 then
-        -- Phải có ít nhất 1 lá hợp lệ cho 1 trong 3 option
+        -- Option 1: có lá face-up của đối thủ
         local has_face_up=Duel.IsExistingMatchingCard(
             Card.IsFaceup,tp,0,LOCATION_MZONE+LOCATION_SZONE,1,nil)
+        -- Option 2: có lá nào đó của đối thủ trên sân
         local has_card=Duel.IsExistingMatchingCard(
-            aux.TRUE,tp,0,LOCATION_MZONE+LOCATION_SZONE+LOCATION_HAND+LOCATION_FZONE,1,nil)
+            aux.TRUE,tp,0,LOCATION_MZONE+LOCATION_SZONE,1,nil)
+        -- Option 3: có quái của đối thủ
         local has_monster=Duel.IsExistingMatchingCard(
             aux.FilterBoolFunctionEx(Card.IsType,TYPE_MONSTER),
             tp,0,LOCATION_MZONE,1,nil)
         return has_face_up or has_card or has_monster
     end
     -- Announce options
-    Duel.SetOperationInfo(0,CATEGORY_NEGATE,nil,1,1-tp,LOCATION_MZONE+LOCATION_SZONE)
-    Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,0,1-tp,LOCATION_MZONE+LOCATION_SZONE)
-    Duel.SetOperationInfo(0,CATEGORY_CONTROL,nil,1,1-tp,LOCATION_MZONE)
+    Duel.SetOperationInfo(0,CATEGORY_NEGATE,nil,1,opp,LOCATION_MZONE+LOCATION_SZONE)
+    Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,0,opp,LOCATION_MZONE+LOCATION_SZONE)
+    Duel.SetOperationInfo(0,CATEGORY_CONTROL,nil,1,opp,LOCATION_MZONE)
 end
 
 -------------------------------------------------
@@ -214,7 +221,7 @@ function s.qop(e,tp,eg,ep,ev,re,r,rp)
             local neg=Effect.CreateEffect(e:GetHandler())
             neg:SetType(EFFECT_TYPE_SINGLE)
             neg:SetCode(EFFECT_DISABLE)
-            neg:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+            neg:SetReset(RESET_EVENT+0x1fe0000)
             tc:RegisterEffect(neg)
         end
 
@@ -222,7 +229,7 @@ function s.qop(e,tp,eg,ep,ev,re,r,rp)
         -- (2) Destroy all cards opponent controls
         local g=Duel.GetMatchingGroup(
             aux.TRUE,tp,0,LOCATION_MZONE+LOCATION_SZONE,nil)
-        if #g>0 then
+        if g:GetCount()>0 then
             Duel.Destroy(g,REASON_EFFECT)
         end
 
