@@ -23,8 +23,15 @@ Project custom card cho EDOPro (Yu-Gi-Oh! auto duel simulator). Repository này 
 │   └── template_hand_trap.lua
 ├── docs/                    # Tài liệu
 │   ├── card-scripting-guide.md    # API reference & patterns
-│   └── testing-guide.md           # Test, validation, debug
-├── scripts/                 # Công cụ tự động
+│   ├── testing-guide.md           # Test, validation, debug
+│   └── queues/                    # Hàng đợi card cần làm (theo archetype)
+│       └── <archetype>/           # Mỗi archetype một folder
+│           ├── p_<card-name>.png  # Pending — chờ làm script
+│           ├── w_<card-name>.png  # Working — đang viết script
+│           ├── r_<card-name>.png  # Review — script xong, cần kiểm tra
+│           ├── d_<card-name>.png  # Done — hoàn tất, đã vào CDB
+│           └── x_<card-name>.png  # Skipped — bỏ qua/hoãn
+├── script-test/                 # Công cụ tự động
 │   ├── validate_scripts.ps1       # Kiểm tra syntax + structure
 │   └── lint_scripts.ps1           # Lua linter
 ├── custom_cards_zesty.cdb   # Card database (SQLite)
@@ -92,7 +99,7 @@ Thay thế tất cả `<<PLACEHOLDER>>`:
 ### Bước 5: Validate
 
 ```powershell
-.\scripts\validate_scripts.ps1
+.\script-test\validate_scripts.ps1
 ```
 
 Sửa tất cả lỗi FAIL và WARN trước khi báo cáo hoàn thành.
@@ -136,7 +143,7 @@ Trước khi báo DONE, chạy:
 
 ```powershell
 # 1. Validate cú pháp + cấu trúc
-.\scripts\validate_scripts.ps1
+.\script-test\validate_scripts.ps1
 
 # 2. Xác nhận file tồn tại đúng vị trí
 Test-Path script\c<PASSCODE>.lua
@@ -229,11 +236,11 @@ Khi user báo bug:
 2. **Xác định effect** bị lỗi (đọc text card → tìm effect tương ứng)
 3. **Check từng phần**: Condition → Cost → Target → Operation
 4. **Tìm pattern sai**: xem `docs/testing-guide.md` mục Common Bugs
-5. **Sửa** → chạy `.\scripts\validate_scripts.ps1`
+5. **Sửa** → chạy `.\script-test\validate_scripts.ps1`
 6. **Không sửa file khác** nếu không liên quan
 
 ## Git commits
 
 - **KHÔNG tự động commit** — chỉ commit khi user yêu cầu
 - **KHÔNG tự động push** — chỉ push khi user yêu cầu
-- File trong `docs/`, `template-card/`, `scripts/` là infrastructure, cần giữ sạch
+- File trong `docs/`, `template-card/`, `script-test/` là infrastructure, cần giữ sạch

@@ -9,8 +9,8 @@
 .PARAMETER Fix
     Tự động fix một số vấn đề đơn giản (unused locals, whitespace)
 .EXAMPLE
-    .\scripts\lint_scripts.ps1
-    .\scripts\lint_scripts.ps1 -Path script\c12345678.lua
+    .\script-test\lint_scripts.ps1
+    .\script-test\lint_scripts.ps1 -Path script\c12345678.lua
 #>
 
 param(

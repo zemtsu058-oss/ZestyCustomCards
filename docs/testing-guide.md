@@ -29,12 +29,12 @@ Get-ChildItem script\*.lua | ForEach-Object {
 }
 
 # Hoặc dùng script đã tạo sẵn:
-.\scripts\validate_scripts.ps1
+.\script-test\validate_scripts.ps1
 ```
 
 ## 2. Validation tự động (PowerShell)
 
-Script `scripts/validate_scripts.ps1` kiểm tra:
+Script `script-test/validate_scripts.ps1` kiểm tra:
 
 | Check | Mô tả |
 |-------|-------|
@@ -50,10 +50,10 @@ Script `scripts/validate_scripts.ps1` kiểm tra:
 
 ```powershell
 # Validate tất cả scripts
-.\scripts\validate_scripts.ps1
+.\script-test\validate_scripts.ps1
 
 # Validate 1 file cụ thể
-.\scripts\validate_scripts.ps1 -Path script\c22121392.lua
+.\script-test\validate_scripts.ps1 -Path script\c22121392.lua
 ```
 
 ### Yêu cầu

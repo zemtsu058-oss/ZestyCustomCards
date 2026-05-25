@@ -53,7 +53,7 @@ Example: script/c789000001.lua
 
 Run validation:
 ```powershell
-.\scripts\validate_scripts.ps1
+.\script-test\validate_scripts.ps1
 ```
 
 ---

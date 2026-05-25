@@ -14,9 +14,9 @@
 .PARAMETER Quiet
     Chỉ hiển thị file bị lỗi, không hiển thị file OK
 .EXAMPLE
-    .\scripts\validate_scripts.ps1
-    .\scripts\validate_scripts.ps1 -Path script\c12345678.lua
-    .\scripts\validate_scripts.ps1 -Quiet
+    .\script-test\validate_scripts.ps1
+    .\script-test\validate_scripts.ps1 -Path script\c12345678.lua
+    .\script-test\validate_scripts.ps1 -Quiet
 #>
 
 param(

@@ -29,7 +29,7 @@ Repository chứa Lua script, SQLite database, artwork của các custom card.
 ├── docs/                         # Internal documentation
 │   ├── card-scripting-guide.md   # EDOPro Lua API reference & patterns
 │   └── testing-guide.md          # Validation, debugging, common bugs
-├── scripts/                      # Automation tools
+├── script-test/                      # Automation tools
 │   ├── validate_scripts.ps1      # Syntax + structure validation
 │   └── lint_scripts.ps1          # Lua linter (luacheck)
 ├── custom_cards_zesty.cdb        # Card database (SQLite, edit with DataEditorX)
@@ -79,7 +79,7 @@ Copy-Item template-card\template_effect_monster.lua script\c<PASSCODE>.lua
 # 2. Replace all <<PLACEHOLDER>> markers with actual values
 
 # 3. Validate
-.\scripts\validate_scripts.ps1
+.\script-test\validate_scripts.ps1
 
 # 4. Add to database via DataEditorX (custom_cards_zesty.cdb)
 ```
@@ -87,8 +87,8 @@ Copy-Item template-card\template_effect_monster.lua script\c<PASSCODE>.lua
 ### Validate existing scripts
 
 ```powershell
-.\scripts\validate_scripts.ps1          # Validate all scripts
-.\scripts\lint_scripts.ps1              # Run linter
+.\script-test\validate_scripts.ps1          # Validate all scripts
+.\script-test\lint_scripts.ps1              # Run linter
 ```
 
 ## EDOPro Documentation Resources
