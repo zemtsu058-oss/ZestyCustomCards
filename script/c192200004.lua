@@ -72,6 +72,13 @@ function s.initial_effect(c)
 end
 
 -- ============================================================
+-- Effect 1: Filter — Only Main Monster Zone (exclude Extra Monster Zone)
+-- ============================================================
+function s.filter_mainzone(c)
+    return not c:IsExtraZone()
+end
+
+-- ============================================================
 -- Effect 1: Filter — Opponent's monster SS from Deck or Extra Deck
 -- ============================================================
 function s.filter_opp_ss(c,tp)
@@ -88,7 +95,7 @@ function s.spcon(e,c)
     local tp=c:GetControler()
     if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return false end
     local opp_ss=Duel.IsExistingMatchingCard(s.filter_opp_ss,tp,0,LOCATION_MZONE,1,nil,tp)
-    local no_monster=not Duel.IsExistingMatchingCard(nil,tp,LOCATION_MZONE,0,1,nil)
+    local no_monster=not Duel.IsExistingMatchingCard(s.filter_mainzone,tp,LOCATION_MZONE,0,1,nil)
     return opp_ss or no_monster
 end
 
