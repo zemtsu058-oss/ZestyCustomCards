@@ -23,7 +23,7 @@ function s.initial_effect(c)
     -- ============================================================
     -- Summon Procedure — Link Summon using setcode materials
     -- ============================================================
-    aux.AddLinkProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0x<<SETCODE>>),<<LINK_COUNT>>,<<MIN_MATERIAL>>)
+    Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0x<<SETCODE>>),<<LINK_COUNT>>,<<MIN_MATERIAL>>)
 
     -- ============================================================
     -- Effect 1 — Trigger on Link Summon: Search an archetype card

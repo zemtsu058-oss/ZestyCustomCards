@@ -25,7 +25,7 @@ function s.initial_effect(c)
     -- ============================================================
     -- Summon Procedure — Link Summon: 1 Castle of Dreams monster
     -- ============================================================
-    aux.AddLinkProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0x782),1,1)
+    Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0x782),1,1)
 
     -- ============================================================
     -- Effect 1a — From field, banish to protect Field Spell from leaving

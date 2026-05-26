@@ -26,7 +26,7 @@ function s.initial_effect(c)
     -- ============================================================
     -- Summon Procedure — Link Summon: 2 monsters, including a Castle of Dreams Spellcaster
     -- ============================================================
-    aux.AddLinkProcedure(c,nil,2,2,s.lcheck)
+    Link.AddProcedure(c,nil,2,2,s.lcheck)
 
     -- ============================================================
     -- Effect 1 — Trigger on Link Summon: Set 2 Castle of Dreams Traps

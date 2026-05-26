@@ -340,7 +340,7 @@ aux.AddXyzProcedure(c,nil,4,2)  -- nil filter, Rank 4, 2 materials
 
 ```lua
 -- Dùng proc_link.lua:
-aux.AddLinkProcedure(c,nil,2,2)  -- nil filter, Link-2, min 2 materials
+Link.AddProcedure(c,nil,2,2)  -- nil filter, Link-2, min 2 materials
 ```
 
 ### Special Summon từ tay (built-in)
