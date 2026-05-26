@@ -20,10 +20,10 @@
 --           Field Spell (Quick Effect): You can negate the
 --           activation, and if you do, your opponent chooses
 --           1 of these effects for you to apply.
---           (1) Your opponent draws 2, then you draw 1.
+--           (1) You draw 2, then your opponent draws 1.
 --           (2) All monsters on the field gain 500 ATK, then all
---               monsters your opponent controls gain 500 ATK.
---           (3) Your opponent gains 2000 LP, then you gain 1000 LP.
+--               monsters you control gain 500 ATK.
+--           (3) You gain 2000 LP, then your opponent gains 1000 LP.
 -- ============================================================
 
 local s,id=GetID()
@@ -167,9 +167,9 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
         Duel.Hint(HINT_SELECTMSG,1-tp,aux.Stringid(id,2))
         local op=Duel.SelectOption(1-tp,aux.Stringid(id,2),aux.Stringid(id,3),aux.Stringid(id,4))
         if op==0 then
-            if Duel.IsPlayerCanDraw(1-tp,2) and Duel.IsPlayerCanDraw(tp,1) then
-                Duel.Draw(1-tp,2,REASON_EFFECT)
-                Duel.Draw(tp,1,REASON_EFFECT)
+            if Duel.IsPlayerCanDraw(tp,2) and Duel.IsPlayerCanDraw(1-tp,1) then
+                Duel.Draw(tp,2,REASON_EFFECT)
+                Duel.Draw(1-tp,1,REASON_EFFECT)
             end
         elseif op==1 then
             local g_all=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
@@ -181,7 +181,7 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
                 e1:SetReset(RESET_EVENT+RESETS_STANDARD)
                 tc:RegisterEffect(e1)
             end
-            local g_opp=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
+            local g_opp=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
             for tc in aux.Next(g_opp) do
                 local e1=Effect.CreateEffect(c)
                 e1:SetType(EFFECT_TYPE_SINGLE)
@@ -191,8 +191,8 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
                 tc:RegisterEffect(e1)
             end
         elseif op==2 then
-            Duel.Recover(1-tp,2000,REASON_EFFECT)
-            Duel.Recover(tp,1000,REASON_EFFECT)
+            Duel.Recover(tp,2000,REASON_EFFECT)
+            Duel.Recover(1-tp,1000,REASON_EFFECT)
         end
     end
 end

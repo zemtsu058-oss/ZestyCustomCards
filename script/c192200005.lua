@@ -19,11 +19,12 @@
 --           Field Spell (Quick Effect): You can negate the
 --           activation, and if you do, your opponent chooses
 --           1 of these effects for you to apply.
---           (1) You draw 1, then discard 2 cards.
---           (2) All monsters you control gain 500 ATK, but change
+--           (1) Your opponent draws 1, then discards 2 cards.
+--           (2) All monsters your opponent controls gain 500 ATK,
+--               but change
 --               them to Defense Position.
---           (3) You gain 1000 LP, but take 2500 damage during the
---               End Phase of this turn.
+--           (3) Your opponent gains 1000 LP, but takes 2500 damage
+--               during the End Phase of this turn.
 -- ============================================================
 
 local s,id=GetID()
@@ -187,13 +188,13 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
         Duel.Hint(HINT_SELECTMSG,1-tp,aux.Stringid(id,3))
         local op=Duel.SelectOption(1-tp,aux.Stringid(id,3),aux.Stringid(id,4),aux.Stringid(id,5))
         if op==0 then
-            if Duel.IsPlayerCanDraw(tp,1) then
-                Duel.Draw(tp,1,REASON_EFFECT)
+            if Duel.IsPlayerCanDraw(1-tp,1) then
+                Duel.Draw(1-tp,1,REASON_EFFECT)
                 Duel.BreakEffect()
-                Duel.DiscardHand(tp,Card.IsDiscardable,2,2,REASON_EFFECT+REASON_DISCARD)
+                Duel.DiscardHand(1-tp,Card.IsDiscardable,2,2,REASON_EFFECT+REASON_DISCARD)
             end
         elseif op==1 then
-            local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+            local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
             for tc in aux.Next(g) do
                 local e1=Effect.CreateEffect(c)
                 e1:SetType(EFFECT_TYPE_SINGLE)
@@ -206,7 +207,7 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
                 end
             end
         elseif op==2 then
-            Duel.Recover(tp,1000,REASON_EFFECT)
+            Duel.Recover(1-tp,1000,REASON_EFFECT)
             local e1=Effect.CreateEffect(c)
             e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
             e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
@@ -215,7 +216,7 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
             e1:SetCondition(s.dmgcon_end)
             e1:SetOperation(s.dmgop_end)
             e1:SetReset(RESET_PHASE+PHASE_END)
-            Duel.RegisterEffect(e1,tp)
+            Duel.RegisterEffect(e1,1-tp)
         end
     end
 end
