@@ -116,8 +116,8 @@ function s.op_lk(e,tp,eg,ep,ev,re,r,rp)
 
     -- If at least 1 was summoned, this player can only Summon Spellcasters for the rest of the Duel.
     if count>0 then
-        local function filter_non_spellcaster(c)
-            return not c:IsRace(RACE_SPELLCASTER)
+        local function filter_non_spellcaster(e,c)
+            return c and not c:IsRace(RACE_SPELLCASTER)
         end
         local ef1=Effect.CreateEffect(c)
         ef1:SetType(EFFECT_TYPE_FIELD)
@@ -125,7 +125,6 @@ function s.op_lk(e,tp,eg,ep,ev,re,r,rp)
         ef1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_IGNORE_IMMUNE)
         ef1:SetTargetRange(1,0)
         ef1:SetTarget(filter_non_spellcaster)
-        ef1:SetReset(RESET_NONE)
         Duel.RegisterEffect(ef1,tp)
 
         local ef1b=ef1:Clone()
@@ -138,7 +137,6 @@ function s.op_lk(e,tp,eg,ep,ev,re,r,rp)
         ef2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_IGNORE_IMMUNE)
         ef2:SetTargetRange(1,0)
         ef2:SetTarget(filter_non_spellcaster)
-        ef2:SetReset(RESET_NONE)
         Duel.RegisterEffect(ef2,tp)
     end
 end
@@ -203,9 +201,13 @@ function s.can_destroy(tp)
     return Duel.IsExistingMatchingCard(aux.TRUE,tp,0,LOCATION_MZONE+LOCATION_SZONE,1,nil)
 end
 
+function s.filter_control(c)
+    return c:IsType(TYPE_MONSTER) and c:IsControlerCanBeChanged()
+end
+
 function s.can_control(tp)
     return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-        and Duel.IsExistingMatchingCard(aux.FilterBoolFunctionEx(Card.IsType,TYPE_MONSTER),tp,0,LOCATION_MZONE,1,nil)
+        and Duel.IsExistingMatchingCard(s.filter_control,tp,0,LOCATION_MZONE,1,nil)
 end
 
 function s.get_options(tp)
@@ -250,6 +252,8 @@ end
 -- Effect 2: Operation — select and resolve 1 of 3 sub-effects
 -- ============================================================
 function s.op_q(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    if not c:IsRelateToEffect(e) then return end
     local op=e:GetLabel()
 
     if op==0 then
@@ -259,7 +263,7 @@ function s.op_q(e,tp,eg,ep,ev,re,r,rp)
         local g=Duel.SelectMatchingCard(tp,Card.IsFaceup,tp,0,LOCATION_MZONE+LOCATION_SZONE,1,1,nil)
         local tc=g:GetFirst()
         if tc then
-            local eneg=Effect.CreateEffect(e:GetHandler())
+            local eneg=Effect.CreateEffect(c)
             eneg:SetType(EFFECT_TYPE_SINGLE)
             eneg:SetCode(EFFECT_DISABLE)
             eneg:SetReset(RESET_EVENT+0x1fe0000)
@@ -280,10 +284,10 @@ function s.op_q(e,tp,eg,ep,ev,re,r,rp)
         -- (3) Take control of 1 monster opponent controls
         if not s.can_control(tp) then return end
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SELECT)
-        local g=Duel.SelectMatchingCard(tp,aux.FilterBoolFunctionEx(Card.IsType,TYPE_MONSTER),tp,0,LOCATION_MZONE,1,1,nil)
+        local g=Duel.SelectMatchingCard(tp,s.filter_control,tp,0,LOCATION_MZONE,1,1,nil)
         local tc=g:GetFirst()
         if tc then
-            local ectrl=Effect.CreateEffect(e:GetHandler())
+            local ectrl=Effect.CreateEffect(c)
             ectrl:SetType(EFFECT_TYPE_SINGLE)
             ectrl:SetCode(EFFECT_SET_CONTROL)
             ectrl:SetValue(tp)
