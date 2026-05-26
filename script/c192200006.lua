@@ -8,7 +8,7 @@
 -- Race     : Spellcaster
 -- Archetype: Castle of Dreams (0x782)
 -- Materials: 2 monsters, including a "Castle of Dreams" Spellcaster
--- Markers  : Bottom-Left, Bottom-Right (0x5)
+-- Markers  : Bottom, Bottom-Right
 -- ============================================================
 -- Effect 1: If this card is Link Summoned: Set 2 "Castle of
 --           Dreams" Traps from your Deck, GY and/or banishment

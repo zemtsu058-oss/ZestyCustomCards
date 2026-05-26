@@ -116,7 +116,7 @@ end
 -- Effect 2: Condition — This card was SS by own effect (Effect 1)
 -- ============================================================
 function s.fspellcon(e,tp,eg,ep,ev,re,r,rp)
-    return eg:IsContains(e:GetHandler()) and e:GetHandler():GetFlagEffect(id)>0
+    return e:GetHandler():GetFlagEffect(id)>0
 end
 
 -- ============================================================
