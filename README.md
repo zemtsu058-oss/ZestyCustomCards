@@ -10,7 +10,7 @@ Repository chứa Lua script, SQLite database, artwork của các custom card.
 
 ```
 /
-├── script/                       # Lua card scripts (57 cards)
+├── script/                       # Lua card scripts (60 cards)
 │   └── constants.lua             # Custom archetypes, setcodes, counters
 ├── pics/                         # Card artwork (.png/.jpg, named by passcode)
 │   └── field/                    # Field spell background artwork
@@ -28,7 +28,14 @@ Repository chứa Lua script, SQLite database, artwork của các custom card.
 │   └── template_hand_trap.lua
 ├── docs/                         # Internal documentation
 │   ├── card-scripting-guide.md   # EDOPro Lua API reference & patterns
-│   └── testing-guide.md          # Validation, debugging, common bugs
+│   ├── testing-guide.md          # Validation, debugging, common bugs
+│   └── queues/                   # Artwork queues theo archetype (p/w/r/d/x prefix)
+│       ├── Brandeds/
+│       ├── Dragonmaid/
+│       ├── Labrynth/
+│       ├── White_Forest/
+│       ├── Witchcrafter/
+│       └── Castel_of_dreams/
 ├── script-test/                  # Automation tools
 │   ├── validate_scripts.ps1      # Syntax + structure validation
 │   └── lint_scripts.ps1          # Lua linter (luacheck)
@@ -48,11 +55,11 @@ Repository chứa Lua script, SQLite database, artwork của các custom card.
 | Synchro Monster | 2 |
 | Xyz Monster | 1 |
 | Link Monster | 7 |
-| Spell Card | 22 |
+| Spell Card | 25 |
 | Trap Card | 1 |
-| **Total** | **57** |
+| **Total** | **60** |
 
-**Extra Deck:** 19 | **Main Deck:** 38
+**Extra Deck:** 19 | **Main Deck:** 41
 
 ## Custom Archetypes
 
@@ -66,7 +73,7 @@ Repository chứa Lua script, SQLite database, artwork của các custom card.
 | `0x1291` | `SET_HYPERDIMENSION` | Hyperdimension |
 | `0x177` | `COUNTER_MANA` | Mana Counter |
 
-Also includes support cards for official archetypes: Witchcrafter (`0x128`), Labrynth (`0x17f`).
+Also includes support cards for official archetypes: Witchcrafter (`0x128`), Labrynth (`0x17f`), Dragonmaid (`0x133`), Branded (`0x160`), White Forest (`0x1aa`).
 
 ## Quick Start
 
