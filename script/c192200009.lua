@@ -10,8 +10,8 @@
 --           your hand, GY, or banishment.
 -- Effect 2: Each turn, when your opponent activates a card or
 --           effect that would negate the effect of another card
---           (Quick Effect): You can negate the
---           activation, and if you do, your opponent chooses
+--           (Quick Effect): You can negate that effect, and if
+--           you do, your opponent chooses
 --           1 of these effects for you to apply.
 --           (1) Both players draw 1 card, then discard 1 card.
 --           (2) All monsters on the field gain 500 ATK, but change
@@ -47,7 +47,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 
     -- ============================================================
-    -- Effect 2 — Quick Effect: Negate opponent's negate, opponent chooses replacement
+    -- Effect 2 — Quick Effect: Negate opponent's effect negate, opponent chooses replacement
     -- ============================================================
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,1))
@@ -125,52 +125,51 @@ end
 -- ============================================================
 function s.tg_negate(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end
-    Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,tp,0)
+    Duel.SetOperationInfo(0,CATEGORY_NEGATE,nil,0,0,0)
 end
 
 -- ============================================================
--- Effect 2: Operation — Negate opponent's negate, opponent chooses replacement
+-- Effect 2: Operation — Negate opponent's effect, opponent chooses replacement
 -- ============================================================
 function s.op_negate(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if not c:IsRelateToEffect(e) then return end
-    if Duel.NegateActivation(ev) then
-        Duel.Hint(HINT_SELECTMSG,1-tp,aux.Stringid(id,2))
-        local op=Duel.SelectOption(1-tp,aux.Stringid(id,2),aux.Stringid(id,3),aux.Stringid(id,4))
-        if op==0 then
-            if Duel.IsPlayerCanDraw(tp,1) and Duel.IsPlayerCanDraw(1-tp,1) then
-                Duel.Draw(tp,1,REASON_EFFECT)
-                Duel.Draw(1-tp,1,REASON_EFFECT)
-                Duel.BreakEffect()
-                Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_EFFECT+REASON_DISCARD)
-                Duel.DiscardHand(1-tp,Card.IsDiscardable,1,1,REASON_EFFECT+REASON_DISCARD)
-            end
-        elseif op==1 then
-            local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
-            for tc in aux.Next(g) do
-                local e1=Effect.CreateEffect(c)
-                e1:SetType(EFFECT_TYPE_SINGLE)
-                e1:SetCode(EFFECT_UPDATE_ATTACK)
-                e1:SetValue(500)
-                e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-                tc:RegisterEffect(e1)
-                if tc:IsAttackPos() then
-                    Duel.ChangePosition(tc,POS_FACEUP_DEFENSE)
-                end
-            end
-        elseif op==2 then
-            Duel.Recover(tp,1000,REASON_EFFECT)
-            Duel.Recover(1-tp,1000,REASON_EFFECT)
-            local e1=Effect.CreateEffect(c)
-            e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-            e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-            e1:SetCode(EVENT_PHASE+PHASE_END)
-            e1:SetCountLimit(1)
-            e1:SetCondition(s.dmgcon_end)
-            e1:SetOperation(s.dmgop_end)
-            e1:SetReset(RESET_PHASE+PHASE_END)
-            Duel.RegisterEffect(e1,tp)
+    Duel.NegateEffect(ev)
+    Duel.Hint(HINT_SELECTMSG,1-tp,aux.Stringid(id,2))
+    local op=Duel.SelectOption(1-tp,aux.Stringid(id,2),aux.Stringid(id,3),aux.Stringid(id,4))
+    if op==0 then
+        if Duel.IsPlayerCanDraw(tp,1) and Duel.IsPlayerCanDraw(1-tp,1) then
+            Duel.Draw(tp,1,REASON_EFFECT)
+            Duel.Draw(1-tp,1,REASON_EFFECT)
+            Duel.BreakEffect()
+            Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_EFFECT+REASON_DISCARD)
+            Duel.DiscardHand(1-tp,Card.IsDiscardable,1,1,REASON_EFFECT+REASON_DISCARD)
         end
+    elseif op==1 then
+        local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
+        for tc in aux.Next(g) do
+            local e1=Effect.CreateEffect(c)
+            e1:SetType(EFFECT_TYPE_SINGLE)
+            e1:SetCode(EFFECT_UPDATE_ATTACK)
+            e1:SetValue(500)
+            e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+            tc:RegisterEffect(e1)
+            if tc:IsAttackPos() then
+                Duel.ChangePosition(tc,POS_FACEUP_DEFENSE)
+            end
+        end
+    elseif op==2 then
+        Duel.Recover(tp,1000,REASON_EFFECT)
+        Duel.Recover(1-tp,1000,REASON_EFFECT)
+        local e1=Effect.CreateEffect(c)
+        e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+        e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+        e1:SetCode(EVENT_PHASE+PHASE_END)
+        e1:SetCountLimit(1)
+        e1:SetCondition(s.dmgcon_end)
+        e1:SetOperation(s.dmgop_end)
+        e1:SetReset(RESET_PHASE+PHASE_END)
+        Duel.RegisterEffect(e1,tp)
     end
 end
 
