@@ -126,7 +126,7 @@ Nếu cần thêm card vào database:
 8. **NEVER** dùng `chk==1` — luôn `chk==0` để check legality
 9. **NEVER** quên `c:RegisterEffect(e1)` sau khi tạo effect
 10. **NEVER** quên `SetRange` cho effect non-SINGLE
-11. **NEVER** copy code từ script hiện có trong `script/` — chúng có thể có bug
+11. **CRITICAL — NEVER** tham chiếu hay copy code từ bất kỳ script nào trong `script/`. Toàn bộ source hiện tại đang có rất nhiều lỗi (thiếu `EFFECT_COUNT_CODE_OATH`, sai category, sai reset, sai `SetSPSummonOnce`, sai `Stringid` mapping, v.v.). Chỉ dùng template trong `template-card/` và document trong `docs/` làm reference.
 12. **ALWAYS** dùng template trong `template-card/` làm base
 
 ### Code quality
