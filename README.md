@@ -29,7 +29,7 @@ Repository chứa Lua script, SQLite database, artwork của các custom card.
 ├── docs/                         # Internal documentation
 │   ├── card-scripting-guide.md   # EDOPro Lua API reference & patterns
 │   └── testing-guide.md          # Validation, debugging, common bugs
-├── script-test/                      # Automation tools
+├── script-test/                  # Automation tools
 │   ├── validate_scripts.ps1      # Syntax + structure validation
 │   └── lint_scripts.ps1          # Lua linter (luacheck)
 ├── custom_cards_zesty.cdb        # Card database (SQLite, edit with DataEditorX)

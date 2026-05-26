@@ -24,14 +24,14 @@ Project custom card cho EDOPro (Yu-Gi-Oh! auto duel simulator). Repository này 
 ├── docs/                    # Tài liệu
 │   ├── card-scripting-guide.md    # API reference & patterns
 │   ├── testing-guide.md           # Test, validation, debug
-│   └── queues/                    # Hàng đợi card cần làm (theo archetype)
+│   └── queues/                    # Hàng đợi card fan-made cần làm (theo archetype)
 │       └── <archetype>/           # Mỗi archetype một folder
 │           ├── p_<card-name>.png  # Pending — chờ làm script
 │           ├── w_<card-name>.png  # Working — đang viết script
 │           ├── r_<card-name>.png  # Review — script xong, cần kiểm tra
 │           ├── d_<card-name>.png  # Done — hoàn tất, đã vào CDB
 │           └── x_<card-name>.png  # Skipped — bỏ qua/hoãn
-├── script-test/                 # Công cụ tự động
+├── script-test/             # Công cụ tự động
 │   ├── validate_scripts.ps1       # Kiểm tra syntax + structure
 │   └── lint_scripts.ps1           # Lua linter
 ├── custom_cards_zesty.cdb   # Card database (SQLite)
@@ -225,6 +225,49 @@ Khi tạo archetype mới:
 1. Thêm `SET_XXX = 0xYYY` vào `script/constants.lua`
 2. Thêm `!setname 0xYYY TênArchetype` vào `strings.conf`
 3. Chọn hex code không trùng với archetype đã có
+
+---
+
+## Archetype trong queue & setcode tham khảo
+
+Các archetype official có trong `docs/queues/` và setcode tương ứng (từ CardScripts/constant.lua):
+
+| Archetype | Setcode | Ghi chú |
+|-----------|---------|---------|
+| Dragonmaid | `0x133` | SET_DRAGONMAID |
+| Labrynth | `0x17f` | SET_LABRYNTH |
+| White Forest | `0x1aa` | SET_WHITE_FOREST |
+| Witchcrafter | `0x128` | SET_WITCHCRAFTER |
+
+Các archetype fan-made (không có trong constant.lua của CardScripts):
+- **Castel of Dreams** — cần tạo setcode mới trong `script/constants.lua`
+
+**Ghi chú:** Khi viết script cho card có archetype official, dùng setcode ở trên (không cần thêm vào `constants.lua` vì EDOPro đã có sẵn). Card fan-made của project này dùng chung namespace archetype official.
+
+---
+
+## Quy tắc chọn passcode
+
+Passcode dùng **9 chữ số** để tránh trùng card official (vốn chỉ dùng tối đa 8 chữ số).
+
+**Công thức:** `{setcode_decimal}{sequential_5digits}`
+
+```
+passcode = {setcode_hex_to_decimal} + {5 chữ số tăng dần}
+```
+
+| Archetype | Setcode hex | Decimal | Passcode range |
+|-----------|-------------|---------|----------------|
+| Dragonmaid | 0x133 | 307 | 30700001 ~ 30799999 |
+| Witchcrafter | 0x128 | 296 | 29600001 ~ 29699999 |
+| Labrynth | 0x17f | 383 | 38300001 ~ 38399999 |
+| White Forest | 0x1aa | 426 | 42600001 ~ 42699999 |
+
+**Ví dụ:** Card đầu tiên của White Forest → `42600001`, card tiếp theo → `42600002`.
+
+**Lưu ý:**
+- Đã dùng passcode nào thì đánh dấu vào bảng để tránh trùng
+- Card có archetype đã có sẵn passcode pattern riêng (vd: TTF = 789xxx) thì giữ nguyên pattern cũ
 
 ---
 
