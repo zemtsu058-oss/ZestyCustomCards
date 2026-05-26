@@ -28,11 +28,11 @@ EDOPro không hỗ trợ "change what an effect resolves into" mid-resolution. P
 
 **Castle of Dreams - Fairytale**
 - CŨ: "Each turn, the first time a card or effect resolve that would negate another card effects, change that effect to 1 of there effect (your opponent choice):"
-- MỚI: "Each turn, when your opponent activates a card or effect that would negate the activation or effect of another card (Quick Effect): You can negate the activation, and if you do, your opponent chooses 1 of these effects for you to apply."
+- MỚI: "Each turn, when your opponent activates a card or effect that would negate the effect of another card (Quick Effect): You can negate the activation, and if you do, your opponent chooses 1 of these effects for you to apply."
 
 **Castle of Dreams - Stage**
 - CŨ: "Each turn, the first time a card or effect resolve that would negate another card effects, change that effect to 1 of there effect (your opponent choice):"
-- MỚI: "Each turn, when your opponent activates a card or effect that would negate the activation or effect of another card (Quick Effect): You can negate the activation, and if you do, your opponent chooses 1 of these effects for you to apply."
+- MỚI: "Each turn, when your opponent activates a card or effect that would negate the effect of another card (Quick Effect): You can negate the activation, and if you do, your opponent chooses 1 of these effects for you to apply."
 
 **Iris, Master of the Castle of Dreams**
 - CŨ: "That effect become once of there effect (your opponent choice);"

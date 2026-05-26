@@ -75,7 +75,7 @@ end
 -- Effect 1: Filter — Only Main Monster Zone (exclude Extra Monster Zone)
 -- ============================================================
 function s.filter_mainzone(c)
-    return not c:IsExtraZone()
+    return c:GetSequence()<5
 end
 
 -- ============================================================

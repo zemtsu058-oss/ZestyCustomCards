@@ -7,8 +7,8 @@
 -- Effect 1: During your Main Phase: You can add 1 "Castle of
 --           Dreams" monster from your Deck to your hand.
 -- Effect 2: Each turn, when your opponent activates a card or
---           effect that would negate the activation or effect of
---           another card (Quick Effect): You can negate the
+--           effect that would negate the effect of another card
+--           (Quick Effect): You can negate the
 --           activation, and if you do, your opponent chooses
 --           1 of these effects for you to apply.
 --           (1) Both players draw 1 card.
@@ -88,10 +88,10 @@ function s.op_search(e,tp,eg,ep,ev,re,r,rp)
 end
 
 -- ============================================================
--- Effect 2: Condition — Opponent activated a negate-type effect
+-- Effect 2: Condition — Opponent activated an effect-negate effect
 -- ============================================================
 function s.cond_negate(e,tp,eg,ep,ev,re,r,rp)
-    return rp==1-tp and (re:IsHasCategory(CATEGORY_NEGATE) or re:IsHasCategory(CATEGORY_DISABLE))
+    return rp==1-tp and re:IsHasCategory(CATEGORY_DISABLE)
         and Duel.IsChainNegatable(ev)
 end
 
