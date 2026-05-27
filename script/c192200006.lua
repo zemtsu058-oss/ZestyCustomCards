@@ -99,7 +99,6 @@ end
 -- Effect 1: Operation — Select 2 Traps, Set them
 -- ============================================================
 function s.op_set(e,tp,eg,ep,ev,re,r,rp)
-    if not e:GetHandler():IsRelateToEffect(e) then return end
     if Duel.GetLocationCount(tp,LOCATION_SZONE)<2 then return end
     local g=Duel.GetMatchingGroup(s.filter_trap,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
     if #g<2 then return end
@@ -131,9 +130,8 @@ end
 -- ============================================================
 function s.tg_ss(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then
-        local ct=Duel.GetLocationCount(tp,LOCATION_MZONE)
-        if ct<2 then return false end
-        return Duel.IsExistingMatchingCard(s.filter_ss,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,2,nil,e,tp)
+        return Duel.GetMZoneCount(tp,e:GetHandler())>=2
+            and Duel.IsExistingMatchingCard(s.filter_ss,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,0,2,nil,e,tp)
     end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED)
 end

@@ -79,8 +79,9 @@ end
 function s.spcon(e,c)
     if c==nil then return true end
     local tp=c:GetControler()
+    local g=Duel.GetFieldGroup(tp,LOCATION_MZONE,0)
     return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-        and not Duel.IsExistingMatchingCard(s.filter_not_race,tp,LOCATION_MZONE,0,1,nil)
+        and #g>0 and not Duel.IsExistingMatchingCard(s.filter_not_race,tp,LOCATION_MZONE,0,1,nil)
 end
 
 -- ============================================================
@@ -95,8 +96,6 @@ end
 -- Effect 2: Operation — Excavate, optionally add 1, reorder rest
 -- ============================================================
 function s.op_excavate(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-    if not c:IsRelateToEffect(e) then return end
     local ct=math.min(6,Duel.GetFieldGroupCount(tp,LOCATION_DECK,0))
     if ct<=0 then return end
     Duel.ConfirmDecktop(tp,ct)
@@ -152,6 +151,5 @@ end
 -- ============================================================
 function s.repop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    if not c:IsRelateToEffect(e) then return end
     Duel.Remove(c,POS_FACEUP,REASON_EFFECT+REASON_REPLACE)
 end

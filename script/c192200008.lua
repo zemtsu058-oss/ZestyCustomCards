@@ -91,7 +91,7 @@ end
 -- Effect 2: Condition — Opponent activated an effect-negate effect
 -- ============================================================
 function s.cond_negate(e,tp,eg,ep,ev,re,r,rp)
-    return rp==1-tp and re:IsHasCategory(CATEGORY_DISABLE)
+    return rp==1-tp and (re:IsHasCategory(CATEGORY_DISABLE) or re:IsHasCategory(CATEGORY_NEGATE))
         and Duel.IsChainNegatable(ev)
 end
 
@@ -109,7 +109,7 @@ end
 function s.op_negate(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if not c:IsRelateToEffect(e) then return end
-    Duel.NegateEffect(ev)
+    Duel.NegateActivation(ev)
     Duel.Hint(HINT_SELECTMSG,1-tp,aux.Stringid(id,2))
     local op=Duel.SelectOption(1-tp,aux.Stringid(id,2),aux.Stringid(id,3),aux.Stringid(id,4))
     if op==0 then

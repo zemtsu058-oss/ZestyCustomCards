@@ -75,7 +75,6 @@ end
 -- Effect 1: Operation — Select 1 card from Deck, Set to field
 -- ============================================================
 function s.op_set(e,tp,eg,ep,ev,re,r,rp)
-    if not e:GetHandler():IsRelateToEffect(e) then return end
     if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
     local g=Duel.SelectMatchingCard(tp,s.filter_set,tp,LOCATION_DECK,0,1,1,nil)
@@ -115,6 +114,5 @@ end
 -- ============================================================
 function s.repop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    if not c:IsRelateToEffect(e) then return end
     Duel.Remove(c,POS_FACEUP,REASON_EFFECT+REASON_REPLACE)
 end

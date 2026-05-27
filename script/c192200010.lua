@@ -40,7 +40,7 @@ end
 -- ============================================================
 function s.filter_opp(c,tp)
     local loc=c:GetSummonLocation()
-    return c:IsSummonType(SUMMON_TYPE_SPECIAL) and c:GetSummonPlayer()==1-tp
+    return c:IsSummonType(SUMMON_TYPE_SPECIAL)
         and (loc==LOCATION_DECK or loc==LOCATION_EXTRA)
 end
 
@@ -58,7 +58,6 @@ end
 -- Effect 1: Operation — Search, then optionally draw
 -- ============================================================
 function s.op_search(e,tp,eg,ep,ev,re,r,rp)
-    if not e:GetHandler():IsRelateToEffect(e) then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
     local g=Duel.SelectMatchingCard(tp,s.filter_search,tp,LOCATION_DECK,0,1,1,nil)
     if #g>0 then

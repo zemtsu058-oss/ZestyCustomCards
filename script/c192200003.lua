@@ -67,7 +67,7 @@ end
 -- ============================================================
 function s.tg_ss(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then
-        return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+        return Duel.GetMZoneCount(tp,e:GetHandler())>0
             and Duel.IsExistingMatchingCard(s.filter_ss,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil,e,tp)
     end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_DECK)
@@ -116,6 +116,5 @@ end
 -- ============================================================
 function s.repop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    if not c:IsRelateToEffect(e) then return end
     Duel.Remove(c,POS_FACEUP,REASON_EFFECT+REASON_REPLACE)
 end

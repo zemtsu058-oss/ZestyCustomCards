@@ -33,24 +33,17 @@ end
 -- ============================================================
 function s.filter_opp(c,tp)
     local loc=c:GetSummonLocation()
-    return c:IsSummonType(SUMMON_TYPE_SPECIAL) and c:GetSummonPlayer()==1-tp
+    return c:IsSummonType(SUMMON_TYPE_SPECIAL)
         and (loc==LOCATION_DECK or loc==LOCATION_EXTRA)
 end
 
 -- ============================================================
--- Effect 1: Filter — Castle of Dreams Illusion monster that can be SS
 -- ============================================================
-function s.filter_illusion(c,e,tp)
-    return c:IsSetCard(0x782) and c:IsMonster() and c:IsRace(0x2000000)
-        and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-end
-
+-- Effect 1: Filter — Castle of Dreams Illusion or optionally Spellcaster monster
 -- ============================================================
--- Effect 1: Filter — Castle of Dreams Spellcaster monster that can be SS
--- ============================================================
-function s.filter_spellcaster(c,e,tp)
-    return c:IsSetCard(0x782) and c:IsMonster() and c:IsRace(RACE_SPELLCASTER)
-        and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function s.filter_ss(c,e,tp,opp_ss)
+    if not (c:IsSetCard(0x782) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)) then return false end
+    return c:IsRace(0x2000000) or (opp_ss and c:IsRace(RACE_SPELLCASTER))
 end
 
 -- ============================================================
@@ -60,11 +53,7 @@ function s.tg_ss(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then
         if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return false end
         local opp_ss=Duel.IsExistingMatchingCard(s.filter_opp,tp,0,LOCATION_MZONE,1,nil,tp)
-        if opp_ss then
-            return Duel.IsExistingMatchingCard(s.filter_spellcaster,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp)
-        else
-            return Duel.IsExistingMatchingCard(s.filter_illusion,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp)
-        end
+        return Duel.IsExistingMatchingCard(s.filter_ss,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp,opp_ss)
     end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
@@ -73,12 +62,10 @@ end
 -- Effect 1: Operation — SS appropriate monster based on condition
 -- ============================================================
 function s.op_ss(e,tp,eg,ep,ev,re,r,rp)
-    if not e:GetHandler():IsRelateToEffect(e) then return end
     if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
     local opp_ss=Duel.IsExistingMatchingCard(s.filter_opp,tp,0,LOCATION_MZONE,1,nil,tp)
-    local filter_to_use=opp_ss and s.filter_spellcaster or s.filter_illusion
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-    local g=Duel.SelectMatchingCard(tp,filter_to_use,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
+    local g=Duel.SelectMatchingCard(tp,s.filter_ss,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp,opp_ss)
     if #g>0 then
         Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
     end

@@ -106,17 +106,16 @@ function s.op_destroy(e,tp,eg,ep,ev,re,r,rp)
     if #g>0 then
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
         local dg=g:Select(tp,1,#g,nil)
-        if #dg>0 then
-            Duel.Destroy(dg,REASON_EFFECT)
-        end
-    end
-    if Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-        and Duel.IsExistingMatchingCard(s.filter_ss_gy,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,e,tp)
-        and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-        local sg=Duel.SelectMatchingCard(tp,s.filter_ss_gy,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,e,tp)
-        if #sg>0 then
-            Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+        if #dg>0 and Duel.Destroy(dg,REASON_EFFECT)>0 then
+            if Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+                and Duel.IsExistingMatchingCard(s.filter_ss_gy,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,e,tp)
+                and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+                Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+                local sg=Duel.SelectMatchingCard(tp,s.filter_ss_gy,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,e,tp)
+                if #sg>0 then
+                    Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
+                end
+            end
         end
     end
 end

@@ -83,7 +83,7 @@ end
 -- ============================================================
 function s.filter_opp_ss(c,tp)
     local loc=c:GetSummonLocation()
-    return c:IsSummonType(SUMMON_TYPE_SPECIAL) and c:GetSummonPlayer()==1-tp
+    return c:IsSummonType(SUMMON_TYPE_SPECIAL)
         and (loc==LOCATION_DECK or loc==LOCATION_EXTRA)
 end
 
@@ -120,7 +120,6 @@ end
 -- Effect 2: Operation — Activate Field Spell from Deck to Field Zone
 -- ============================================================
 function s.op_place(e,tp,eg,ep,ev,re,r,rp)
-    if not e:GetHandler():IsRelateToEffect(e) then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
     local g=Duel.SelectMatchingCard(tp,s.filter_fspell,tp,LOCATION_DECK,0,1,1,nil)
     if #g>0 then
@@ -167,9 +166,9 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
         Duel.Hint(HINT_SELECTMSG,1-tp,aux.Stringid(id,2))
         local op=Duel.SelectOption(1-tp,aux.Stringid(id,2),aux.Stringid(id,3),aux.Stringid(id,4))
         if op==0 then
-            if Duel.IsPlayerCanDraw(tp,2) and Duel.IsPlayerCanDraw(1-tp,1) then
-                Duel.Draw(tp,2,REASON_EFFECT)
-                Duel.Draw(1-tp,1,REASON_EFFECT)
+            if Duel.IsPlayerCanDraw(1-tp,2) and Duel.IsPlayerCanDraw(tp,1) then
+                Duel.Draw(1-tp,2,REASON_EFFECT)
+                Duel.Draw(tp,1,REASON_EFFECT)
             end
         elseif op==1 then
             local g_all=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
@@ -181,7 +180,7 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
                 e1:SetReset(RESET_EVENT+RESETS_STANDARD)
                 tc:RegisterEffect(e1)
             end
-            local g_opp=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+            local g_opp=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
             for tc in aux.Next(g_opp) do
                 local e1=Effect.CreateEffect(c)
                 e1:SetType(EFFECT_TYPE_SINGLE)
@@ -191,8 +190,8 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
                 tc:RegisterEffect(e1)
             end
         elseif op==2 then
-            Duel.Recover(tp,2000,REASON_EFFECT)
-            Duel.Recover(1-tp,1000,REASON_EFFECT)
+            Duel.Recover(1-tp,2000,REASON_EFFECT)
+            Duel.Recover(tp,1000,REASON_EFFECT)
         end
     end
 end

@@ -141,7 +141,6 @@ end
 -- Effect 2: Operation — Activate Field Spell from Deck to Field Zone
 -- ============================================================
 function s.op_place(e,tp,eg,ep,ev,re,r,rp)
-    if not e:GetHandler():IsRelateToEffect(e) then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
     local g=Duel.SelectMatchingCard(tp,s.filter_fspell,tp,LOCATION_DECK,0,1,1,nil)
     if #g>0 then
@@ -188,13 +187,13 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
         Duel.Hint(HINT_SELECTMSG,1-tp,aux.Stringid(id,3))
         local op=Duel.SelectOption(1-tp,aux.Stringid(id,3),aux.Stringid(id,4),aux.Stringid(id,5))
         if op==0 then
-            if Duel.IsPlayerCanDraw(1-tp,1) then
-                Duel.Draw(1-tp,1,REASON_EFFECT)
+            if Duel.IsPlayerCanDraw(tp,1) then
+                Duel.Draw(tp,1,REASON_EFFECT)
                 Duel.BreakEffect()
-                Duel.DiscardHand(1-tp,Card.IsDiscardable,2,2,REASON_EFFECT+REASON_DISCARD)
+                Duel.DiscardHand(tp,Card.IsDiscardable,2,2,REASON_EFFECT+REASON_DISCARD)
             end
         elseif op==1 then
-            local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
+            local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
             for tc in aux.Next(g) do
                 local e1=Effect.CreateEffect(c)
                 e1:SetType(EFFECT_TYPE_SINGLE)
@@ -207,25 +206,17 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
                 end
             end
         elseif op==2 then
-            Duel.Recover(1-tp,1000,REASON_EFFECT)
+            Duel.Recover(tp,1000,REASON_EFFECT)
             local e1=Effect.CreateEffect(c)
             e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
             e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
             e1:SetCode(EVENT_PHASE+PHASE_END)
             e1:SetCountLimit(1)
-            e1:SetCondition(s.dmgcon_end)
             e1:SetOperation(s.dmgop_end)
             e1:SetReset(RESET_PHASE+PHASE_END)
-            Duel.RegisterEffect(e1,1-tp)
+            Duel.RegisterEffect(e1,tp)
         end
     end
-end
-
--- ============================================================
--- Effect 3 — End Phase damage condition
--- ============================================================
-function s.dmgcon_end(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.GetTurnPlayer()==tp
 end
 
 -- ============================================================

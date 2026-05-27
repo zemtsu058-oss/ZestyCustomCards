@@ -116,7 +116,7 @@ end
 -- Effect 2: Condition — Opponent activated an effect-negate effect
 -- ============================================================
 function s.cond_negate(e,tp,eg,ep,ev,re,r,rp)
-    return rp==1-tp and re:IsHasCategory(CATEGORY_DISABLE)
+    return rp==1-tp and (re:IsHasCategory(CATEGORY_DISABLE) or re:IsHasCategory(CATEGORY_NEGATE))
         and Duel.IsChainNegatable(ev)
 end
 
@@ -134,7 +134,7 @@ end
 function s.op_negate(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if not c:IsRelateToEffect(e) then return end
-    Duel.NegateEffect(ev)
+    Duel.NegateActivation(ev)
     Duel.Hint(HINT_SELECTMSG,1-tp,aux.Stringid(id,2))
     local op=Duel.SelectOption(1-tp,aux.Stringid(id,2),aux.Stringid(id,3),aux.Stringid(id,4))
     if op==0 then
@@ -166,18 +166,10 @@ function s.op_negate(e,tp,eg,ep,ev,re,r,rp)
         e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
         e1:SetCode(EVENT_PHASE+PHASE_END)
         e1:SetCountLimit(1)
-        e1:SetCondition(s.dmgcon_end)
         e1:SetOperation(s.dmgop_end)
         e1:SetReset(RESET_PHASE+PHASE_END)
         Duel.RegisterEffect(e1,tp)
     end
-end
-
--- ============================================================
--- Effect 2 — End Phase damage condition
--- ============================================================
-function s.dmgcon_end(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.GetTurnPlayer()==tp
 end
 
 -- ============================================================

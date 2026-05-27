@@ -117,7 +117,6 @@ end
 -- ============================================================
 function s.repop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    if not c:IsRelateToEffect(e) then return end
     Duel.Remove(c,POS_FACEUP,REASON_EFFECT+REASON_REPLACE)
 end
 
