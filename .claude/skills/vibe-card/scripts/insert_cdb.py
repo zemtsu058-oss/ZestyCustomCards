@@ -36,7 +36,7 @@ def insert_card(
     level: int = 0,
     race: int = 0,
     attribute: int = 0,
-    ot: int = 1,
+    ot: int = 32,
     alias: int = 0,
     category: int = 0,
     overwrite: bool = False,
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     parser.add_argument("--race", type=str, default="0", help="Monster race bitmask (hex string or integer)")
     parser.add_argument("--attribute", type=str, default="0", help="Monster attribute bitmask (hex string or integer)")
     parser.add_argument("--category", type=str, default="0", help="Effect category bitmask (hex string or integer)")
-    parser.add_argument("--ot", type=int, default=1, help="OT (1=OCG, 2=TCG, 3=Anime, 4=Custom)")
+    parser.add_argument("--ot", type=int, default=32, help="OT (1=OCG, 2=TCG, 3=Anime, 32=Custom)")
     parser.add_argument("--alias", type=int, default=0, help="Alias card ID")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing card with same passcode")
     parser.add_argument("--json-file", type=str, help="Path to a JSON file containing the card details")
@@ -141,7 +141,7 @@ if __name__ == "__main__":
         race = parse_int(data.get("race"))
         attribute = parse_int(data.get("attribute"))
         category = parse_int(data.get("category"))
-        ot = data.get("ot", 1)
+        ot = data.get("ot", 32)
         alias = data.get("alias", 0)
         overwrite = data.get("overwrite", args.overwrite)
     else:

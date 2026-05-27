@@ -9,7 +9,7 @@ EDOPro card database is SQLite3 (`custom_cards_zesty.cdb`).
 | Column | Type | Description |
 |--------|------|-------------|
 | id | INTEGER PK | Card passcode |
-| ot | INTEGER | 1=OCG, 2=TCG, 3=Anime, 4=Custom |
+| ot | INTEGER | 1=OCG, 2=TCG, 3=Anime, 32=Custom (restricts to custom format) |
 | alias | INTEGER | If this is an alt art, passcode of original |
 | setcode | INTEGER | Archetype code (see encoding below) |
 | type | INTEGER | Card type bitmask (TYPE_* constants) |

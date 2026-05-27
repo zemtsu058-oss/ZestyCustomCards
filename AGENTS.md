@@ -108,7 +108,7 @@ Sửa tất cả lỗi FAIL và WARN trước khi báo cáo hoàn thành.
 
 Nếu cần thêm card vào database:
 - Dùng DataEditorX mở `custom_cards_zesty.cdb` 
-- Thêm entry mới với passcode, stats, effect text
+- Thêm entry mới với passcode, stats, effect text. **BẮT BUỘC đặt cột `ot` = 32 (Custom format)** để tránh các lỗi định dạng trong EDOPro.
 - Nếu có custom archetype mới: thêm vào `constants.lua` và `strings.conf`
 
 ---

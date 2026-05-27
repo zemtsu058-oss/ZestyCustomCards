@@ -165,7 +165,7 @@ Trước khi commit, kiểm tra từng mục:
 - [ ] Đúng ATK/DEF/Level/Rank/Link/Scale
 - [ ] Đúng Attribute, Race
 - [ ] Đúng Archetype (setcode)
-- [ ] OT = Custom (cho custom card)
+- [ ] OT = 32 (cho custom card)
 - [ ] Có đầy đủ card text
 
 ### Script (.lua)
