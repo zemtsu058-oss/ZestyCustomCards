@@ -28,6 +28,3 @@ loop-results.tsv
 
 # Plan
 plans/
-
-# Local AI agent config
-.claude/
