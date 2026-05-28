@@ -59,7 +59,7 @@ function s.initial_effect(c)
     -- ============================================================
     local e3=Effect.CreateEffect(c)
     e3:SetType(EFFECT_TYPE_FIELD)
-    e3:SetCode(EFFECT_REPLACE_DAMAGE)
+    e3:SetCode(EFFECT_CHANGE_DAMAGE)
     e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
     e3:SetRange(LOCATION_MZONE)
     e3:SetTargetRange(1,0)
