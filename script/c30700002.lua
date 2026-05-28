@@ -2,7 +2,7 @@
 -- Card Name: Laundry Fusion
 -- Passcode : 30700002
 -- Type     : Spell / Normal
--- Archetype: Dragonmaid (0x133)
+-- Archetype: None
 -- ============================================================
 -- Effect 1: Send the top 6 cards of your Deck to the GY, then
 --           you can Fusion Summon 1 monster from your Extra Deck,
