@@ -39,7 +39,7 @@ function s.initial_effect(c)
     local e1=Effect.CreateEffect(c)
     e1:SetType(EFFECT_TYPE_SINGLE)
     e1:SetCode(EFFECT_MATERIAL_CHECK)
-    e1:SetOperation(s.matop)
+    e1:SetValue(s.matop)
     c:RegisterEffect(e1)
 
     -- ============================================================
