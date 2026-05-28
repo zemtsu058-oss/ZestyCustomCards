@@ -244,7 +244,7 @@ function s.qkop(e,tp,eg,ep,ev,re,r,rp)
     if op==0 then
         -- (1) Negate effects of 1 face-up card opponent controls
         if not s.can_negate(tp) then return end
-        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISABLE)
+        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
         local g=Duel.SelectMatchingCard(tp,Card.IsFaceup,tp,0,LOCATION_ONFIELD,1,1,nil)
         if #g>0 then
             local tc=g:GetFirst()
