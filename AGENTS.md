@@ -191,10 +191,13 @@ https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/proc_pendulum.
 ```
 
 ### 5. Official card scripts (tìm card có effect tương tự)
-```
-Tìm passcode trên https://yugipedia.com/ → lấy code
-Fetch: https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/official/c{code}.lua
-```
+
+- Xem thư mục chứa các card mẫu tiêu biểu tại: [docs/official-reference/](file:///d:/TTF/TTFCustomCards/docs/official-reference/)
+- Nếu chưa có card mẫu cần thiết, hãy tự động tải về bằng lệnh:
+  ```powershell
+  .\script-test\fetch_official.ps1 <passcode>
+  ```
+  File tải về sẽ được lưu tự động vào `docs/official-reference/c<passcode>.lua` để các lần làm việc sau có thể dùng lại trực tiếp.
 
 ---
 
