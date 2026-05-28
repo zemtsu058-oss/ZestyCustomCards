@@ -108,16 +108,14 @@ end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if not c:IsRelateToEffect(e) then return end
-    if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
-        c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
-    end
+    Duel.SpecialSummon(c,1,tp,tp,false,false,POS_FACEUP)
 end
 
 -- ============================================================
 -- Effect 2: Condition — This card was SS by own effect (Effect 1)
 -- ============================================================
 function s.fspellcon(e,tp,eg,ep,ev,re,r,rp)
-    return e:GetHandler():GetFlagEffect(id)>0
+    return e:GetHandler():GetSummonType()==SUMMON_TYPE_SPECIAL+1
 end
 
 -- ============================================================
