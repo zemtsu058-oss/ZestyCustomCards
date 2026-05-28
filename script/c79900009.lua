@@ -6,7 +6,7 @@
 -- Level    : 8
 -- ATK/DEF  : 3000 / 2500
 -- Race     : Fiend
--- Archetype: Labrynth (0x17f)
+-- Archetype: None
 -- ============================================================
 -- Effect 1 [QUICK / HOPT]: When your opponent activates a card
 --           or effect in response to the activation of your
@@ -63,11 +63,12 @@ function s.initial_effect(c)
     local e3=Effect.CreateEffect(c)
     -- No description needed for continuous protection effects
     e3:SetType(EFFECT_TYPE_FIELD)          -- Always-on field effect
+    e3:SetProperty(EFFECT_FLAG_SET_AVAILABLE) -- Required to target face-down cards
     e3:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
     e3:SetRange(LOCATION_MZONE)            -- This card must be on the Monster Zone
     e3:SetTargetRange(LOCATION_MZONE+LOCATION_SZONE,0)  -- Protects cards on controller's side
     e3:SetCondition(s.defcon)
-    e3:SetTarget(aux.TargetBoolFunction(Card.IsFacedown))
+    e3:SetTarget(function(e,c) return c:IsFacedown() end)
     e3:SetValue(1)                         -- Cannot be destroyed by card effects
     c:RegisterEffect(e3)
 end
@@ -155,3 +156,4 @@ end
 function s.defcon(e)
     return e:GetHandler():IsPosition(POS_FACEUP_DEFENSE)
 end
+
