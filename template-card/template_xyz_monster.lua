@@ -21,7 +21,7 @@ function s.initial_effect(c)
     -- ============================================================
     -- Summon Procedure — Generic Xyz with any materials
     -- ============================================================
-    aux.AddXyzProcedure(c,nil,<<RANK>>,<<MATERIAL_COUNT>>)
+    Xyz.AddProcedure(c,nil,<<RANK>>,<<MATERIAL_COUNT>>)
 
     -- ============================================================
     -- Effect 1 — Ignition: Detach to destroy a card on field

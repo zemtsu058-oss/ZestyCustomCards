@@ -50,15 +50,7 @@ if (-not $luacheckPath) {
                 $fileIssues += @{ Line = $ln; Col = $line.Length; Msg = "Trailing whitespace" }
             }
 
-            # Tabs (should use spaces)
-            if ($line -match "`t") {
-                $fileIssues += @{ Line = $ln; Col = 1; Msg = "Tab character found (use spaces)" }
-            }
 
-            # Missing space after comma
-            if ($line -match ',[^\s]' -and $line -notmatch "^--") {
-                $fileIssues += @{ Line = $ln; Col = 1; Msg = "Missing space after comma" }
-            }
 
             # Long lines (> 120)
             if ($line.Length -gt 120 -and $line -notmatch "^--") {

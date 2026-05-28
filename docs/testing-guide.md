@@ -7,9 +7,10 @@ Hướng dẫn kiểm tra và phát hiện lỗi cho card script EDOPro.
 1. [Kiểm tra nhanh](#1-kiểm-tra-nhanh)
 2. [Validation tự động (PowerShell)](#2-validation-tự-động-powershell)
 3. [Luacheck (Lua Linter)](#3-luacheck-lua-linter)
-4. [Test trong EDOPro](#4-test-trong-edopro)
-5. [Checklist kiểm tra card](#5-checklist-kiểm-tra-card)
-6. [Common bug patterns và cách fix](#6-common-bug-patterns-và-cách-fix)
+4. [Linter và Database Tool hỗ trợ](#4-linter-và-database-tool-hỗ-trợ)
+5. [Test trong EDOPro](#5-test-trong-edopro)
+6. [Checklist kiểm tra card](#6-checklist-kiểm-tra-card)
+7. [Common bug patterns và cách fix](#7-common-bug-patterns-và-cách-fix)
 
 ---
 
@@ -120,7 +121,33 @@ luacheck script/ --config .luacheckrc
 
 ---
 
-## 4. Test trong EDOPro
+## 4. Linter và Database Tool hỗ trợ
+
+### Kịch bản Linter hỗ trợ nhanh (`lint_scripts.ps1`)
+Chạy kiểm tra phong cách viết code (lỗi khoảng trắng thừa ở cuối dòng, độ dài dòng > 120 ký tự):
+```powershell
+.\script-test\lint_scripts.ps1
+```
+*Lưu ý:* Linter đã được tối ưu hóa để cho phép sử dụng kí tự Tab và cách viết code thu gọn đặc trưng của EDOPro mà không sinh cảnh báo rác.
+
+### Công cụ CLI quản lý Database (`manage_db.py`)
+Script Python cung cấp khả năng truy vấn, cập nhật và kiểm tra database `custom_cards_zesty.cdb` trực tiếp từ console:
+* **Truy vấn card**: Xem chỉ số, định dạng và hiệu ứng của card bằng passcode hoặc tên:
+  ```powershell
+  python .\script-test\manage_db.py query <passcode_hoặc_tên>
+  ```
+* **Kiểm tra đồng bộ**: Đối chiếu danh sách file LUA cục bộ và các bản ghi trong database:
+  ```powershell
+  python .\script-test\manage_db.py check-sync
+  ```
+* **Cập nhật nhanh mô tả card**:
+  ```powershell
+  python .\script-test\manage_db.py update-text <passcode> --desc "Văn bản mô tả mới"
+  ```
+
+---
+
+## 5. Test trong EDOPro
 
 ### Setup test deck
 
@@ -154,7 +181,7 @@ Nhấn `` ` `` (backtick) trong duel để mở debug console, gõ:
 
 ---
 
-## 5. Checklist kiểm tra card
+## 6. Checklist kiểm tra card
 
 Trước khi commit, kiểm tra từng mục:
 
@@ -193,7 +220,7 @@ Trước khi commit, kiểm tra từng mục:
 
 ---
 
-## 6. Common bug patterns và cách fix
+## 7. Common bug patterns và cách fix
 
 ### Bug 1: Effect không kích hoạt được
 

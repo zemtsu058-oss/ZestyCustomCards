@@ -1,40 +1,62 @@
-# Setcode Map — Official Archetypes in Queue
+# Setcode Map — Quick Reference
 
-All values from `archetype_setcode_constants.lua` (ProjectIgnis/CardScripts).
+Cache of archetype setcodes used in the TTF Custom Cards project.
+For full official archetype list, see `docs/archetype_setcode_constants.lua`.
 
-## Queue Archetypes
+## Fan-Made Archetypes (in `script/constants.lua`)
 
-| Archetype | Setcode Hex | Decimal | Passcode Range |
-|-----------|------------|---------|----------------|
-| Dragonmaid | `0x133` | 307 | 30700001 ~ 30799999 |
-| Witchcrafter | `0x128` | 296 | 29600001 ~ 29699999 |
-| Branded | `0x160` | 352 | 35200001 ~ 35299999 |
-| Labrynth | `0x17f` | 383 | 38300001 ~ 38399999 |
-| White Forest | `0x1aa` | 426 | 42600001 ~ 42699999 |
+| Archetype | Hex | Decimal | Passcode Range | Constant |
+|-----------|-----|---------|----------------|----------|
+| TTF | `0x789` | 1929 | 192900001–192999999 | `SET_TTF` |
+| Atermis | `0x780` | 1920 | 192000001–192099999 | `SET_ATERMIS` |
+| Cat | `0x781` | 1921 | 192100001–192199999 | `SET_CAT` |
+| Desire HERO | `0x927` | 2343 | 234300001–234399999 | `SET_DESIRE_HERO` |
+| Buckle | `0x315` | 789 | 78900001–78999999 | `SET_BUCKLE` |
+| Hyperdimension | `0x1291` | 4753 | 475300001–475399999 | `SET_HYPERDIMENSION` |
+| Castle of Dreams | `0x782` | 1922 | 192200001–192299999 | `SET_CASTLE_OF_DREAMS` |
 
-## Related Archetypes (support cards)
+These require entries in both `script/constants.lua` and `strings.conf`.
 
-| Archetype | Setcode Hex | Decimal | Used by |
-|-----------|------------|---------|---------|
-| Diabell | `0x203` | 515 | White Forest |
-| Diabellstar | `0x1203` | 4611 | White Forest |
-| Sinful Spoils | `0x204` | 516 | White Forest |
-| Welcome Labrynth | `0x117f` | 4479 | Labrynth |
+## Official Archetypes (in queue — EDOPro built-in)
 
-## Custom (fan-made) Archetypes
+| Archetype | Hex | Decimal | Passcode Range | Queue Folder |
+|-----------|-----|---------|----------------|--------------|
+| Dragonmaid | `0x133` | 307 | 30700001–30799999 | `Dragonmaid` |
+| Labrynth | `0x17f` | 383 | 38300001–38399999 | `Labrynth` |
+| White Forest | `0x1aa` | 426 | 42600001–42699999 | `White_Forest` |
+| Witchcrafter | `0x128` | 296 | 29600001–29699999 | `Witchcrafter` |
+| Branded | `0x160` | 352 | 35200001–35299999 | `Brandeds` |
 
-Fan-made archetypes need setcodes created in `script/constants.lua` and `strings.conf`.
+Official archetypes do NOT need entries in `constants.lua` — EDOPro has them built-in.
 
-| Archetype | Status | Setcode |
-|-----------|--------|---------|
-| Castel of Dreams | Needs setcode | TBD |
+## Related Sub-Archetypes
+
+| Archetype | Hex | Related To |
+|-----------|-----|------------|
+| Diabell | `0x203` | White Forest |
+| Diabellstar | `0x1203` | White Forest |
+| Sinful Spoils | `0x204` | White Forest |
+| Welcome Labrynth | `0x117f` | Labrynth |
+
+## Special Queue Folders
+
+| Folder | Notes |
+|--------|-------|
+| `Common` | Cards not tied to a specific archetype |
+| `Castel_of_dreams` | Fan-made archetype (Castle of Dreams) |
+
+## Custom Counter
+
+| Counter | Hex | Constant |
+|---------|-----|----------|
+| Mana | `0x177` | `COUNTER_MANA` |
 
 ## Passcode Convention
 
 ```
-passcode = {setcode_decimal}{5_digit_sequential}
+passcode = {setcode_hex_to_decimal} × 100000 + {5-digit sequential}
 ```
 
-- Always 9 digits (avoids collisions with official 8-digit passcodes)
-- Check `script/c*.lua` and `custom_cards_zesty.cdb:datas` for existing passcodes
-- Existing custom archetypes (TTF, Desire HERO, etc.) keep their own patterns
+Example: White Forest (`0x1aa` = 426) → first card = `42600001`, next = `42600002`.
+
+Use `check_passcode.py` to find the next free passcode automatically.

@@ -106,10 +106,14 @@ Sửa tất cả lỗi FAIL và WARN trước khi báo cáo hoàn thành.
 
 ### Bước 6: Cập nhật database
 
-Nếu cần thêm card vào database:
-- Dùng DataEditorX mở `custom_cards_zesty.cdb` 
-- Thêm entry mới với passcode, stats, effect text. **BẮT BUỘC đặt cột `ot` = 32 (Custom format)** để tránh các lỗi định dạng trong EDOPro.
-- Nếu có custom archetype mới: thêm vào `constants.lua` và `strings.conf`
+Nếu cần thêm card hoặc kiểm tra database:
+- Bạn có thể sử dụng công cụ CLI hỗ trợ nhanh:
+  - Xem thông tin/hiệu ứng card: `python .\script-test\manage_db.py query <passcode_hoặc_tên>`
+  - Kiểm tra đồng bộ file script và DB: `python .\script-test\manage_db.py check-sync`
+  - Cập nhật text/mô tả nhanh: `python .\script-test\manage_db.py update-text <passcode> --desc "Văn bản"`
+- Hoặc dùng DataEditorX mở `custom_cards_zesty.cdb`:
+  - Thêm entry mới với passcode, stats, effect text. **BẮT BUỘC đặt cột `ot` = 32 (Custom format)** để tránh các lỗi định dạng trong EDOPro.
+  - Nếu có custom archetype mới: thêm vào `constants.lua` và `strings.conf`
 
 ---
 
@@ -145,11 +149,17 @@ Trước khi báo DONE, chạy:
 # 1. Validate cú pháp + cấu trúc
 .\script-test\validate_scripts.ps1
 
-# 2. Xác nhận file tồn tại đúng vị trí
+# 2. Chạy linter kiểm tra style (lỗi khoảng trắng thừa...)
+.\script-test\lint_scripts.ps1
+
+# 3. Kiểm tra tính đồng bộ database
+python .\script-test\manage_db.py check-sync
+
+# 4. Xác nhận file tồn tại đúng vị trí
 Test-Path script\c<PASSCODE>.lua
 ```
 
-Nếu validate báo FAIL → sửa ngay, không báo DONE.
+Nếu validate hoặc check-sync báo lỗi → sửa ngay, không báo DONE.
 
 ---
 
@@ -164,9 +174,10 @@ docs/testing-guide.md                 — Debug & common bugs
 template-card/README.md               — Bảng lookup pattern → source
 ```
 
-### 2. Constants cục bộ
+### 2. Constants và Setcode cục bộ
 ```
-script/constants.lua                  — SET_xxx, COUNTER_xxx của project
+docs/archetype_setcode_constants.lua  — Bản đồ setcode của toàn bộ các archetype official
+script/constants.lua                  — SET_xxx, COUNTER_xxx tùy chỉnh của project
 strings.conf                          — !setname, !countername
 ```
 
@@ -211,6 +222,7 @@ SET_CAT            = 0x781    -- Cat
 SET_DESIRE_HERO    = 0x927    -- Desire HERO
 SET_BUCKLE         = 0x315    -- Buckle
 SET_HYPERDIMENSION = 0x1291   -- Hyperdimension
+SET_CASTLE_OF_DREAMS = 0x782  -- Castle of Dreams
 COUNTER_MANA       = 0x177    -- Mana counter
 ```
 
@@ -222,6 +234,7 @@ COUNTER_MANA       = 0x177    -- Mana counter
 !setname 0x315 Buckle
 !setname 0x927 Desire HERO
 !setname 0x1291 Hyperdimension
+!setname 0x782 Castle of Dreams
 ```
 
 Khi tạo archetype mới:
@@ -233,7 +246,7 @@ Khi tạo archetype mới:
 
 ## Archetype trong queue & setcode tham khảo
 
-Các archetype official có trong `docs/queues/` và setcode tương ứng (từ CardScripts/constant.lua):
+Các archetype official có trong `docs/queues/` và setcode tương ứng (để tra cứu đầy đủ tất cả archetype khác, xem tại [docs/archetype_setcode_constants.lua](file:///d:/TTF/TTFCustomCards/docs/archetype_setcode_constants.lua)):
 
 | Archetype | Setcode | Ghi chú |
 |-----------|---------|---------|
@@ -241,11 +254,16 @@ Các archetype official có trong `docs/queues/` và setcode tương ứng (từ
 | Labrynth | `0x17f` | SET_LABRYNTH |
 | White Forest | `0x1aa` | SET_WHITE_FOREST |
 | Witchcrafter | `0x128` | SET_WITCHCRAFTER |
+| Branded | `0x160` | SET_BRANDED |
 
-Các archetype fan-made (không có trong constant.lua của CardScripts):
-- **Castel of Dreams** — cần tạo setcode mới trong `script/constants.lua`
+Các archetype fan-made (đã có trong `script/constants.lua`):
+- **Castle of Dreams** (`0x782`) — `SET_CASTLE_OF_DREAMS`
 
-**Ghi chú:** Khi viết script cho card có archetype official, dùng setcode ở trên (không cần thêm vào `constants.lua` vì EDOPro đã có sẵn). Card fan-made của project này dùng chung namespace archetype official.
+**Ghi chú:** 
+- Khi viết script cho card có archetype official, dùng setcode ở trên (không cần thêm vào `constants.lua` vì EDOPro đã có sẵn). Card fan-made của project này dùng chung namespace archetype official.
+- Các archetype phụ trợ (support) có liên quan:
+  - Diabell (`0x203`), Diabellstar (`0x1203`), Sinful Spoils (`0x204`) - dùng cho White Forest.
+  - Welcome Labrynth (`0x117f`) - dùng cho Labrynth.
 
 ---
 
@@ -265,6 +283,8 @@ passcode = {setcode_hex_to_decimal} + {5 chữ số tăng dần}
 | Witchcrafter | 0x128 | 296 | 29600001 ~ 29699999 |
 | Labrynth | 0x17f | 383 | 38300001 ~ 38399999 |
 | White Forest | 0x1aa | 426 | 42600001 ~ 42699999 |
+| Branded | 0x160 | 352 | 35200001 ~ 35299999 |
+| Castle of Dreams | 0x782 | 1922 | 192200001 ~ 192299999 |
 
 **Ví dụ:** Card đầu tiên của White Forest → `42600001`, card tiếp theo → `42600002`.
 

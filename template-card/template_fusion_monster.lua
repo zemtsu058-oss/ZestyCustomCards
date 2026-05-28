@@ -21,7 +21,7 @@ function s.initial_effect(c)
     -- ============================================================
     -- Summon Procedure — Contact Fusion using setcode materials
     -- ============================================================
-    aux.AddFusionProcFunRep(c,s.mfilter,<<MIN_MATERIAL>>,false)
+    Fusion.AddProcFunRep(c,s.mfilter,<<MIN_MATERIAL>>,false)
 
     -- ============================================================
     -- Effect 1 — Trigger on Fusion Summon: Destroy opponent's card

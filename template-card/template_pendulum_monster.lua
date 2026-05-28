@@ -20,6 +20,11 @@ local s,id=GetID()
 
 function s.initial_effect(c)
     -- ============================================================
+    -- Summon Procedure — Enable Pendulum Summon
+    -- ============================================================
+    Pendulum.AddProcedure(c)
+
+    -- ============================================================
     -- Pendulum Effect — Ignition in Pendulum Zone: Destroy a card
     -- ============================================================
     local e1=Effect.CreateEffect(c)

@@ -17,6 +17,14 @@
 local s,id=GetID()
 
 function s.initial_effect(c)
+    -- Enable revive limit
+    c:EnableReviveLimit()
+
+    -- ============================================================
+    -- Summon Procedure — Generic Synchro (Tuner + 1+ non-Tuners)
+    -- ============================================================
+    Synchro.AddProcedure(c,nil,1,1,Synchro.NonTuner(nil),1,99)
+
     -- ============================================================
     -- Effect 1 — Trigger on Synchro Summon: Revive a low-level monster
     -- ============================================================
