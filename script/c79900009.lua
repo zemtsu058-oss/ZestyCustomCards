@@ -48,7 +48,7 @@ function s.initial_effect(c)
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,1))
     e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
-    e2:SetType(EFFECT_TYPE_TRIGGER_O)      -- Optional Trigger (no Quick Effect text)
+    e2:SetType(EFFECT_TYPE_QUICK_O)        -- Quick Effect, responds to event activation
     e2:SetCode(EVENT_CHAINING)             -- Fires when a chain link is being added
     e2:SetRange(LOCATION_HAND+LOCATION_GRAVE)  -- Can activate from hand or GY
     e2:SetCountLimit(1,{id,1})  -- Separate HOPT (different index)
