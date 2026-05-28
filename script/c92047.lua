@@ -24,6 +24,7 @@
 -- ============================================================
 
 local s,id=GetID()
+s.pending_def_loss=0
 
 function s.initial_effect(c)
     -- Enable revive limit
@@ -66,7 +67,9 @@ function s.initial_effect(c)
     c:RegisterEffect(e3)
 
     -- ============================================================
-    -- Effect 4b — Field: Replace effect damage with DEF loss
+    -- Effect 4b — Field: Replace effect damage (set to 0)
+    --   Value function only stores pending DEF loss in Lua variable;
+    --   actual DEF reduction applied by Effect 4c on EVENT_CHAIN_SOLVED.
     -- ============================================================
     local e3b=Effect.CreateEffect(c)
     e3b:SetType(EFFECT_TYPE_FIELD)
@@ -76,6 +79,16 @@ function s.initial_effect(c)
     e3b:SetTargetRange(1,0)
     e3b:SetValue(s.val_replace_effdmg)
     c:RegisterEffect(e3b)
+
+    -- ============================================================
+    -- Effect 4c — Apply pending DEF reduction after chain resolves
+    -- ============================================================
+    local e3c=Effect.CreateEffect(c)
+    e3c:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e3c:SetCode(EVENT_CHAIN_SOLVED)
+    e3c:SetRange(LOCATION_MZONE)
+    e3c:SetOperation(s.op_apply_pending_def)
+    c:RegisterEffect(e3c)
 
     -- ============================================================
     -- Effect 5 — Trigger: When leaves the field
@@ -168,16 +181,31 @@ function s.op_replace_battle(e,tp,eg,ep,ev,re,r,rp)
 end
 
 -- ============================================================
--- Effect 4b: Value — Replace effect damage with DEF loss
---   Only handles effect damage; battle damage is handled by 4a.
+-- Effect 4b: Value — Prevent effect damage, store pending DEF loss
+--   Engine API calls are silently ignored inside value functions,
+--   so we only use Lua variable to store pending DEF reduction.
+--   Battle damage is handled by Effect 4a.
 -- ============================================================
 function s.val_replace_effdmg(e,re,dam,r,rp,rc)
     if dam<=0 then return dam end
-    -- Only handle effect damage (battle damage is handled by Effect 4a)
+    -- Only handle effect damage
     if (r&REASON_EFFECT)==0 then return dam end
     local c=e:GetHandler()
     local half=math.floor(dam/2)
     if c:GetDefense()<half then return dam end
+    -- Store pending DEF loss (applied by Effect 4c after chain resolves)
+    s.pending_def_loss=s.pending_def_loss+half
+    return 0
+end
+
+-- ============================================================
+-- Effect 4c: Operation — Apply pending DEF reduction
+-- ============================================================
+function s.op_apply_pending_def(e,tp,eg,ep,ev,re,r,rp)
+    if s.pending_def_loss<=0 then return end
+    local c=e:GetHandler()
+    local half=s.pending_def_loss
+    s.pending_def_loss=0
     Duel.Hint(HINT_CARD,0,id)
     local e1=Effect.CreateEffect(c)
     e1:SetType(EFFECT_TYPE_SINGLE)
@@ -185,7 +213,6 @@ function s.val_replace_effdmg(e,re,dam,r,rp,rc)
     e1:SetValue(-half)
     e1:SetReset(RESET_EVENT+RESETS_STANDARD)
     c:RegisterEffect(e1)
-    return 0
 end
 
 -- ============================================================
