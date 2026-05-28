@@ -59,7 +59,7 @@ end
 -- Effect 1: Filter — Castle of Dreams monsters that can be SS
 -- ============================================================
 function s.filter_ss(c,e,tp)
-    return c:IsSetCard(0x782) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+    return c:IsSetCard(0x782) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 -- ============================================================

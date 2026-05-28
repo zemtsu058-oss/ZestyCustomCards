@@ -61,7 +61,7 @@ end
 -- Effect 1: Filter — Castle of Dreams monsters in Deck
 -- ============================================================
 function s.filter_monster(c)
-    return c:IsSetCard(0x782) and c:IsMonster() and c:IsAbleToHand()
+    return c:IsSetCard(0x782) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
 end
 
 -- ============================================================

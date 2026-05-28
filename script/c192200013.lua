@@ -95,7 +95,7 @@ end
 -- Effect 1: Filter — Monsters in GY or banishment that can be SS
 -- ============================================================
 function s.filter_ss_gy(c,e,tp)
-    return c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+    return c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 -- ============================================================

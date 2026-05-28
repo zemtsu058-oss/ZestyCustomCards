@@ -121,7 +121,7 @@ end
 -- Effect 2: Filter — Non-Link Castle of Dreams monsters that can be SS
 -- ============================================================
 function s.filter_ss(c,e,tp)
-    return c:IsSetCard(0x782) and c:IsMonster() and not c:IsType(TYPE_LINK)
+    return c:IsSetCard(0x782) and c:IsType(TYPE_MONSTER) and not c:IsType(TYPE_LINK)
         and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 

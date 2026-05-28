@@ -42,7 +42,7 @@ end
 -- Effect 1: Filter — Castle of Dreams Illusion or optionally Spellcaster monster
 -- ============================================================
 function s.filter_ss(c,e,tp,opp_ss)
-    if not (c:IsSetCard(0x782) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)) then return false end
+    if not (c:IsSetCard(0x782) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)) then return false end
     return c:IsRace(0x2000000) or (opp_ss and c:IsRace(RACE_SPELLCASTER))
 end
 
