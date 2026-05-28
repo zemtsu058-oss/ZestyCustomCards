@@ -55,16 +55,26 @@ function s.initial_effect(c)
     c:RegisterEffect(e2)
 
     -- ============================================================
-    -- Effect 4 — Field: LP loss replacement
+    -- Effect 4a — Continuous: Replace battle damage with DEF loss
     -- ============================================================
     local e3=Effect.CreateEffect(c)
-    e3:SetType(EFFECT_TYPE_FIELD)
-    e3:SetCode(EFFECT_CHANGE_DAMAGE)
-    e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+    e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e3:SetCode(EVENT_PRE_BATTLE_DAMAGE)
     e3:SetRange(LOCATION_MZONE)
-    e3:SetTargetRange(1,0)
-    e3:SetValue(s.val_replace_lp)
+    e3:SetOperation(s.op_replace_battle)
     c:RegisterEffect(e3)
+
+    -- ============================================================
+    -- Effect 4b — Field: Replace effect damage with DEF loss (auto)
+    -- ============================================================
+    local e3b=Effect.CreateEffect(c)
+    e3b:SetType(EFFECT_TYPE_FIELD)
+    e3b:SetCode(EFFECT_CHANGE_DAMAGE)
+    e3b:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+    e3b:SetRange(LOCATION_MZONE)
+    e3b:SetTargetRange(1,0)
+    e3b:SetValue(s.val_replace_effdmg)
+    c:RegisterEffect(e3b)
 
     -- ============================================================
     -- Effect 5 — Trigger: When leaves the field
@@ -132,22 +142,41 @@ function s.efilter(e,re)
 end
 
 -- ============================================================
--- Effect 4: Value — Replace damage with DEF loss
+-- Effect 4a: Operation — Replace battle damage with DEF loss
 -- ============================================================
-function s.val_replace_lp(e,re,dam,r,rp,rc)
+function s.op_replace_battle(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    local tp=e:GetHandlerPlayer()
-    if dam>0 and c:GetDefense()>=math.floor(dam/2) and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-        Duel.Hint(HINT_CARD,0,id)
-        local e1=Effect.CreateEffect(c)
-        e1:SetType(EFFECT_TYPE_SINGLE)
-        e1:SetCode(EFFECT_UPDATE_DEFENSE)
-        e1:SetValue(-math.floor(dam/2))
-        e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-        c:RegisterEffect(e1)
-        return 0
-    end
-    return dam
+    if ep~=tp then return end
+    if ev<=0 then return end
+    local half=math.floor(ev/2)
+    if c:GetDefense()<half then return end
+    if not Duel.SelectYesNo(tp,aux.Stringid(id,0)) then return end
+    Duel.Hint(HINT_CARD,0,id)
+    Duel.ChangeBattleDamage(tp,0)
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_SINGLE)
+    e1:SetCode(EFFECT_UPDATE_DEFENSE)
+    e1:SetValue(-half)
+    e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+    c:RegisterEffect(e1)
+end
+
+-- ============================================================
+-- Effect 4b: Value — Auto-replace effect damage with DEF loss
+-- ============================================================
+function s.val_replace_effdmg(e,re,dam,r,rp,rc)
+    local c=e:GetHandler()
+    if dam<=0 then return dam end
+    local half=math.floor(dam/2)
+    if c:GetDefense()<half then return dam end
+    Duel.Hint(HINT_CARD,0,id)
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_SINGLE)
+    e1:SetCode(EFFECT_UPDATE_DEFENSE)
+    e1:SetValue(-half)
+    e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+    c:RegisterEffect(e1)
+    return 0
 end
 
 -- ============================================================
