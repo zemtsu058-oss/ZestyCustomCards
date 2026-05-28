@@ -46,7 +46,6 @@ function s.initial_effect(c)
     -- ============================================================
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,0))
-    e2:SetCategory(CATEGORY_SEARCH)
     e2:SetType(EFFECT_TYPE_IGNITION)
     e2:SetCode(EVENT_FREE_CHAIN)
     e2:SetRange(LOCATION_MZONE)
@@ -113,7 +112,6 @@ function s.tg_place(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then
         return Duel.IsExistingMatchingCard(s.filter_fspell,tp,LOCATION_DECK,0,1,nil)
     end
-    Duel.SetOperationInfo(0,CATEGORY_SEARCH,nil,1,tp,LOCATION_DECK)
 end
 
 -- ============================================================

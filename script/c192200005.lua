@@ -50,7 +50,6 @@ function s.initial_effect(c)
     -- ============================================================
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,1))
-    e2:SetCategory(CATEGORY_SEARCH)
     e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
     e2:SetCode(EVENT_SPSUMMON_SUCCESS)
     e2:SetProperty(EFFECT_FLAG_DELAY)
@@ -132,7 +131,6 @@ function s.tg_place(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then
         return Duel.IsExistingMatchingCard(s.filter_fspell,tp,LOCATION_DECK,0,1,nil)
     end
-    Duel.SetOperationInfo(0,CATEGORY_SEARCH,nil,1,tp,LOCATION_DECK)
 end
 
 -- ============================================================

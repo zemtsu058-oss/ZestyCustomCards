@@ -23,7 +23,6 @@ function s.initial_effect(c)
     -- ============================================================
     local e1=Effect.CreateEffect(c)
     e1:SetDescription(aux.Stringid(id,0))
-    e1:SetCategory(CATEGORY_SEARCH)
     e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
     e1:SetCode(EVENT_SUMMON_SUCCESS)
     e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
@@ -68,7 +67,6 @@ function s.tg_set(e,tp,eg,ep,ev,re,r,rp,chk)
         return Duel.GetLocationCount(tp,LOCATION_SZONE)>0
             and Duel.IsExistingMatchingCard(s.filter_set,tp,LOCATION_DECK,0,1,nil)
     end
-    Duel.SetOperationInfo(0,CATEGORY_SEARCH,nil,1,tp,LOCATION_DECK)
 end
 
 -- ============================================================
