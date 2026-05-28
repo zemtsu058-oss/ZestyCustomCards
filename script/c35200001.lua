@@ -125,7 +125,7 @@ end
 function s.val_no_response_to_fusion_spell(e,re,tp)
     local ch=Duel.GetCurrentChain()
     if ch==0 then return false end
-    local te,p=Duel.GetChainInfo(ch,CHAININFO_TRIGGERINGEFFECT,CHAININFO_TRIGGERINGPLAYER)
+    local te,p=Duel.GetChainInfo(ch,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER)
     if p~=e:GetLabel() or not te then return false end
     local tc=te:GetHandler()
     return tc:IsType(TYPE_SPELL) and te:IsHasCategory(CATEGORY_SPECIAL_SUMMON)
