@@ -166,9 +166,9 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
         Duel.Hint(HINT_SELECTMSG,1-tp,aux.Stringid(id,2))
         local op=Duel.SelectOption(1-tp,aux.Stringid(id,2),aux.Stringid(id,3),aux.Stringid(id,4))
         if op==0 then
-            if Duel.IsPlayerCanDraw(1-tp,2) and Duel.IsPlayerCanDraw(tp,1) then
-                Duel.Draw(1-tp,2,REASON_EFFECT)
-                Duel.Draw(tp,1,REASON_EFFECT)
+            if Duel.IsPlayerCanDraw(tp,2) and Duel.IsPlayerCanDraw(1-tp,1) then
+                Duel.Draw(tp,2,REASON_EFFECT)
+                Duel.Draw(1-tp,1,REASON_EFFECT)
             end
         elseif op==1 then
             local g_all=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
@@ -180,8 +180,8 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
                 e1:SetReset(RESET_EVENT+RESETS_STANDARD)
                 tc:RegisterEffect(e1)
             end
-            local g_opp=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
-            for tc in aux.Next(g_opp) do
+            local g_you=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+            for tc in aux.Next(g_you) do
                 local e1=Effect.CreateEffect(c)
                 e1:SetType(EFFECT_TYPE_SINGLE)
                 e1:SetCode(EFFECT_UPDATE_ATTACK)
@@ -190,8 +190,8 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
                 tc:RegisterEffect(e1)
             end
         elseif op==2 then
-            Duel.Recover(1-tp,2000,REASON_EFFECT)
-            Duel.Recover(tp,1000,REASON_EFFECT)
+            Duel.Recover(tp,2000,REASON_EFFECT)
+            Duel.Recover(1-tp,1000,REASON_EFFECT)
         end
     end
 end
