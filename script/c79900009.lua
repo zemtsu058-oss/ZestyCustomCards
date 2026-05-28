@@ -35,7 +35,7 @@ function s.initial_effect(c)
     e1:SetType(EFFECT_TYPE_QUICK_O)        -- Quick Effect, can be activated on opponent's turn
     e1:SetCode(EVENT_CHAINING)             -- Fires when a new chain link is being added
     e1:SetRange(LOCATION_HAND)             -- Must be in hand to activate
-    e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)  -- Separate HOPT per effect
+    e1:SetCountLimit(1,id)  -- Separate HOPT per effect
     e1:SetCondition(s.negcon)
     e1:SetCost(s.negcost)
     e1:SetTarget(s.negtg)
@@ -51,7 +51,7 @@ function s.initial_effect(c)
     e2:SetType(EFFECT_TYPE_TRIGGER_O)      -- Optional Trigger (no Quick Effect text)
     e2:SetCode(EVENT_CHAINING)             -- Fires when a chain link is being added
     e2:SetRange(LOCATION_HAND+LOCATION_GRAVE)  -- Can activate from hand or GY
-    e2:SetCountLimit(1,id+100,EFFECT_COUNT_CODE_OATH)  -- Separate HOPT (different id)
+    e2:SetCountLimit(1,{id,1})  -- Separate HOPT (different index)
     e2:SetCondition(s.spcon)
     e2:SetTarget(s.sptg)
     e2:SetOperation(s.spop)
@@ -145,7 +145,7 @@ end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if c:IsRelateToEffect(e) then  -- Guard: card must still be in hand/GY
-        Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP_DEFENCE)
+        Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
     end
 end
 
@@ -153,5 +153,5 @@ end
 -- Effect 3: Condition — This card must be in Defense Position
 -- ============================================================
 function s.defcon(e)
-    return e:GetHandler():IsPosition(POS_FACEUP_DEFENCE)
+    return e:GetHandler():IsPosition(POS_FACEUP_DEFENSE)
 end
