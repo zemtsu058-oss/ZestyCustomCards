@@ -67,8 +67,6 @@ function s.initial_effect(c)
 
     -- ============================================================
     -- Effect 4b — Field: Replace effect damage with DEF loss
-    -- (Value function only returns 0; DEF reduction applied via
-    --  EVENT_CUSTOM trigger to avoid side effects in value func)
     -- ============================================================
     local e3b=Effect.CreateEffect(c)
     e3b:SetType(EFFECT_TYPE_FIELD)
@@ -78,14 +76,6 @@ function s.initial_effect(c)
     e3b:SetTargetRange(1,0)
     e3b:SetValue(s.val_replace_effdmg)
     c:RegisterEffect(e3b)
-
-    -- Effect 4b-post — Apply DEF reduction after effect damage replaced
-    local e3c=Effect.CreateEffect(c)
-    e3c:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-    e3c:SetCode(EVENT_CUSTOM+id)
-    e3c:SetRange(LOCATION_MZONE)
-    e3c:SetOperation(s.op_apply_def_loss)
-    c:RegisterEffect(e3c)
 
     -- ============================================================
     -- Effect 5 — Trigger: When leaves the field
@@ -178,9 +168,8 @@ function s.op_replace_battle(e,tp,eg,ep,ev,re,r,rp)
 end
 
 -- ============================================================
--- Effect 4b: Value — Replace effect damage (no side effects)
+-- Effect 4b: Value — Replace effect damage with DEF loss
 --   Only handles effect damage; battle damage is handled by 4a.
---   Stores half-damage on the effect label for the post-trigger.
 -- ============================================================
 function s.val_replace_effdmg(e,re,dam,r,rp,rc)
     if dam<=0 then return dam end
@@ -189,25 +178,14 @@ function s.val_replace_effdmg(e,re,dam,r,rp,rc)
     local c=e:GetHandler()
     local half=math.floor(dam/2)
     if c:GetDefense()<half then return dam end
-    -- Store half-damage for the post-trigger to apply DEF loss
-    e:SetLabel(half)
     Duel.Hint(HINT_CARD,0,id)
-    Duel.RaiseEvent(c,EVENT_CUSTOM+id,e,0,0,0,half)
-    return 0
-end
-
--- ============================================================
--- Effect 4b-post: Operation — Apply DEF reduction from effect damage
--- ============================================================
-function s.op_apply_def_loss(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-    if ev<=0 then return end
     local e1=Effect.CreateEffect(c)
     e1:SetType(EFFECT_TYPE_SINGLE)
     e1:SetCode(EFFECT_UPDATE_DEFENSE)
-    e1:SetValue(-ev)
+    e1:SetValue(-half)
     e1:SetReset(RESET_EVENT+RESETS_STANDARD)
     c:RegisterEffect(e1)
+    return 0
 end
 
 -- ============================================================
