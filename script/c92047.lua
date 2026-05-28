@@ -173,8 +173,8 @@ end
 -- ============================================================
 function s.val_replace_effdmg(e,re,dam,r,rp,rc)
     if dam<=0 then return dam end
-    -- Skip battle damage (handled by Effect 4a)
-    if (r&REASON_BATTLE)~=0 then return dam end
+    -- Only handle effect damage (battle damage is handled by Effect 4a)
+    if (r&REASON_EFFECT)==0 then return dam end
     local c=e:GetHandler()
     local half=math.floor(dam/2)
     if c:GetDefense()<half then return dam end
