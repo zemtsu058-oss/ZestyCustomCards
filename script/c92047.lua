@@ -61,11 +61,14 @@ function s.initial_effect(c)
     e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
     e3:SetCode(EVENT_PRE_BATTLE_DAMAGE)
     e3:SetRange(LOCATION_MZONE)
+    e3:SetCondition(s.con_replace_battle)
     e3:SetOperation(s.op_replace_battle)
     c:RegisterEffect(e3)
 
     -- ============================================================
-    -- Effect 4b — Field: Replace effect damage with DEF loss (auto)
+    -- Effect 4b — Field: Replace effect damage with DEF loss
+    -- (Value function only returns 0; DEF reduction applied via
+    --  EVENT_CUSTOM trigger to avoid side effects in value func)
     -- ============================================================
     local e3b=Effect.CreateEffect(c)
     e3b:SetType(EFFECT_TYPE_FIELD)
@@ -75,6 +78,14 @@ function s.initial_effect(c)
     e3b:SetTargetRange(1,0)
     e3b:SetValue(s.val_replace_effdmg)
     c:RegisterEffect(e3b)
+
+    -- Effect 4b-post — Apply DEF reduction after effect damage replaced
+    local e3c=Effect.CreateEffect(c)
+    e3c:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e3c:SetCode(EVENT_CUSTOM+id)
+    e3c:SetRange(LOCATION_MZONE)
+    e3c:SetOperation(s.op_apply_def_loss)
+    c:RegisterEffect(e3c)
 
     -- ============================================================
     -- Effect 5 — Trigger: When leaves the field
@@ -142,15 +153,20 @@ function s.efilter(e,re)
 end
 
 -- ============================================================
+-- Effect 4a: Condition — Only for damage to this card's controller
+-- ============================================================
+function s.con_replace_battle(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    return ep==tp and ev>0 and c:GetDefense()>=math.floor(ev/2)
+end
+
+-- ============================================================
 -- Effect 4a: Operation — Replace battle damage with DEF loss
 -- ============================================================
 function s.op_replace_battle(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    if ep~=tp then return end
-    if ev<=0 then return end
-    local half=math.floor(ev/2)
-    if c:GetDefense()<half then return end
     if not Duel.SelectYesNo(tp,aux.Stringid(id,0)) then return end
+    local half=math.floor(ev/2)
     Duel.Hint(HINT_CARD,0,id)
     Duel.ChangeBattleDamage(tp,0)
     local e1=Effect.CreateEffect(c)
@@ -162,21 +178,36 @@ function s.op_replace_battle(e,tp,eg,ep,ev,re,r,rp)
 end
 
 -- ============================================================
--- Effect 4b: Value — Auto-replace effect damage with DEF loss
+-- Effect 4b: Value — Replace effect damage (no side effects)
+--   Only handles effect damage; battle damage is handled by 4a.
+--   Stores half-damage on the effect label for the post-trigger.
 -- ============================================================
 function s.val_replace_effdmg(e,re,dam,r,rp,rc)
-    local c=e:GetHandler()
     if dam<=0 then return dam end
+    -- Skip battle damage (handled by Effect 4a)
+    if (r&REASON_BATTLE)~=0 then return dam end
+    local c=e:GetHandler()
     local half=math.floor(dam/2)
     if c:GetDefense()<half then return dam end
+    -- Store half-damage for the post-trigger to apply DEF loss
+    e:SetLabel(half)
     Duel.Hint(HINT_CARD,0,id)
+    Duel.RaiseEvent(c,EVENT_CUSTOM+id,e,0,0,0,half)
+    return 0
+end
+
+-- ============================================================
+-- Effect 4b-post: Operation — Apply DEF reduction from effect damage
+-- ============================================================
+function s.op_apply_def_loss(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    if ev<=0 then return end
     local e1=Effect.CreateEffect(c)
     e1:SetType(EFFECT_TYPE_SINGLE)
     e1:SetCode(EFFECT_UPDATE_DEFENSE)
-    e1:SetValue(-half)
+    e1:SetValue(-ev)
     e1:SetReset(RESET_EVENT+RESETS_STANDARD)
     c:RegisterEffect(e1)
-    return 0
 end
 
 -- ============================================================
@@ -188,16 +219,22 @@ end
 
 -- ============================================================
 -- Effect 5: Target — Declare categories and operations
+--   Store reason info via e:SetLabel since it's reliable at
+--   target time (before chain resolution moves the card).
 -- ============================================================
 function s.lftg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end
     local c=e:GetHandler()
     local def=c:GetFlagEffectLabel(id+100) or 0
+    -- Check if opponent caused the card to leave (via card effect or battle)
+    local by_opponent=(rp==1-tp) and (r&(REASON_EFFECT+REASON_BATTLE+REASON_DESTROY))~=0
+    -- Store in label: 1 = opponent caused, 0 = not
+    e:SetLabel(by_opponent and 1 or 0)
     Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,def)
     if c:IsType(TYPE_FUSION) then
         Duel.SetOperationInfo(0,CATEGORY_TOEXTRA,c,1,0,0)
     end
-    if c:GetReasonPlayer()==1-tp then
+    if by_opponent then
         Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,1-tp,LOCATION_MZONE)
     end
 end
@@ -209,7 +246,7 @@ function s.lfop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     local atk=c:GetFlagEffectLabel(id) or 0
     local def=c:GetFlagEffectLabel(id+100) or 0
-    local removed_by_opponent=c:GetReasonPlayer()==1-tp
+    local removed_by_opponent=e:GetLabel()==1
     -- Clear flag effects
     c:ResetFlagEffect(id)
     c:ResetFlagEffect(id+100)
