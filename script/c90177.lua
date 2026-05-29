@@ -42,6 +42,7 @@ function s.initial_effect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(0)
 	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetCode(0)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e2:SetCost(s.cost_banish)
@@ -100,7 +101,8 @@ end
 function s.tg_setdeck(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local gy=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_GRAVE,0,nil,TYPE_TRAP)
-		return Duel.IsExistingMatchingCard(s.filter_setdeck,tp,LOCATION_DECK,0,1,nil,gy)
+		return Duel.GetLocationCount(tp,LOCATION_SZONE)>0
+			and Duel.IsExistingMatchingCard(s.filter_setdeck,tp,LOCATION_DECK,0,1,nil,gy)
 	end
 end
 
@@ -108,23 +110,18 @@ end
 -- Effect 1: Operation — Set Traps from Deck
 -- ============================================================
 function s.op_setdeck(e,tp,eg,ep,ev,re,r,rp)
+	local ft=Duel.GetLocationCount(tp,LOCATION_SZONE)
+	if ft<=0 then return end
 	local gy=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_GRAVE,0,nil,TYPE_TRAP)
 	local labct=Duel.GetMatchingGroupCount(s.filter_labcard,tp,LOCATION_GRAVE,0,nil)
 	if labct<=0 then return end
 	local g=Duel.GetMatchingGroup(s.filter_setdeck,tp,LOCATION_DECK,0,nil,gy)
 	if #g==0 then return end
-	local ct=math.min(labct,#g)
+	local ct=math.min(labct,#g,ft)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
 	local sg=g:Select(tp,1,ct,nil)
-	for tc in aux.Next(sg) do
-		if Duel.SSet(tp,tc)>0 then
-			-- Can be activated this turn
-			local e1=Effect.CreateEffect(e:GetHandler())
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-			tc:RegisterEffect(e1)
-		end
+	if #sg>0 then
+		Duel.SSet(tp,sg)
 	end
 end
 
@@ -149,7 +146,8 @@ end
 -- ============================================================
 function s.tg_setgy(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		return Duel.IsExistingMatchingCard(s.filter_setgy,tp,LOCATION_GRAVE,0,1,nil)
+		return Duel.GetLocationCount(tp,LOCATION_SZONE)>0
+			and Duel.IsExistingMatchingCard(s.filter_setgy,tp,LOCATION_GRAVE,0,1,e:GetHandler())
 	end
 end
 
@@ -157,8 +155,10 @@ end
 -- Effect 2: Operation — Set 1 Labrynth Trap from GY
 -- ============================================================
 function s.op_setgy(e,tp,eg,ep,ev,re,r,rp)
+	-- IsRelateToEffect not checked because handler is banished as cost
+	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-	local g=Duel.SelectMatchingCard(tp,s.filter_setgy,tp,LOCATION_GRAVE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.filter_setgy,tp,LOCATION_GRAVE,0,1,1,e:GetHandler())
 	local tc=g:GetFirst()
 	if tc and Duel.SSet(tp,tc)>0 then
 		-- Can be activated this turn
