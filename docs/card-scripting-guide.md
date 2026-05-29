@@ -11,8 +11,7 @@ Tài liệu tham khảo đầy đủ để lập trình card cho EDOPro, dựa t
 5. [Summon Procedure](#5-summon-procedure)
 6. [Cost Patterns](#6-cost-patterns)
 7. [Common Pitfalls (Lỗi thường gặp)](#7-common-pitfalls-lỗi-thường-gặp)
-8. [Auto-Code Workflow](#8-auto-code-workflow)
-9. [Tham khảo API](#9-tham-khảo-api)
+8. [Tham khảo API](#8-tham-khảo-api)
 
 ---
 
@@ -519,60 +518,7 @@ if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 
 ---
 
-## 8. Auto-Code Workflow
-
-### Quy trình tạo card mới
-
-```
-1. Thiết kế text effect → phân tích thành các effect con
-2. Tạo database entry (.cdb) với DataEditorX
-3. Chọn template phù hợp → sinh script
-4. Validate script (chạy tests)
-5. Test trong EDOPro
-```
-
-### Phân tích effect thành code
-
-| Text Pattern | Loại Effect | Template |
-|-------------|-------------|----------|
-| "If/When ... is Normal/Special Summoned: You can..." | Trigger O | 3.1 |
-| "Once per turn: You can..." | Ignition | 3.2 |
-| "(Quick Effect): You can..." | Quick | 3.3 |
-| "All ... gain/lose ..." | Continuous | 3.4 |
-| "Target 1 ...; destroy it" | Target + Destroy | 4 + CATEGORY_DESTROY |
-| "Add 1 ... from your Deck to your hand" | Search | CATEGORY_SEARCH+TOHAND |
-| "Special Summon 1 ... from your ..." | SS | CATEGORY_SPECIAL_SUMMON |
-| "Negate the activation, and if you do, destroy it" | Negate | CATEGORY_NEGATE+DISABLE |
-
-### Sinh code tự động với AI
-
-Khi dùng AI để sinh code, cung cấp prompt theo format:
-
-```
-Tạo card script EDOPro (Lua 5.3) cho card sau:
-
-Name: [tên card]
-Type: [Monster/Spell/Trap] / [Effect/Normal/Fusion/...]
-Attribute: [DARK/LIGHT/...]
-Level/Rank/Link: [số]
-ATK/DEF: [số/số]
-Race: [Spellcaster/Dragon/...]
-Archetype: [0xXXX nếu có]
-
-Effect text:
-[Full effect text tiếng Anh, mỗi effect 1 dòng]
-
-Yêu cầu:
-- Dùng GetID() cho table/ID
-- SetCategory đầy đủ
-- SetCountLimit đúng (hard/soft once per turn)
-- Kiểm tra IsRelateToEffect trong operation
-- Dùng aux.FilterBoolFunction cho filter đơn giản
-```
-
----
-
-## 9. Tham khảo API
+## 8. Tham khảo API
 
 ### Card.* methods thường dùng
 

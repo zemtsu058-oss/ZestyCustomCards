@@ -19,6 +19,11 @@ lua_modules/
 # Test outputs
 loop-results.tsv
 
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
 # DataEditorX backups
 *.cdb.bak
 *.cdb~
