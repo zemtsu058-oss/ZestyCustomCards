@@ -34,6 +34,7 @@
 
 - **KHÔNG tự động commit** — chỉ commit khi user yêu cầu.
 - **KHÔNG tự động push** — chỉ push khi user yêu cầu.
+- **Luôn commit file CDB chung với file script** (nếu có thay đổi đồng thời), tuyệt đối không tách ra thành các commit riêng biệt.
 - **Cấu trúc Commit Message bắt buộc:**
   * Format: `[<Tên rút gọn>] [<Type>]: <Mô tả ngắn bằng tiếng Anh>` (Trong đó `<Tên rút gọn>` là từ cuối cùng trong tên cấu hình `git config user.name` của hệ thống, ví dụ: "Lê Đình Doanh" -> "Doanh")
   * Các `<Type>` hợp lệ:
