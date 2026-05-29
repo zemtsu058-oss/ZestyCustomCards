@@ -7,8 +7,8 @@
 -- While you control a "Labrynth" monster, this turn, each
 -- player must send 1 card from their hand to the GY to
 -- activate a card or effect. If a player has no cards in
--- their hand, it becomes the End Phase. You can banish this
--- card from your GY; return 1 banished card to the GY.
+-- their hand during the Main Phase, it becomes the End Phase.
+-- You can banish this card from your GY; return 1 banished card to the GY.
 -- You can only use 1 "Farewell Labrynth" effect per turn,
 -- and only once that turn.
 -- ============================================================
@@ -117,6 +117,8 @@ end
 -- Effect 1: End Phase check — If any player has no hand, end
 -- ============================================================
 function s.ep_check(e,tp,eg,ep,ev,re,r,rp)
+	local phase=Duel.GetCurrentPhase()
+	if phase~=PHASE_MAIN1 and phase~=PHASE_MAIN2 then return end
 	local tp_hand=Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)
 	local opp_hand=Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)
 	if tp_hand==0 or opp_hand==0 then
