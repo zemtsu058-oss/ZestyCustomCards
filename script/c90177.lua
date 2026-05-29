@@ -6,13 +6,14 @@
 -- ============================================================
 -- Effect 1: You can only activate this card if you have 2 or
 --           more Normal Traps in your GY, including a "Labrynth"
---           Trap. Tribute 1 Level 8 Fiend monster; Set Traps
+--           Trap. Tribute 1 Level 8 Fiend monster; Set Normal Traps
 --           from your Deck, up to the number of "Labrynth" cards
 --           in your GY, with different names from the Traps in
 --           your GY.
--- Effect 2: You can banish this card from your GY; Set 1
---           "Labrynth" Trap from your GY. It can be activated
---           this turn, but banish it when it leaves the field.
+-- Effect 2: During your Main Phase: You can banish this card
+--           from your GY; Set 1 "Labrynth" Trap from your GY.
+--           It can be activated this turn, but banish it when
+--           it leaves the field.
 -- You can only use 1 "Labrynth Party" effect per turn, and only
 -- once that turn.
 -- ============================================================
@@ -45,6 +46,7 @@ function s.initial_effect(c)
 	e2:SetCode(0)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
+	e2:SetCondition(s.setcon2)
 	e2:SetCost(s.cost_banish)
 	e2:SetTarget(s.tg_setgy)
 	e2:SetOperation(s.op_setgy)
@@ -81,10 +83,10 @@ function s.cost_tribute(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 -- ============================================================
--- Effect 1: Filter — Traps in Deck with different names from GY Traps
+-- Effect 1: Filter — Normal Traps in Deck with different names from GY Traps
 -- ============================================================
 function s.filter_setdeck(c,gy)
-	return c:IsType(TYPE_TRAP) and c:IsSSetable()
+	return c:IsNormalTrap() and c:IsSSetable()
 		and not gy:IsExists(Card.IsCode,1,nil,c:GetCode())
 end
 
@@ -123,6 +125,14 @@ function s.op_setdeck(e,tp,eg,ep,ev,re,r,rp)
 	if #sg>0 then
 		Duel.SSet(tp,sg)
 	end
+end
+
+-- ============================================================
+-- Effect 2: Condition — During your Main Phase
+-- ============================================================
+function s.setcon2(e,tp,eg,ep,ev,re,r,rp)
+	local ph=Duel.GetCurrentPhase()
+	return Duel.GetTurnPlayer()==tp and (ph==PHASE_MAIN1 or ph==PHASE_MAIN2)
 end
 
 -- ============================================================
