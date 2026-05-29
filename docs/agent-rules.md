@@ -32,6 +32,13 @@
 
 ## Git & Infrastructure
 
-- **KHÔNG tự động commit** — chỉ commit khi user yêu cầu
-- **KHÔNG tự động push** — chỉ push khi user yêu cầu
-- File trong `docs/`, `template-card/`, `script-test/` là infrastructure — giữ sạch
+- **KHÔNG tự động commit** — chỉ commit khi user yêu cầu.
+- **KHÔNG tự động push** — chỉ push khi user yêu cầu.
+- **Cấu trúc Commit Message bắt buộc:**
+  * Format: `[Doanh] [<Type>]: <Mô tả ngắn bằng tiếng Anh>`
+  * Các `<Type>` hợp lệ:
+    * `[Fix]`: Sửa lỗi script, sửa hiệu ứng, sửa DB sai thông tin.
+    * `[Feature]`: Thêm card mới, script mới hoặc hiệu ứng mới.
+    * `[Chore]`: Cập nhật cấu hình, cập nhật database chung, dọn dẹp file.
+    * `[Refactor]`: Tái cấu trúc thư mục, tối ưu hóa code không làm thay đổi tính năng.
+- File trong `docs/`, `template-card/`, `script-test/` là infrastructure — giữ sạch.
