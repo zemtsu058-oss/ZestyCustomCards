@@ -10,7 +10,7 @@
 --           from your Deck, up to the number of "Labrynth" cards
 --           in your GY, with different names from the Traps in
 --           your GY.
--- Effect 2: During your Main Phase: You can banish this card
+-- Effect 2: During Main Phase: You can banish this card
 --           from your GY; Set 1 "Labrynth" Trap from your GY.
 --           It can be activated this turn, but banish it when
 --           it leaves the field.
@@ -42,8 +42,8 @@ function s.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(0)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetCode(0)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
 	e2:SetCondition(s.setcon2)
@@ -128,11 +128,11 @@ function s.op_setdeck(e,tp,eg,ep,ev,re,r,rp)
 end
 
 -- ============================================================
--- Effect 2: Condition — During your Main Phase
+-- Effect 2: Condition — During Main Phase
 -- ============================================================
 function s.setcon2(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()
-	return Duel.GetTurnPlayer()==tp and (ph==PHASE_MAIN1 or ph==PHASE_MAIN2)
+	return ph==PHASE_MAIN1 or ph==PHASE_MAIN2
 end
 
 -- ============================================================
