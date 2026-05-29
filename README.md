@@ -1,132 +1,60 @@
 # TTF Custom Cards
 
-Custom card project by Zesty and friends for [EDOPro](https://github.com/ProjectIgnis/edopro) (Yu-Gi-Oh! auto duel simulator).
+Custom card fan-made cho [EDOPro](https://github.com/ProjectIgnis/edopro) — simulator Yu-Gi-Oh! miễn phí.
 
-Repository chứa Lua script, SQLite database, artwork của các custom card.
+Project này chứa các card do nhóm TTF tự thiết kế: script Lua, database, artwork.
 
 ---
 
-## Project Structure
+## Cài đặt
+
+1. Clone repo này về máy
+2. Copy toàn bộ vào thư mục `expansions/` của EDOPro:
+   ```
+   expansions/
+   ├── custom_cards_zesty.cdb   ← database card
+   ├── script/                  ← Lua scripts
+   ├── pics/                    ← artwork
+   └── strings.conf             ← tên archetype
+   ```
+3. Mở EDOPro → bật "Alternate format" để thấy card tùy chỉnh
+
+---
+
+## Card có trong project
+
+| Archetype | Số card | Loại |
+|-----------|---------|------|
+| Castle of Dreams | 14 | Fan-made original |
+| TTF / Atermis / Cat | ~10 | Fan-made original |
+| Labrynth | 2 | Support card |
+| Dragonmaid | 2 | Support card |
+| White Forest | 1 | Support card |
+| Branded | 1 | Support card |
+| Desire HERO / Buckle | ~8 | Fan-made original |
+
+---
+
+## Cấu trúc thư mục
 
 ```
-/
-├── script/                       # Lua card scripts (60 cards)
-│   └── constants.lua             # Custom archetypes, setcodes, counters
-├── pics/                         # Card artwork (.png/.jpg, named by passcode)
-│   └── field/                    # Field spell background artwork
-├── template-card/                # Reusable script templates (10 types)
-│   ├── README.md                 # Template usage guide + pattern lookup
-│   ├── template_effect_monster.lua
-│   ├── template_normal_spell.lua
-│   ├── template_normal_trap.lua
-│   ├── template_fusion_monster.lua
-│   ├── template_synchro_monster.lua
-│   ├── template_xyz_monster.lua
-│   ├── template_link_monster.lua
-│   ├── template_pendulum_monster.lua
-│   ├── template_field_spell.lua
-│   └── template_hand_trap.lua
-├── docs/                         # Internal documentation
-│   ├── card-scripting-guide.md   # EDOPro Lua API reference & patterns
-│   ├── testing-guide.md          # Validation, debugging, common bugs
-│   └── queues/                   # Artwork queues theo archetype (p/w/r/d/x prefix)
-│       ├── Brandeds/
-│       ├── Dragonmaid/
-│       ├── Labrynth/
-│       ├── White_Forest/
-│       ├── Witchcrafter/
-│       └── Castel_of_dreams/
-├── script-test/                  # Automation tools
-│   ├── validate_scripts.ps1      # Syntax + structure validation
-│   └── lint_scripts.ps1          # Lua linter (luacheck)
-├── custom_cards_zesty.cdb        # Card database (SQLite, edit with DataEditorX)
-├── strings.conf                  # Archetype/counter display name strings
-├── AGENTS.md                     # Agent guide (workflow, rules, template selection)
-├── LICENSE                       # MIT
-└── README.md                     # This file
+script/          — Lua script cho mỗi card (tên file = passcode)
+pics/            — Artwork (tên file = passcode)
+template-card/   — Template để tạo script mới
+docs/            — Tài liệu nội bộ
+script-test/     — Công cụ validate và quản lý database
+custom_cards_zesty.cdb  — Database SQLite
+strings.conf     — Tên archetype hiển thị trong game
 ```
 
-## Card Statistics
+---
 
-| Type | Count |
-|------|-------|
-| Effect Monster | 15 |
-| Fusion Monster | 9 |
-| Synchro Monster | 2 |
-| Xyz Monster | 1 |
-| Link Monster | 7 |
-| Spell Card | 25 |
-| Trap Card | 1 |
-| **Total** | **60** |
+## Đóng góp
 
-**Extra Deck:** 19 | **Main Deck:** 41
+Nếu bạn muốn thêm card mới hoặc sửa bug, đọc [`AGENTS.md`](AGENTS.md) để biết workflow.
 
-## Custom Archetypes
-
-| Hex | Setcode | Name |
-|-----|---------|------|
-| `0x789` | `SET_TTF` | TTF |
-| `0x780` | `SET_ATERMIS` | Atermis |
-| `0x781` | `SET_CAT` | Cat |
-| `0x927` | `SET_DESIRE_HERO` | Desire HERO |
-| `0x315` | `SET_BUCKLE` | Buckle |
-| `0x1291` | `SET_HYPERDIMENSION` | Hyperdimension |
-| `0x177` | `COUNTER_MANA` | Mana Counter |
-
-Also includes support cards for official archetypes: Witchcrafter (`0x128`), Labrynth (`0x17f`), Dragonmaid (`0x133`), Branded (`0x160`), White Forest (`0x1aa`).
-
-## Quick Start
-
-### Create a new card
-
-```powershell
-# 1. Copy template
-Copy-Item template-card\template_effect_monster.lua script\c<PASSCODE>.lua
-
-# 2. Replace all <<PLACEHOLDER>> markers with actual values
-
-# 3. Validate
-.\script-test\validate_scripts.ps1
-
-# 4. Add to database via DataEditorX (custom_cards_zesty.cdb)
-```
-
-### Validate existing scripts
-
-```powershell
-.\script-test\validate_scripts.ps1          # Validate all scripts
-.\script-test\lint_scripts.ps1              # Run linter
-```
-
-## EDOPro Documentation Resources
-
-### Internal Docs
-- `docs/card-scripting-guide.md` — Full Lua API reference, effect types, filter functions, summon procedures, cost patterns, common pitfalls
-- `docs/testing-guide.md` — Validation workflow, EDOPro test deck setup, debug console commands, common bug patterns
-- `template-card/README.md` — Template selection guide, placeholder reference, pattern lookup table, 10 critical scripting rules
-- `AGENTS.md` — Master workflow guide for card creation and bug fixing
-
-### EDOPro / ProjectIgnis Sources
-
-| Resource | URL |
-|----------|-----|
-| EDOPro GitHub | https://github.com/ProjectIgnis/edopro |
-| CardScripts Wiki | https://github.com/ProjectIgnis/CardScripts/wiki |
-| Scripting Library (API) | https://github.com/ProjectIgnis/CardScripts/wiki/1-%E2%80%90-Scripting-Library |
-| Understanding a Script | https://github.com/ProjectIgnis/CardScripts/wiki/4-%E2%80%90-Understanding-a-card-script |
-| Filter Functions | https://github.com/ProjectIgnis/CardScripts/wiki/5-%E2%80%90-Filter-Functions |
-| Archetypes & Setcodes | https://github.com/ProjectIgnis/CardScripts/wiki/6-%E2%80%90-How-archetypes-and-their-values-work |
-| `utility.lua` (all `aux.*` helpers) | https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/utility.lua |
-| `constant.lua` (all constants) | https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/constant.lua |
-| Summon procedures | `proc_fusion.lua`, `proc_synchro.lua`, `proc_xyz.lua`, `proc_link.lua`, `proc_ritual.lua`, `proc_pendulum.lua` (under same repo) |
-| Official card scripts | https://github.com/ProjectIgnis/CardScripts/tree/master/official |
-| Konami DB (passcode lookup) | https://www.db.yugioh-card.com/yugiohdb/card_search.action |
-| Yugipedia (card info) | https://yugipedia.com/wiki/ |
-
-### Tools
-- **DataEditorX** — GUI editor for `custom_cards_zesty.cdb` (included with EDOPro)
-- **Lua 5.3+** — Required for `validate_scripts.ps1` (optional, falls back to basic checks)
+---
 
 ## License
 
-MIT — see [LICENSE](./LICENSE)
+MIT

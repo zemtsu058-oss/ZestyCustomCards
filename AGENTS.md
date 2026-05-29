@@ -1,312 +1,57 @@
 # TTF Custom Cards — Agent Guide
 
-Project custom card cho EDOPro (Yu-Gi-Oh! auto duel simulator). Repository này chứa script, database, ảnh của các custom card.
+Project custom card cho EDOPro (Yu-Gi-Oh! auto duel simulator).
+Scripts Lua + database SQLite + artwork cho các card fan-made.
+
+## Khởi động nhanh
+
+```powershell
+# Validate tất cả scripts
+.\script-test\validate_scripts.ps1
+
+# Kiểm tra đồng bộ database
+python .\script-test\manage_db.py check-sync
+```
+
+Trước khi bắt đầu: đọc [`claude-progress.md`](claude-progress.md) để biết trạng thái phiên trước.
+
+---
 
 ## Cấu trúc project
 
 ```
-/
-├── script/                  # Lua card scripts (cXXXXXXXXX.lua)
-│   └── constants.lua        # Custom archetypes, setcodes, counters
-├── pics/                    # Card artwork (.png/.jpg, tên = passcode)
-├── template-card/           # Templates để sinh script mới
-│   ├── README.md            # Agent guide chi tiết cho việc dùng template
-│   ├── template_effect_monster.lua
-│   ├── template_normal_spell.lua
-│   ├── template_normal_trap.lua
-│   ├── template_fusion_monster.lua
-│   ├── template_synchro_monster.lua
-│   ├── template_xyz_monster.lua
-│   ├── template_link_monster.lua
-│   ├── template_pendulum_monster.lua
-│   ├── template_field_spell.lua
-│   └── template_hand_trap.lua
-├── docs/                    # Tài liệu
-│   ├── card-scripting-guide.md    # API reference & patterns
-│   ├── testing-guide.md           # Test, validation, debug
-│   └── queues/                    # Hàng đợi card fan-made cần làm (theo archetype)
-│       └── <archetype>/           # Mỗi archetype một folder
-│           ├── p_<card-name>.png  # Pending — chờ làm script
-│           ├── w_<card-name>.png  # Working — đang viết script
-│           ├── r_<card-name>.png  # Review — script xong, cần kiểm tra
-│           ├── d_<card-name>.png  # Done — hoàn tất, đã vào CDB
-│           └── x_<card-name>.png  # Skipped — bỏ qua/hoãn
-├── script-test/             # Công cụ tự động
-│   ├── validate_scripts.ps1       # Kiểm tra syntax + structure
-│   └── lint_scripts.ps1           # Lua linter
-├── custom_cards_zesty.cdb   # Card database (SQLite)
-├── strings.conf             # Archetype/counter name strings
-└── AGENTS.md                # File này
+script/          # Lua scripts (cXXXXXXXXX.lua) + constants.lua
+pics/            # Artwork (tên file = passcode)
+template-card/   # Templates sinh script mới (xem README.md bên trong)
+docs/            # Tài liệu (xem bảng điều hướng bên dưới)
+script-test/     # validate_scripts.ps1, lint_scripts.ps1, manage_db.py
+custom_cards_zesty.cdb  # Database SQLite
+strings.conf     # Archetype/counter name strings
+docs/queues/     # Hàng đợi card theo archetype (p_/w_/r_/d_/x_ prefix)
 ```
-
-## Workflow tạo card mới
-
-### Bước 1: Nhận yêu cầu
-
-User cung cấp thông tin:
-- Tên card, loại (Monster/Spell/Trap), sub-type (Effect/Fusion/Synchro/...)
-- Attribute, Level/Rank/Link, ATK/DEF, Race
-- Effect text (tiếng Anh hoặc tiếng Việt)
-
-### Bước 2: Phân tích effect → chọn template
-
-Đọc effect text, xác định các loại effect và chọn template tương ứng:
-
-| Mô tả effect | Loại | Template |
-|-------------|------|----------|
-| "If/When ... is Normal/Special Summoned: You can..." | Trigger O | `template_effect_monster.lua` |
-| "Once per turn: You can..." (Main Phase) | Ignition | `template_effect_monster.lua` |
-| "(Quick Effect): You can..." | Quick | `template_hand_trap.lua` |
-| "When your opponent activates..." (negate từ tay) | Quick Hand | `template_hand_trap.lua` |
-| Spell Card activation | Normal Spell | `template_normal_spell.lua` |
-| Trap Card activation | Normal Trap | `template_normal_trap.lua` |
-| Fusion Monster + effect | Fusion | `template_fusion_monster.lua` |
-| Synchro Monster + effect | Synchro | `template_synchro_monster.lua` |
-| Xyz Monster + detach effect | Xyz | `template_xyz_monster.lua` |
-| Link Monster + effect | Link | `template_link_monster.lua` |
-| Pendulum (scale + monster effect) | Pendulum | `template_pendulum_monster.lua` |
-| Field Spell (activation + continuous + phase trigger) | Field | `template_field_spell.lua` |
-| "All ... gain ATK/DEF" | Continuous | `template_synchro_monster.lua` (Effect 2) |
-| Target + destroy | Destroy | `template_effect_monster.lua` (Effect 2) |
-| Search/add từ Deck | Search | `template_effect_monster.lua` (Effect 1) |
-| SS từ GY/Deck | Special Summon | `template_synchro_monster.lua` (Effect 1) |
-
-Nếu card có nhiều effect, chọn template có số effect phù hợp nhất, rồi thêm/bớt effect block.
-
-### Bước 3: Copy template → điền placeholder
-
-```powershell
-Copy-Item template-card\template_xxx.lua script\c<PASSCODE>.lua
-```
-
-Thay thế tất cả `<<PLACEHOLDER>>`:
-- `<<CARD_NAME>>` → tên card
-- `<<PASSCODE>>` → passcode (số 9 chữ số)
-- `<<SETCODE>>` → archetype hex (tra `script/constants.lua`)
-- `<<LEVEL>>`, `<<RANK>>`, `<<ATK>>`, `<<DEF>>` → chỉ số
-- `<<ATK_VALUE>>`, `<<LP_AMOUNT>>` → giá trị hiệu ứng
-- `<<LINK_COUNT>>`, `<<MIN_MATERIAL>>`, `<<MATERIAL_COUNT>>` → chỉ số summon
-
-**Quan trọng**: Khi copy template, giữ nguyên header comment (phần `-- ============================================================`) và cập nhật effect text.
-
-### Bước 4: Tùy chỉnh effect
-
-- Nếu card chỉ có 1 effect: xóa block effect 2 + tất cả function liên quan
-- Nếu card có 3+ effect: copy block `Effect.CreateEffect` → `RegisterEffect` và tăng số (`e3`, `e4`)
-- Nếu effect khác pattern trong template: sửa trực tiếp logic trong target/operation function
-- Ánh xạ `aux.Stringid(id,N)` — N=0 cho effect 1, N=1 cho effect 2, v.v.
-
-### Bước 5: Validate
-
-```powershell
-.\script-test\validate_scripts.ps1
-```
-
-Sửa tất cả lỗi FAIL và WARN trước khi báo cáo hoàn thành.
-
-### Bước 6: Cập nhật database
-
-Nếu cần thêm card hoặc kiểm tra database:
-- Bạn có thể sử dụng công cụ CLI hỗ trợ nhanh:
-  - Xem thông tin/hiệu ứng card: `python .\script-test\manage_db.py query <passcode_hoặc_tên>`
-  - Kiểm tra đồng bộ file script và DB: `python .\script-test\manage_db.py check-sync`
-  - Cập nhật text/mô tả nhanh: `python .\script-test\manage_db.py update-text <passcode> --desc "Văn bản"`
-- Hoặc dùng DataEditorX mở `custom_cards_zesty.cdb`:
-  - Thêm entry mới với passcode, stats, effect text. **BẮT BUỘC đặt cột `ot` = 32 (Custom format)** để tránh các lỗi định dạng trong EDOPro.
-  - Nếu có custom archetype mới: thêm vào `constants.lua` và `strings.conf`
 
 ---
 
-## Critical Rules (BẮT BUỘC TUÂN THỦ)
+## Ràng buộc cứng (KHÔNG ĐƯỢC VI PHẠM)
 
-### Script rules
-1. **ALWAYS** `local s,id=GetID()` ở đầu file
-2. **ALWAYS** `function s.initial_effect(c) ... end`
-3. **ALWAYS** `aux.Stringid(id,N)` cho SetDescription
-4. **ALWAYS** `if chk==0 then return ... end` trong target function
-5. **ALWAYS** `Duel.SetOperationInfo` nếu effect destroy/search/SS
-6. **ALWAYS** check `c:IsRelateToEffect(e)` trong operation nếu dùng handler
-7. **ALWAYS** check `Duel.GetLocationCount(tp,LOCATION_MZONE)>0` trước SS
-8. **NEVER** dùng `chk==1` — luôn `chk==0` để check legality
-9. **NEVER** quên `c:RegisterEffect(e1)` sau khi tạo effect
-10. **NEVER** quên `SetRange` cho effect non-SINGLE
-11. **CRITICAL — NEVER** tham chiếu hay copy code từ bất kỳ script nào trong `script/`. Toàn bộ source hiện tại đang có rất nhiều lỗi (thiếu `EFFECT_COUNT_CODE_OATH`, sai category, sai reset, sai `SetSPSummonOnce`, sai `Stringid` mapping, v.v.). Chỉ dùng template trong `template-card/` và document trong `docs/` làm reference.
-12. **ALWAYS** dùng template trong `template-card/` làm base
-
-### Code quality
-- Hàm filter/target/operation dùng tên có ý nghĩa: `filter_search`, `tg_destroy`, `op_revive`, v.v.
-- Mỗi effect block phải có comment `-- Effect N — Mô tả ngắn gọn`
-- Giữ text effect gốc trong header comment của file
-- Hàm filter đặt trước hàm target, hàm target trước hàm operation
+1. **NEVER** copy code từ `script/` — toàn bộ đang có lỗi, chỉ dùng `template-card/`
+2. **ALWAYS** `local s,id=GetID()` ở đầu mỗi script
+3. **ALWAYS** validate trước khi báo DONE: `.\script-test\validate_scripts.ps1`
+4. **NEVER** tự commit/push — chỉ khi user yêu cầu
+5. **ALWAYS** cột `ot` = 32 khi thêm card vào database
 
 ---
 
-## Kiểm tra trước khi báo cáo
+## Điều hướng theo tác vụ
 
-Trước khi báo DONE, chạy:
-
-```powershell
-# 1. Validate cú pháp + cấu trúc
-.\script-test\validate_scripts.ps1
-
-# 2. Chạy linter kiểm tra style (lỗi khoảng trắng thừa...)
-.\script-test\lint_scripts.ps1
-
-# 3. Kiểm tra tính đồng bộ database
-python .\script-test\manage_db.py check-sync
-
-# 4. Xác nhận file tồn tại đúng vị trí
-Test-Path script\c<PASSCODE>.lua
-```
-
-Nếu validate hoặc check-sync báo lỗi → sửa ngay, không báo DONE.
-
----
-
-## Khi template không đủ
-
-Nếu card cần pattern không có trong template, tìm kiếm theo thứ tự:
-
-### 1. Docs nội bộ
-```
-docs/card-scripting-guide.md          — API đầy đủ, tất cả pattern
-docs/testing-guide.md                 — Debug & common bugs
-template-card/README.md               — Bảng lookup pattern → source
-```
-
-### 2. Constants và Setcode cục bộ
-```
-docs/archetype_setcode_constants.lua  — Bản đồ setcode của toàn bộ các archetype official
-script/constants.lua                  — SET_xxx, COUNTER_xxx tùy chỉnh của project
-strings.conf                          — !setname, !countername
-```
-
-### 3. CardScripts Wiki (qua WebFetch)
-```
-https://github.com/ProjectIgnis/CardScripts/wiki/1-%E2%80%90-Scripting-Library
-https://github.com/ProjectIgnis/CardScripts/wiki/5-%E2%80%90-Filter-Functions
-https://github.com/ProjectIgnis/CardScripts/wiki/4-%E2%80%90-Understanding-a-card-script
-https://github.com/ProjectIgnis/CardScripts/wiki/6-%E2%80%90-How-archetypes-and-their-values-work
-```
-
-### 4. Raw source files (từ GitHub)
-```
-https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/utility.lua
-https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/constant.lua
-https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/proc_fusion.lua
-https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/proc_synchro.lua
-https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/proc_xyz.lua
-https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/proc_link.lua
-https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/proc_ritual.lua
-https://raw.githubusercontent.com/ProjectIgnis/CardScripts/master/proc_pendulum.lua
-```
-
-### 5. Official card scripts (tìm card có effect tương tự)
-
-- Xem thư mục chứa các card mẫu tiêu biểu tại: [docs/official-reference/](file:///d:/TTF/TTFCustomCards/docs/official-reference/)
-- Nếu chưa có card mẫu cần thiết, hãy tự động tải về bằng lệnh:
-  ```powershell
-  .\script-test\fetch_official.ps1 <passcode>
-  ```
-  File tải về sẽ được lưu tự động vào `docs/official-reference/c<passcode>.lua` để các lần làm việc sau có thể dùng lại trực tiếp.
-
----
-
-## Custom constants của project
-
-```lua
--- Từ script/constants.lua
-SET_TTF            = 0x789    -- TTF
-SET_ATERMIS        = 0x780    -- Atermis
-SET_CAT            = 0x781    -- Cat
-SET_DESIRE_HERO    = 0x927    -- Desire HERO
-SET_BUCKLE         = 0x315    -- Buckle
-SET_HYPERDIMENSION = 0x1291   -- Hyperdimension
-SET_CASTLE_OF_DREAMS = 0x782  -- Castle of Dreams
-COUNTER_MANA       = 0x177    -- Mana counter
-```
-
-```conf
-# Từ strings.conf
-!setname 0x789 TTF
-!setname 0x780 Atermis
-!setname 0x781 Cat
-!setname 0x315 Buckle
-!setname 0x927 Desire HERO
-!setname 0x1291 Hyperdimension
-!setname 0x782 Castle of Dreams
-```
-
-Khi tạo archetype mới:
-1. Thêm `SET_XXX = 0xYYY` vào `script/constants.lua`
-2. Thêm `!setname 0xYYY TênArchetype` vào `strings.conf`
-3. Chọn hex code không trùng với archetype đã có
-
----
-
-## Archetype trong queue & setcode tham khảo
-
-Các archetype official có trong `docs/queues/` và setcode tương ứng (để tra cứu đầy đủ tất cả archetype khác, xem tại [docs/archetype_setcode_constants.lua](file:///d:/TTF/TTFCustomCards/docs/archetype_setcode_constants.lua)):
-
-| Archetype | Setcode | Ghi chú |
-|-----------|---------|---------|
-| Dragonmaid | `0x133` | SET_DRAGONMAID |
-| Labrynth | `0x17f` | SET_LABRYNTH |
-| White Forest | `0x1aa` | SET_WHITE_FOREST |
-| Witchcrafter | `0x128` | SET_WITCHCRAFTER |
-| Branded | `0x160` | SET_BRANDED |
-
-Các archetype fan-made (đã có trong `script/constants.lua`):
-- **Castle of Dreams** (`0x782`) — `SET_CASTLE_OF_DREAMS`
-
-**Ghi chú:** 
-- Khi viết script cho card có archetype official, dùng setcode ở trên (không cần thêm vào `constants.lua` vì EDOPro đã có sẵn). Card fan-made của project này dùng chung namespace archetype official.
-- Các archetype phụ trợ (support) có liên quan:
-  - Diabell (`0x203`), Diabellstar (`0x1203`), Sinful Spoils (`0x204`) - dùng cho White Forest.
-  - Welcome Labrynth (`0x117f`) - dùng cho Labrynth.
-
----
-
-## Quy tắc chọn passcode
-
-Passcode dùng **9 chữ số** để tránh trùng card official (vốn chỉ dùng tối đa 8 chữ số).
-
-**Công thức:** `{setcode_decimal}{sequential_5digits}`
-
-```
-passcode = {setcode_hex_to_decimal} + {5 chữ số tăng dần}
-```
-
-| Archetype | Setcode hex | Decimal | Passcode range |
-|-----------|-------------|---------|----------------|
-| Dragonmaid | 0x133 | 307 | 30700001 ~ 30799999 |
-| Witchcrafter | 0x128 | 296 | 29600001 ~ 29699999 |
-| Labrynth | 0x17f | 383 | 38300001 ~ 38399999 |
-| White Forest | 0x1aa | 426 | 42600001 ~ 42699999 |
-| Branded | 0x160 | 352 | 35200001 ~ 35299999 |
-| Castle of Dreams | 0x782 | 1922 | 192200001 ~ 192299999 |
-
-**Ví dụ:** Card đầu tiên của White Forest → `42600001`, card tiếp theo → `42600002`.
-
-**Lưu ý:**
-- Đã dùng passcode nào thì đánh dấu vào bảng để tránh trùng
-- Card có archetype đã có sẵn passcode pattern riêng (vd: TTF = 789xxx) thì giữ nguyên pattern cũ
-
----
-
-## Bug fix workflow
-
-Khi user báo bug:
-
-1. **Đọc script** liên quan
-2. **Xác định effect** bị lỗi (đọc text card → tìm effect tương ứng)
-3. **Check từng phần**: Condition → Cost → Target → Operation
-4. **Tìm pattern sai**: xem `docs/testing-guide.md` mục Common Bugs
-5. **Sửa** → chạy `.\script-test\validate_scripts.ps1`
-6. **Không sửa file khác** nếu không liên quan
-
-## Git commits
-
-- **KHÔNG tự động commit** — chỉ commit khi user yêu cầu
-- **KHÔNG tự động push** — chỉ push khi user yêu cầu
-- File trong `docs/`, `template-card/`, `script-test/` là infrastructure, cần giữ sạch
+| Tác vụ | Đọc file này |
+|--------|-------------|
+| Tạo card mới | [`docs/agent-workflow.md`](docs/agent-workflow.md) |
+| Viết/review script | [`docs/agent-rules.md`](docs/agent-rules.md) |
+| Tra setcode / passcode | [`docs/agent-constants.md`](docs/agent-constants.md) |
+| Fix bug / effect lạ | [`docs/agent-bugfix.md`](docs/agent-bugfix.md) |
+| API scripting đầy đủ | [`docs/card-scripting-guide.md`](docs/card-scripting-guide.md) |
+| Debug / testing | [`docs/testing-guide.md`](docs/testing-guide.md) |
+| Templates | [`template-card/README.md`](template-card/README.md) |
+| Trạng thái card (queue) | [`feature_list.json`](feature_list.json) |
+| Tiến độ phiên làm việc | [`claude-progress.md`](claude-progress.md) |

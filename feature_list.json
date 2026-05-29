@@ -1,0 +1,154 @@
+{
+  "last_updated": "2026-05-29",
+  "note": "Trạng thái: pending(p) | working(w) | review(r) | done(d) | skipped(x). Phản ánh prefix trong docs/queues/<archetype>/",
+  "archetypes": {
+    "Labrynth": {
+      "setcode": "0x17f",
+      "passcode_range": "38300001-38399999",
+      "cards": [
+        {
+          "name": "Labrynth Party",
+          "passcode": "38300001",
+          "status": "done",
+          "script": "script/c38300001.lua"
+        },
+        {
+          "name": "Farewell Labrynth",
+          "passcode": "38300002",
+          "status": "done",
+          "script": "script/c38300002.lua"
+        }
+      ]
+    },
+    "Witchcrafter": {
+      "setcode": "0x128",
+      "passcode_range": "29600001-29699999",
+      "cards": []
+    },
+    "Dragonmaid": {
+      "setcode": "0x133",
+      "passcode_range": "30700001-30799999",
+      "cards": [
+        {
+          "name": "Dragonmaid's Soul",
+          "passcode": "30700001",
+          "status": "done",
+          "script": "script/c30700001.lua",
+          "queue_file": "docs/queues/Dragonmaid/d_Dragonmaids_Soul.png"
+        }
+      ]
+    },
+    "White_Forest": {
+      "setcode": "0x1aa",
+      "passcode_range": "42600001-42699999",
+      "cards": [
+        {
+          "name": "Whispers of the White Forest",
+          "passcode": "42600001",
+          "status": "done",
+          "script": "script/c42600001.lua",
+          "queue_file": "docs/queues/White_Forest/d_Whispers_of_the_White_Forest.png"
+        }
+      ]
+    },
+    "Branded": {
+      "setcode": "0x160",
+      "passcode_range": "35200001-35299999",
+      "cards": [
+        {
+          "name": "Branded's New Adventure",
+          "passcode": "35200001",
+          "status": "done",
+          "script": "script/c35200001.lua",
+          "queue_file": "docs/queues/Brandeds/d_Brandeds_New_Adventure.png"
+        }
+      ]
+    },
+    "Castle_of_Dreams": {
+      "setcode": "0x782",
+      "passcode_range": "192200001-192299999",
+      "cards": [
+        {
+          "name": "Iris, Master of the Castle of Dreams",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Iris_Master_of_the_Castle_of_Dreams_.jpg"
+        },
+        {
+          "name": "Bena, Guardian of the Castle of Dreams",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Bena_Guardian_of_the_Castle_of_Dreams_2.jpg"
+        },
+        {
+          "name": "Cautus, Keeper of the Castle of Dreams",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Cautus_Keeper_of_the_Castle_of_Dreams_1.jpg"
+        },
+        {
+          "name": "Morpheus, Corruptor of the Castle of Dreams",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Morpheus_Corruptor_of_the_Castle_of_Dreams_1.jpg"
+        },
+        {
+          "name": "Morpheus, Dreamspinner of the Castle of Dreams",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Morpheus_Dreamspinner_of_the_Castle_of_Dreams_1.jpg"
+        },
+        {
+          "name": "Wandering Ghost of the Castle of Dreams",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Wandering_Ghost_of_the_Castle_of_Dreams_1.jpg"
+        },
+        {
+          "name": "Wolff, Servant of the Castle of Dreams",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Wolff_Servant_of_the_Castle_of_Dreams_.jpg"
+        },
+        {
+          "name": "Castle of Dreams - Betrayal",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castel_of_Dreams_-_Betrayal.jpg"
+        },
+        {
+          "name": "Castle of Dreams - Breakout",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castel_of_Dreams_-_Breakout.jpg"
+        },
+        {
+          "name": "Castle of Dreams - Fall",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castel_of_Dreams_-_Fall_1.jpg"
+        },
+        {
+          "name": "Castle of Dreams - Dream Show",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castle_of_Dreams_-_Dream_Show.jpg"
+        },
+        {
+          "name": "Castle of Dreams - Fairytale",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castle_of_Dreams_-_Fairytale.jpg"
+        },
+        {
+          "name": "Castle of Dreams - Iriss Necklace",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castle_of_Dreams_-_Iriss_Necklace_.jpg"
+        },
+        {
+          "name": "Castle of Dreams - Stage",
+          "status": "done",
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castle_of_Dreams_-_Stage.jpg"
+        }
+      ]
+    },
+    "Common": {
+      "note": "Card không thuộc archetype cụ thể",
+      "cards": [
+        {
+          "name": "Laundry Fusion",
+          "status": "done",
+          "queue_file": "docs/queues/Common/d_Laundry_Fusion.jpg"
+        }
+      ]
+    }
+  }
+}
