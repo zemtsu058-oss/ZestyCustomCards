@@ -98,6 +98,17 @@
   - `python .\script-test\manage_db.py check-sync` -> đồng bộ thành công (không phát sinh lỗi mới).
 - **Files/artifacts đã cập nhật:** [c998716.lua](file:///d:/TTF/TTFCustomCards/script/c998716.lua), [c22121392.lua](file:///d:/TTF/TTFCustomCards/script/c22121392.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
+### Phiên 006 — 2026-05-30
+
+- **Mục tiêu:** Sửa lỗi hiển thị menu chọn Battle Phase / End Phase khi kích hoạt chuyển End Phase từ Main Phase của card `90178` ("Farewell Labrynth").
+- **Đã hoàn thành:**
+  - Cập nhật script `script/c90178.lua`: Trong hàm `s.ep_check`, thêm đăng ký hiệu ứng `EFFECT_CANNOT_BP` lên turn player (`turnp`) có reset timing `RESET_PHASE|PHASE_END` trước khi thực hiện `Duel.SkipPhase`. Việc này ngăn không cho người chơi chọn Battle Phase, giúp game tự động chuyển trực tiếp sang End Phase mà không hiển thị prompt lựa chọn.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 0 FAIL, c90178.lua OK.
+  - `python .\script-test\manage_db.py check-sync` -> Hoạt động bình thường.
+- **Files/artifacts đã cập nhật:** [c90178.lua](file:///d:/TTF/TTFCustomCards/script/c90178.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._
 
