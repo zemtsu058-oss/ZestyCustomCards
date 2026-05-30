@@ -23,7 +23,7 @@ Project này chứa các card do nhóm TTF tự thiết kế: script Lua, databa
 
 ## Card có trong project
 
-Hiện tại project có **76** custom cards (bao gồm cả fan-made original archetypes và các thẻ bài support cho các archetype chính thức):
+Hiện tại project có **79** custom cards (bao gồm cả fan-made original archetypes và các thẻ bài support cho các archetype chính thức):
 
 ### Archetypes Thiết Kế Riêng (Fan-made Original)
 
@@ -45,9 +45,9 @@ Hiện tại project có **76** custom cards (bao gồm cả fan-made original a
 | **Dragonmaid** | 2 | Dragonmaid's Soul!?, Laundry Fusion |
 | **Melodious** | 2 | Melodious Fusion, MELODIOUS FAMILY |
 | **White Forest** | 1 | Whispers of the White Forest |
-| **Maliss** | 1 | The Grand Stage of Maliss |
+| **Maliss** | 2 | The Grand Stage of Maliss, Maliss of the Fallen Game |
 | **Rikka** | 1 | Teardrop the Rikka Fairy |
-| **Các card khác (Meme / Generic / Support lẻ)** | 18 | DoomZ Command, Majestic Quasar, Toon Quasar, Void Invasion, Drytron Supernova, Cây Súng Ngàn Năm, Monster Redie... |
+| **Các card khác (Meme / Generic / Support lẻ)** | 20 | DoomZ Command, Majestic Quasar, Toon Quasar, Void Invasion, Drytron Supernova, Cây Súng Ngàn Năm, Monster Redie, Elaina, The Wandering Witch, Power of the Dominators... |
 
 
 ---
