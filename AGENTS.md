@@ -39,6 +39,7 @@ docs/queues/     # Hàng đợi card theo archetype (p_/w_/r_/d_/x_ prefix)
 3. **ALWAYS** validate trước khi báo DONE: `.\script-test\validate_scripts.ps1`
 4. **NEVER** tự commit/push — chỉ khi user yêu cầu
 5. **ALWAYS** cột `ot` = 32 khi thêm card vào database
+6. **ALWAYS** tra cứu setcode của các official archetype trong [`docs/archetype_setcode_constants.lua`](file:///d:/TTF/TTFCustomCards/docs/archetype_setcode_constants.lua) (không search web hay tự đoán bừa setcode).
 
 ---
 

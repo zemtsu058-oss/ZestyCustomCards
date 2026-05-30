@@ -33,7 +33,12 @@ COUNTER_MANA         = 0x177    -- Mana counter
 
 ## Archetypes Official trong Queue
 
-Các archetype official có trong `docs/queues/` (tra đầy đủ tại [`docs/archetype_setcode_constants.lua`](archetype_setcode_constants.lua)):
+> [!IMPORTANT]
+> **TRA CỨU SETCODE CHO ARCHETYPE:**
+> - Đối với các archetype official (Dragonmaid, Labrynth, White Forest, Rikka, v.v.), bạn **BẮT BUỘC** phải tra cứu setcode trong file [`docs/archetype_setcode_constants.lua`](file:///d:/TTF/TTFCustomCards/docs/archetype_setcode_constants.lua).
+> - **KHÔNG** được search web hay tự đoán setcode vì có thể sai lệch giữa các bản simulator khác nhau. File này chứa toàn bộ setcode chuẩn OCG/TCG được hỗ trợ trong dự án.
+
+Các archetype official có trong `docs/queues/` (tra đầy đủ tại [`docs/archetype_setcode_constants.lua`](file:///d:/TTF/TTFCustomCards/docs/archetype_setcode_constants.lua)):
 
 | Archetype | Setcode | Hằng số |
 |-----------|---------|---------|
