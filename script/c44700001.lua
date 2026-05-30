@@ -57,7 +57,7 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
     -- Check 2: Targets a card in opponent's GY/banishment
     local tg=Duel.GetChainInfo(ev,CHAININFO_TARGET_CARDS)
     if tg and tg:IsExists(function(c) return c:IsLocation(LOCATION_GRAVE|LOCATION_REMOVED)
-        and c:IsControler(1-tp) end) then
+        and c:IsControler(1-tp) end,1,nil) then
         return true
     end
     
