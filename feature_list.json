@@ -140,6 +140,19 @@
         }
       ]
     },
+    "Rikka": {
+      "setcode": "0x141",
+      "passcode_range": "32100001-32199999",
+      "cards": [
+        {
+          "name": "Teardrop the Rikka Fairy",
+          "passcode": "32100001",
+          "status": "done",
+          "script": "script/c32100001.lua",
+          "queue_file": "docs/queues/Rikka/p_Teardrop_the_Rikka_Fairy.jpg"
+        }
+      ]
+    },
     "Common": {
       "note": "Card không thuộc archetype cụ thể",
       "cards": [
