@@ -108,7 +108,15 @@
   - `python .\script-test\manage_db.py check-sync` -> Hoạt động bình thường.
 - **Files/artifacts đã cập nhật:** [c90178.lua](file:///d:/TTF/TTFCustomCards/script/c90178.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
+### Phiên 007 — 2026-05-30
 
+- **Mục tiêu:** Sửa lỗi `8 Parameters are needed` của card `c192200014` ("Castle of Dreams - Fall").
+- **Đã hoàn thành:**
+  - Cập nhật script `script/c192200014.lua`: Sửa cuộc gọi `Duel.SelectMatchingCard` ở dòng 107 để truyền đủ 8 tham số bằng cách thêm `1-tp` làm tham số `player_of_self_location` (để lọc từ phần bài của đối thủ).
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 0 FAIL.
+  - `python .\script-test\manage_db.py check-sync` -> Hoạt động bình thường.
+- **Files/artifacts đã cập nhật:** [c192200014.lua](file:///d:/TTF/TTFCustomCards/script/c192200014.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._
 
