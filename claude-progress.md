@@ -87,7 +87,16 @@
   - `python .\script-test\manage_db.py query 32100001` và `query 998716` -> thông tin và các strings hiệu ứng hiển thị chính xác.
 - **Files/artifacts đã cập nhật:** [c32100001.lua](file:///d:/TTF/TTFCustomCards/script/c32100001.lua), [AGENTS.md](file:///d:/TTF/TTFCustomCards/AGENTS.md), [agent-constants.md](file:///d:/TTF/TTFCustomCards/docs/agent-constants.md), `pics/32100001.jpg`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
----
+### Phiên 005 — 2026-05-30
+
+- **Mục tiêu:** Fix lỗi hiển thị `???` thay cho lựa chọn "Add to hand" của card `998716` ("The Grand Stage of Maliss") và `22121392` ("Verre Magic: Transformation").
+- **Đã hoàn thành:**
+  - Sửa script `script/c998716.lua` và `script/c22121392.lua`: Thay thế system string `1190` bằng custom string tương ứng từ database (`aux.Stringid(id,3)` cho 998716 và `aux.Stringid(id,4)` cho 22121392).
+  - Cập nhật database SQLite `custom_cards_zesty.cdb`: Thêm `'Add to hand'` vào `str4` cho card `998716` và `str5` cho card `22121392`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 0 FAIL, c998716.lua và c22121392.lua OK.
+  - `python .\script-test\manage_db.py check-sync` -> đồng bộ thành công (không phát sinh lỗi mới).
+- **Files/artifacts đã cập nhật:** [c998716.lua](file:///d:/TTF/TTFCustomCards/script/c998716.lua), [c22121392.lua](file:///d:/TTF/TTFCustomCards/script/c22121392.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._
