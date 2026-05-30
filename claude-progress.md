@@ -129,4 +129,18 @@
   - `python .\script-test\manage_db.py check-sync` -> Thành công, không có lỗi đồng bộ mới.
 - **Files/artifacts đã cập nhật:** [c44700001.lua](file:///d:/TTF/TTFCustomCards/script/c44700001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
+### Phiên 015 — 2026-05-30
+
+- **Mục tiêu:** Kiểm tra và sửa lỗi thiếu/trùng description của Effect 1 và Effect 2 cho card `79900010` ("Monica, The Legendary Witch") trong database SQLite.
+- **Đã hoàn thành:**
+  - Cập nhật script `script/c79900010.lua`: Đổi mô tả hiệu ứng 2 `e2:SetDescription` từ `aux.Stringid(id,0)` thành `aux.Stringid(id,8)` nhằm phân tách rõ ràng với hiệu ứng 1.
+  - Cập nhật database SQLite `custom_cards_zesty.cdb`:
+    - Cập nhật `str1` (tương ứng với index 0 của Monica) thành `[Link] Special Summon materials`.
+    - Thêm `str9` (tương ứng với index 8 của Monica) thành `[Quick] Tribute/Discard: disable, destroy, or control`.
+    - Sửa lỗi thiếu số `1` trong dòng hạn chế triệu hồi ở cột `desc` (đổi từ `Special Summon "Monica, ..."` thành `Special Summon 1 "Monica, ..."`).
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 48 OK (c79900010.lua OK không lỗi), 31 WARN, 0 FAIL.
+  - `python .\script-test\manage_db.py check-sync` -> Hoạt động bình thường, không phát sinh lỗi đồng bộ mới cho Monica.
+- **Files/artifacts đã cập nhật:** [c79900010.lua](file:///d:/TTF/TTFCustomCards/script/c79900010.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._
