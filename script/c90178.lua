@@ -70,26 +70,24 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetCode(EFFECT_ACTIVATE_COST)
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e1:SetTargetRange(1,1)
-	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetReset(RESET_PHASE|PHASE_END)
 	e1:SetCost(s.costchk)
 	e1:SetOperation(s.costop)
 	Duel.RegisterEffect(e1,tp)
 
 	-- Register continuous field checks: when any player's hand
 	-- becomes empty, immediately move to the End Phase.
-	-- Use EVENT_CHAIN_SOLVED to catch hand loss during chain resolution
 	local e2=Effect.CreateEffect(e:GetHandler())
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EVENT_CHAIN_SOLVED)
-	e2:SetReset(RESET_PHASE+PHASE_END)
+	e2:SetReset(RESET_PHASE|PHASE_END)
 	e2:SetOperation(s.ep_check)
 	Duel.RegisterEffect(e2,tp)
 
-	-- Also check at EVENT_CHAIN_END to catch cost payment emptying hand
 	local e3=Effect.CreateEffect(e:GetHandler())
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e3:SetCode(EVENT_CHAIN_END)
-	e3:SetReset(RESET_PHASE+PHASE_END)
+	e3:SetReset(RESET_PHASE|PHASE_END)
 	e3:SetOperation(s.ep_check)
 	Duel.RegisterEffect(e3,tp)
 end
@@ -123,9 +121,9 @@ function s.ep_check(e,tp,eg,ep,ev,re,r,rp)
 	local opp_hand=Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)
 	if tp_hand==0 or opp_hand==0 then
 		local turnp=Duel.GetTurnPlayer()
-		Duel.SkipPhase(turnp,PHASE_MAIN1,RESET_PHASE+PHASE_END,1)
-		Duel.SkipPhase(turnp,PHASE_BATTLE,RESET_PHASE+PHASE_END,1)
-		Duel.SkipPhase(turnp,PHASE_MAIN2,RESET_PHASE+PHASE_END,1)
+		Duel.SkipPhase(turnp,PHASE_MAIN1,RESET_PHASE|PHASE_END,1)
+		Duel.SkipPhase(turnp,PHASE_BATTLE,RESET_PHASE|PHASE_END,1)
+		Duel.SkipPhase(turnp,PHASE_MAIN2,RESET_PHASE|PHASE_END,1)
 		e:Reset()
 	end
 end
