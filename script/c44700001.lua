@@ -44,6 +44,24 @@ function s.handcon(e)
     return Duel.GetMatchingGroupCount(Card.IsType,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil,TYPE_MONSTER)==0
 end
 
+-- Filter for cards in opponent's GY/banishment
+function s.cfilter(c,tp)
+    return c:IsLocation(LOCATION_GRAVE|LOCATION_REMOVED) and c:IsControler(1-tp)
+end
+
+-- Check if an operation info category moves a card from opponent's GY/banishment
+function s.check_opinfo(ev,category,tp)
+    local ex,g,gc,dp,dv=Duel.GetOperationInfo(ev,category)
+    if not ex then return false end
+    if g and g:IsExists(s.cfilter,1,nil,tp) then return true end
+    if dv and (dv&(LOCATION_GRAVE|LOCATION_REMOVED))~=0 then
+        if not dp or dp==1-tp or dp==3 then
+            return true
+        end
+    end
+    return false
+end
+
 -- Negate condition
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
     if not Duel.IsChainNegatable(ev) then return false end
@@ -56,16 +74,19 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
     
     -- Check 2: Targets a card in opponent's GY/banishment
     local tg=Duel.GetChainInfo(ev,CHAININFO_TARGET_CARDS)
-    if tg and tg:IsExists(function(c) return c:IsLocation(LOCATION_GRAVE|LOCATION_REMOVED)
-        and c:IsControler(1-tp) end,1,nil) then
+    if tg and tg:IsExists(s.cfilter,1,nil,tp) then
         return true
     end
     
-    -- Check 3: Opponent activates effect moving cards from GY/banishment (non-targeting)
-    local cat=re:GetCategory()
-    local is_move_cat=(cat&(CATEGORY_TOHAND|CATEGORY_TODECK
-        |CATEGORY_SPECIAL_SUMMON|CATEGORY_REMOVE|CATEGORY_TOGRAVE))~=0
-    if rp==1-tp and is_move_cat and Duel.GetFieldGroupCount(1-tp,LOCATION_GRAVE|LOCATION_REMOVED,0)>0 then
+    -- Check 3: Non-targeting effect that moves cards from opponent's GY/banishment
+    if s.check_opinfo(ev,CATEGORY_TOHAND,tp)
+        or s.check_opinfo(ev,CATEGORY_TODECK,tp)
+        or s.check_opinfo(ev,CATEGORY_TOEXTRA,tp)
+        or s.check_opinfo(ev,CATEGORY_SPECIAL_SUMMON,tp)
+        or s.check_opinfo(ev,CATEGORY_REMOVE,tp)
+        or s.check_opinfo(ev,CATEGORY_TOGRAVE,tp)
+        or s.check_opinfo(ev,CATEGORY_EQUIP,tp)
+        or s.check_opinfo(ev,CATEGORY_LEAVE_GRAVE,tp) then
         return true
     end
     
