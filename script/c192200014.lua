@@ -104,7 +104,7 @@ function s.op_mill(e,tp,eg,ep,ev,re,r,rp)
         if avail>0 then
             ct=math.min(ct,avail)
             Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_TOGRAVE)
-            local sg=Duel.SelectMatchingCard(1-tp,nil,LOCATION_HAND+LOCATION_EXTRA,0,ct,ct,nil)
+            local sg=Duel.SelectMatchingCard(1-tp,nil,1-tp,LOCATION_HAND+LOCATION_EXTRA,0,ct,ct,nil)
             if #sg>0 then
                 Duel.SendtoGrave(sg,REASON_EFFECT)
             end

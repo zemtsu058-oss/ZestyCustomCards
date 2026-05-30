@@ -11,6 +11,9 @@ Scripts Lua + database SQLite + artwork cho các card fan-made.
 
 # Kiểm tra đồng bộ database
 python .\script-test\manage_db.py check-sync
+
+# Tải script card official để làm mẫu tham khảo
+.\script-test\fetch_official.ps1 <passcode>
 ```
 
 Trước khi bắt đầu: đọc [`claude-progress.md`](claude-progress.md) để biết trạng thái phiên trước.
@@ -24,7 +27,7 @@ script/          # Lua scripts (cXXXXXXXXX.lua) + constants.lua
 pics/            # Artwork (tên file = passcode)
 template-card/   # Templates sinh script mới (xem README.md bên trong)
 docs/            # Tài liệu (xem bảng điều hướng bên dưới)
-script-test/     # validate_scripts.ps1, lint_scripts.ps1, manage_db.py
+script-test/     # validate_scripts.ps1, lint_scripts.ps1, manage_db.py, fetch_official.ps1
 custom_cards_zesty.cdb  # Database SQLite
 strings.conf     # Archetype/counter name strings
 docs/queues/     # Hàng đợi card theo archetype (p_/w_/r_/d_/x_ prefix)
@@ -40,6 +43,7 @@ docs/queues/     # Hàng đợi card theo archetype (p_/w_/r_/d_/x_ prefix)
 4. **NEVER** tự commit/push — chỉ khi user yêu cầu
 5. **ALWAYS** cột `ot` = 32 khi thêm card vào database
 6. **ALWAYS** tra cứu setcode của các official archetype trong [`docs/archetype_setcode_constants.lua`](file:///d:/TTF/TTFCustomCards/docs/archetype_setcode_constants.lua) (không search web hay tự đoán bừa setcode).
+7. **ALWAYS** sử dụng `.\script-test\fetch_official.ps1 <passcode>` khi cần tải code card official để làm mẫu tham khảo (lưu tại `docs/official-reference/c<passcode>.lua`), không tự ý tìm kiếm hay curl/fetch thủ công từ các URL bên ngoài.
 
 ---
 

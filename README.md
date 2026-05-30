@@ -23,15 +23,32 @@ Project này chứa các card do nhóm TTF tự thiết kế: script Lua, databa
 
 ## Card có trong project
 
-| Archetype | Số card | Loại |
-|-----------|---------|------|
-| Castle of Dreams | 14 | Fan-made original |
-| TTF / Atermis / Cat | ~10 | Fan-made original |
-| Labrynth | 2 | Support card |
-| Dragonmaid | 2 | Support card |
-| White Forest | 1 | Support card |
-| Branded | 1 | Support card |
-| Desire HERO / Buckle | ~8 | Fan-made original |
+Hiện tại project có **79** custom cards (bao gồm cả fan-made original archetypes và các thẻ bài support cho các archetype chính thức):
+
+### Archetypes Thiết Kế Riêng (Fan-made Original)
+
+| Archetype / Series | Số card | Mô tả |
+| :--- | :---: | :--- |
+| **Castle of Dreams** | 14 | Archetype độc quyền xoay quanh các quái thú tiên (Fairy) và cơ chế giấc mơ |
+| **TTF / Atermis / Cat / Hanako** | 10 | Các thẻ bài linh vật của nhóm TTF, Artemis và biệt đội mèo siêu quậy |
+| **Desire HERO / Buckle** | 6 | Lấy cảm hứng từ series Kamen Rider Geats với cơ chế thay đổi Buckle |
+| **Hyperdimension CPU** | 2 | Các quái thú CPU Neptune và Chrome Heart từ vũ trụ Hyperdimension Neptunia |
+
+### Thẻ Bài Hỗ Trợ (Support Cards) cho Archetype Chính Thức
+
+| Archetype Hỗ Trợ | Số card | Các card tiêu biểu / Ghi chú |
+| :--- | :---: | :--- |
+| **Witchcrafter / Magistus** | 9 | Witchcrafter Unit Jeweler, Witchcrafter Hisho - Madame, Verre Magic: Transformation... |
+| **Branded / Albaz** | 4 | Branded's New Adventure, Branded in Peace, Protection of the Albaz, Fall of the Fallen |
+| **HERO (Elemental / Xtra / Blue-Eyes)** | 3 | Elemental HERO Draconic Neos, Xtra HERO Wonderkid, Blue-eyes HERO Dragon |
+| **Labrynth** | 3 | Labrynth Party, Farewell Labrynth, Chambermaid of the Silver Castle |
+| **Dragonmaid** | 2 | Dragonmaid's Soul!?, Laundry Fusion |
+| **Melodious** | 2 | Melodious Fusion, MELODIOUS FAMILY |
+| **White Forest** | 1 | Whispers of the White Forest |
+| **Maliss** | 2 | The Grand Stage of Maliss, Maliss of the Fallen Game |
+| **Rikka** | 1 | Teardrop the Rikka Fairy |
+| **Các card khác (Meme / Generic / Support lẻ)** | 20 | DoomZ Command, Majestic Quasar, Toon Quasar, Void Invasion, Drytron Supernova, Cây Súng Ngàn Năm, Monster Redie, Elaina, The Wandering Witch, Power of the Dominators... |
+
 
 ---
 

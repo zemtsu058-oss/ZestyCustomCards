@@ -4,16 +4,42 @@
 
 ---
 
-## Bug Fix Workflow
+## Bug Fix Workflow (Quy trình sửa lỗi nhanh — KHÔNG CẦN TỰ SUY NGHĨ)
 
-Khi user báo bug:
+Khi nhận được báo cáo lỗi (ví dụ: hiệu ứng kích hoạt không đúng điều kiện, logic sai hoặc crash game):
 
-1. **Đọc script** liên quan (`script/c<PASSCODE>.lua`)
-2. **Xác định effect** bị lỗi (đọc text card → tìm effect tương ứng)
-3. **Check từng phần**: Condition → Cost → Target → Operation
-4. **Tìm pattern sai**: xem [`docs/testing-guide.md`](testing-guide.md) mục Common Bugs
-5. **Sửa** → chạy `.\script-test\validate_scripts.ps1`
-6. **Không sửa file khác** nếu không liên quan
+### Bước 1: Xác định card bị lỗi và card tham khảo
+1. Tìm passcode của card bị lỗi trong `script/` hoặc cơ sở dữ liệu.
+2. Tìm 1-2 lá bài **official** có hiệu ứng tương đồng nhất với hiệu ứng đang lỗi (Ví dụ: chặn di chuyển Graveyard -> Ghost Belle `73642296`; chặn add từ Deck -> Ash Blossom `14558127`; chặn Special Summon -> Solemn Strike `40605147`).
+3. Tải ngay card official đó về làm mẫu bằng lệnh:
+   ```powershell
+   .\script-test\fetch_official.ps1 <passcode_official>
+   ```
+4. Đọc file card mẫu tại `docs/official-reference/c<passcode_official>.lua` để đối chiếu.
+
+### Bước 2: So sánh logic (Mechanical Diff)
+So sánh trực tiếp code của card bị lỗi và card mẫu theo cấu trúc:
+* **Condition (`con`)**: Card mẫu lọc điều kiện kích hoạt bằng hàm nào? Cần so sánh `tp`, `1-tp` (người chơi/đối thủ), vị trí (`IsLocation`), hay các category check (`re:IsHasCategory` / `Duel.GetOperationInfo`).
+* **Target (`tg`) / Cost (`cost`)**: Kiểm tra xem các cờ Category, Target Range, hay các bước check legality (`chk==0`) có khớp với card mẫu không.
+* **Operation (`op`)**: Kiểm tra cách xử lý hiệu ứng, các hàm API của EDOPro được gọi như thế nào.
+
+### Bước 3: Sửa đổi và Tối ưu hóa
+1. Cập nhật code trong file `script/c<PASSCODE_LỖI>.lua`.
+2. **Lưu ý quan trọng**: Đảm bảo không sử dụng các hằng số không có trong whitelist của validator (ví dụ: `CATEGORY_GRAVE_SPSUMMON` và `CATEGORY_GRAVE_ACTION` không thuộc whitelist, thay vào đó hãy check 8 categories di chuyển card tiêu chuẩn).
+
+### Bước 4: Chạy kiểm tra tự động (BẮT BUỘC)
+Chạy lần lượt 2 lệnh sau dưới PowerShell:
+```powershell
+# 1. Validate cú pháp và linter
+.\script-test\validate_scripts.ps1
+
+# 2. Kiểm tra đồng bộ cơ sở dữ liệu
+python .\script-test\manage_db.py check-sync
+```
+Nếu có bất kỳ dòng `[!] WARN` hoặc `[X] FAIL` nào xuất hiện cho card vừa sửa, phải sửa cho đến khi file đó hiển thị `[ ] OK`.
+
+### Bước 5: Cập nhật nhật ký
+Thêm dòng mô tả sửa đổi vào phần cuối của [`claude-progress.md`](claude-progress.md) theo format của các phiên trước.
 
 ---
 

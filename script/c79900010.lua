@@ -47,7 +47,7 @@ function s.initial_effect(c)
 
     -- Effect 2 — Quick Effect: once per chain, twice per turn
     local e2=Effect.CreateEffect(c)
-    e2:SetDescription(aux.Stringid(id,0))
+    e2:SetDescription(aux.Stringid(id,8))
     e2:SetCategory(CATEGORY_DISABLE+CATEGORY_DESTROY+CATEGORY_CONTROL)
     e2:SetType(EFFECT_TYPE_QUICK_O)
     e2:SetCode(EVENT_FREE_CHAIN)
@@ -71,9 +71,12 @@ end
 -- ============================================================
 -- Effect 1: Filter — material in GY summonable to linked zones
 -- ============================================================
-function s.lkfilter(c,e,tp,zone)
+function s.lkfilter(c,e,tp,c_link)
+    local zone_tp=c_link:GetLinkedZone(tp)
+    local zone_op=c_link:GetLinkedZone(1-tp)
     return c:IsLocation(LOCATION_GRAVE)
-        and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,tp,zone)
+        and (c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,tp,zone_tp)
+            or c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,1-tp,zone_op))
 end
 
 -- ============================================================
@@ -81,13 +84,11 @@ end
 -- ============================================================
 function s.lktg(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
-    local zone=c:GetLinkedZone(tp)
     local mg=c:GetMaterial()
     if chk==0 then
-        return zone~=0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-            and mg and mg:IsExists(s.lkfilter,1,nil,e,tp,zone)
+        return mg and #mg>0 and mg:IsExists(s.lkfilter,1,nil,e,tp,c)
     end
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,0,tp,0)
+    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,0,tp,LOCATION_GRAVE)
 end
 
 -- ============================================================
@@ -98,33 +99,73 @@ function s.lkop(e,tp,eg,ep,ev,re,r,rp)
     if not c:IsRelateToEffect(e) then return end
     local mg=c:GetMaterial()
     if not mg then return end
-    local zone=c:GetLinkedZone(tp)
-    local sg=mg:Filter(s.lkfilter,nil,e,tp,zone)
-    if zone==0 or Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 or #sg==0 then return end
-    local ct=Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP,zone)
-    if ct==0 then return end
-    -- Spellcaster-only summon lock for rest of duel
-    local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_FIELD)
-    e1:SetCode(EFFECT_CANNOT_SUMMON)
-    e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_IGNORE_IMMUNE)
-    e1:SetTargetRange(1,0)
-    e1:SetTarget(s.filter_non_spellcaster)
-    Duel.RegisterEffect(e1,tp)
-    local e2=Effect.CreateEffect(c)
-    e2:SetType(EFFECT_TYPE_FIELD)
-    e2:SetCode(EFFECT_CANNOT_FLIP_SUMMON)
-    e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_IGNORE_IMMUNE)
-    e2:SetTargetRange(1,0)
-    e2:SetTarget(s.filter_non_spellcaster)
-    Duel.RegisterEffect(e2,tp)
-    local e3=Effect.CreateEffect(c)
-    e3:SetType(EFFECT_TYPE_FIELD)
-    e3:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-    e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_IGNORE_IMMUNE)
-    e3:SetTargetRange(1,0)
-    e3:SetTarget(s.filter_non_spellcaster)
-    Duel.RegisterEffect(e3,tp)
+    local sg=mg:Filter(s.lkfilter,nil,e,tp,c)
+    if #sg==0 then return end
+    
+    local zone_tp=c:GetLinkedZone(tp)
+    local zone_op=c:GetLinkedZone(1-tp)
+    
+    local g=sg:Clone()
+    local summon_group=Group.CreateGroup()
+    while #g>0 do
+        local space_tp=Duel.GetLocationCount(tp,LOCATION_MZONE,tp,LOCATION_REASON_TOFIELD,zone_tp)
+        local space_op=Duel.GetLocationCount(1-tp,LOCATION_MZONE,tp,LOCATION_REASON_TOFIELD,zone_op)
+        if space_tp<=0 and space_op<=0 then break end
+        
+        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+        local tc=g:Select(tp,1,1,nil):GetFirst()
+        if not tc then break end
+        g:RemoveCard(tc)
+        
+        local can_tp=space_tp>0 and tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,tp,zone_tp)
+        local can_op=space_op>0 and tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,1-tp,zone_op)
+        
+        if can_tp or can_op then
+            local target_player=tp
+            local current_zone=zone_tp
+            if can_tp and can_op then
+                -- Player chooses: 0 for Self, 1 for Opponent
+                local sel=Duel.SelectOption(tp,aux.Stringid(id,6),aux.Stringid(id,7))
+                if sel==1 then
+                    target_player=1-tp
+                    current_zone=zone_op
+                end
+            elseif can_op then
+                target_player=1-tp
+                current_zone=zone_op
+            end
+            
+            if Duel.SpecialSummonStep(tc,0,tp,target_player,false,false,POS_FACEUP,current_zone) then
+                summon_group:AddCard(tc)
+            end
+        end
+    end
+    
+    if #summon_group>0 then
+        Duel.SpecialSummonComplete()
+        -- Spellcaster-only summon lock for rest of duel
+        local e1=Effect.CreateEffect(c)
+        e1:SetType(EFFECT_TYPE_FIELD)
+        e1:SetCode(EFFECT_CANNOT_SUMMON)
+        e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_IGNORE_IMMUNE)
+        e1:SetTargetRange(1,0)
+        e1:SetTarget(s.filter_non_spellcaster)
+        Duel.RegisterEffect(e1,tp)
+        local e2=Effect.CreateEffect(c)
+        e2:SetType(EFFECT_TYPE_FIELD)
+        e2:SetCode(EFFECT_CANNOT_FLIP_SUMMON)
+        e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_IGNORE_IMMUNE)
+        e2:SetTargetRange(1,0)
+        e2:SetTarget(s.filter_non_spellcaster)
+        Duel.RegisterEffect(e2,tp)
+        local e3=Effect.CreateEffect(c)
+        e3:SetType(EFFECT_TYPE_FIELD)
+        e3:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+        e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_IGNORE_IMMUNE)
+        e3:SetTargetRange(1,0)
+        e3:SetTarget(s.filter_non_spellcaster)
+        Duel.RegisterEffect(e3,tp)
+    end
 end
 
 -- ============================================================
