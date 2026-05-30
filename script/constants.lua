@@ -5,5 +5,6 @@ SET_CAT                           = 0x781
 SET_DESIRE_HERO                   = 0x927
 SET_BUCKLE                        = 0x315
 SET_HYPERDIMENSION                = 0x1291
+SET_CASTLE_OF_DREAMS               = 0x782
 -- Custom counter
 COUNTER_MANA                      = 0x177

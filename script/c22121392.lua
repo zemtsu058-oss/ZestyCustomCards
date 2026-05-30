@@ -72,7 +72,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
                 if #stg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
                     local tc=stg:Select(tp,1,1,nil):GetFirst()
                     local b1,b2=tc:IsAbleToHand(),tc:IsSSetable()
-                    local sel=(b1 and b2) and Duel.SelectOption(tp,1190,1153) or (b1 and 0 or 1)
+                    local sel=(b1 and b2) and Duel.SelectOption(tp,aux.Stringid(id,4),1153) or (b1 and 0 or 1)
                     if sel==0 then Duel.SendtoHand(tc,nil,REASON_EFFECT) Duel.ConfirmCards(1-tp,tc)
                     else Duel.SSet(tp,tc) end
                 end

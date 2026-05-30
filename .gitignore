@@ -1,0 +1,35 @@
+# Lua backup files
+*.lua~
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor files
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# LuaRocks / Lua packages
+luarocks/
+lua_modules/
+
+# Test outputs
+loop-results.tsv
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# DataEditorX backups
+*.cdb.bak
+*.cdb~
+
+# Obsidian vault files
+.obsidian/
+
+# Plan
+plans/

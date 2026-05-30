@@ -1,193 +1,51 @@
---[[
-===========================================
-  POLLUX (Fusion Monster)
-  ID: 92047 | ATK/DEF tính từ nguyên liệu
-===========================================
-
-  [Điều kiện Fusion]
-    - 2+ quái thú bất kỳ từ Mộ (hoặc từ MZone nếu điều kiện
-      triệu hồi của chúng là Mộ). Hỗ trợ thay thế nguyên liệu (RepFusion).
-    - Giới hạn 1 bản trên sân (UniqueOnField).
-
-  [HU1 - Khi được Fusion Summon] ATK/DEF từ nguyên liệu
-    - ATK = Tổng Base ATK của tất cả nguyên liệu Fusion.
-    - DEF = Tổng Base DEF của tất cả nguyên liệu Fusion.
-
-  [HU2 - CONTINUOUS, trong khi ở MZone] Miễn dịch hiệu ứng
-    - Điều kiện: Field Spell 45128 (Dragonbone City Styxia) đang ở vùng Field.
-    - Miễn dịch với tất cả hiệu ứng của đối thủ.
-
-  [HU3 - CONTINUOUS] Chuyển đổi sát thương sang giảm DEF
-    - Khi người chơi sẽ nhận sát thương chiến đấu hoặc hiệu ứng:
-    - Có thể chọn Có/Không để thay vào đó giảm DEF của lá này
-      đi 1/2 lượng sát thương đó (không mất LP).
-    - Điều kiện: DEF hiện tại >= 1/2 lượng sát thương.
-
-  [HU4 - TRIGGER_F] Khi rời sân
-    - Hồi LP bằng DEF hiện tại của lá này lúc rời sân.
-    - Nếu là loại Fusion: trả về Extra Deck.
-    - Nếu bị đối thủ loại bỏ: phá hủy tất cả quái thú của đối thủ
-      có ATK thấp hơn ATK của lá này lúc rời sân.
-
-===========================================
-]]
+-- ============================================================
+-- Card Name: Pollux, Netherwing Husk, Ferry of Souls
+-- Passcode : 92047
+-- Type     : Dragon / Fusion / Effect
+-- Attribute: DARK
+-- Level    : 10
+-- ATK/DEF  : ? / ?
+-- ============================================================
+-- Materials: 2 monsters in the GY and/or Special Summoned from the GY.
+-- Effect 1: The original ATK/DEF of this card becomes the combined
+--           original ATK/DEF of the materials used for its Fusion Summon.
+-- Effect 2: You can only control 1 "Pollux, Netherwing Husk, Ferry
+--           of Souls".
+-- Effect 3: Unaffected by your opponent's card effects while
+--           "Dragonbone City Styxia" is in your Field Zone.
+-- Effect 4: If you would lose LP, you can make this card lose DEF
+--           equal to half of the LP lost instead.
+-- Effect 5: If this card leaves the field: return it to the Extra
+--           Deck; gain LP equal to the original DEF it had on the
+--           field, then if it leaves the field because of an
+--           opponent's card, destroy all monsters your opponent
+--           controls with ATK less than the original ATK it had on
+--           the field.
+-- ============================================================
 
 local s,id=GetID()
+s.pending_def_loss=0
 
----------------------------------------------------
--- KHAI BÁO CÁC HÀM HELPER TRƯỚC initial_effect
--- (đảm bảo không bị lỗi nil function khi đăng ký)
----------------------------------------------------
-
--- Filter nguyên liệu hợp lệ: phải ở Mộ hoặc MZone với điều kiện triệu hồi là Mộ
-function s.ffilter(c,fc,sumtype,tp)
-    return c:IsLocation(LOCATION_GRAVE) or (c:IsLocation(LOCATION_MZONE) and c:IsSummonLocation(LOCATION_GRAVE))
-end
-
--- Tính tổng ATK/DEF từ tất cả nguyên liệu Fusion và gán làm giá trị gốc cho lá này
-function s.matop(e,c)
-    local g=c:GetMaterial()
-    if not g or #g==0 then return end
-    local atk,def=0,0
-    for tc in aux.Next(g) do
-        atk=atk+math.max(tc:GetBaseAttack(),0)
-        def=def+math.max(tc:GetBaseDefense(),0)
-    end
-    -- Gán ATK gốc bằng tổng ATK nguyên liệu
-    local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_SINGLE)
-    e1:SetCode(EFFECT_SET_BASE_ATTACK)
-    e1:SetValue(atk)
-    e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD)
-    c:RegisterEffect(e1)
-    -- Gán DEF gốc bằng tổng DEF nguyên liệu
-    local e2=e1:Clone()
-    e2:SetCode(EFFECT_SET_BASE_DEFENSE)
-    e2:SetValue(def)
-    c:RegisterEffect(e2)
-end
-
----------------------------------------------------
--- HU2: MIỄN DỊCH HIỆU ỨNG ĐỐI THỦ
----------------------------------------------------
-
--- Điều kiện: Field Spell Dragonbone City Styxia (ID 45128) phải đang hoạt động
-function s.immcon(e)
-    return Duel.IsEnvironment(45128)
-end
-
--- Chỉ chọn lọc hiệu ứng của đối thủ (người sở hữu hiệu ứng khác người điều khiển lá)
-function s.efilter(e,re)
-    return e:GetHandlerPlayer()~=re:GetOwnerPlayer()
-end
-
----------------------------------------------------
--- HU3: CHUYỂN SÁT THƯƠNG SANG GIẢM DEF
----------------------------------------------------
-
--- Điều kiện kích hoạt: người chơi nhận sát thương, DEF hiện tại >= 1/2 sát thương đó
-function s.damcon(e,tp,eg,ep,ev,re,r,rp)
-    return ep==tp and ev and ev>0 and e:GetHandler():GetDefense()>=math.floor(ev/2)
-end
-
--- HU3a operation: trừ DEF và hủy sát thương chiến đấu
-function s.damop(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-    if Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-        Duel.Hint(HINT_CARD,0,id)
-        local e1=Effect.CreateEffect(c)
-        e1:SetType(EFFECT_TYPE_SINGLE)
-        e1:SetCode(EFFECT_UPDATE_DEFENSE)
-        e1:SetValue(-math.floor(ev/2))
-        e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-        c:RegisterEffect(e1)
-        Duel.ChangeBattleDamage(tp,0)
-    end
-end
-
--- HU3b operation: trừ DEF và bù lại LP để không mất LP từ sát thương hiệu ứng
-function s.edamop(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-    if (r&REASON_EFFECT)==0 then return end
-    if not (ep==tp and ev and ev>0) then return end
-    if c:GetDefense()<math.floor(ev/2) then return end
-    if Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-        Duel.Hint(HINT_CARD,0,id)
-        local e1=Effect.CreateEffect(c)
-        e1:SetType(EFFECT_TYPE_SINGLE)
-        e1:SetCode(EFFECT_UPDATE_DEFENSE)
-        e1:SetValue(-math.floor(ev/2))
-        e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-        c:RegisterEffect(e1)
-        -- Hồi phục đúng bằng lượng sát thương để bù lại, không mất LP
-        Duel.Recover(tp,ev,REASON_EFFECT)
-    end
-end
-
----------------------------------------------------
--- HU4: HIỆU ỨNG KHI RỜI SÂN (TRIGGER_F)
----------------------------------------------------
-
--- Chỉ kích hoạt khi lá này thật sự vừa rời khỏi sân
-function s.lfcon(e,tp,eg,ep,ev,re,r,rp)
-    return e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD)
-end
-
--- Khai báo các danh mục hiệu ứng sẽ thực hiện khi rời sân
-function s.lftg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return true end
-    local c=e:GetHandler()
-    local atk=c:GetPreviousAttackOnField() or 0
-    local def=c:GetPreviousDefenseOnField() or 0
-    Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,def)
-    -- Chỉ khai báo TOEXTRA khi là Fusion Monster thực sự
-    if c:IsType(TYPE_FUSION) then
-        Duel.SetOperationInfo(0,CATEGORY_TOEXTRA,nil,1,tp,0)
-    end
-    if c:GetReasonPlayer()==1-tp then
-        Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,0,1-tp,LOCATION_MZONE)
-    end
-end
-
--- Thực thi hiệu ứng khi rời sân
-function s.lfop(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-    local atk=c:GetPreviousAttackOnField() or 0
-    local def=c:GetPreviousDefenseOnField() or 0
-    local removed_by_opponent=c:GetReasonPlayer()==1-tp
-    -- Trả về Extra Deck (face-down) nếu là Fusion Monster
-    -- SendtoDeck tự động gửi Extra Deck monster về Extra Deck thay vì Main Deck
-    if c:IsType(TYPE_FUSION) then
-        Duel.SendtoDeck(c,nil,SEQ_DECKTOP,REASON_EFFECT)
-    end
-    -- Hồi phục LP bằng DEF hiện tại khi rời sân
-    Duel.Recover(tp,def,REASON_EFFECT)
-    -- Nếu bị đối thủ loại bỏ: phá hủy toàn bộ quái thú đối thủ có ATK thấp hơn ATK của lá này
-    if removed_by_opponent then
-        local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
-        local dg=g:Filter(function(tc) return tc:GetAttack()<atk end,nil)
-        if #dg>0 then
-            Duel.Destroy(dg,REASON_EFFECT)
-        end
-    end
-end
-
----------------------------------------------------
--- ĐĂNG KÝ HIỆU ỨNG
----------------------------------------------------
 function s.initial_effect(c)
+    -- Enable revive limit
     c:EnableReviveLimit()
+    -- Fusion material
     Fusion.AddProcFunRep(c,s.ffilter,2,false)
+    -- Unique control
     c:SetUniqueOnField(1,0,id)
 
-    -- HU1: Tính ATK/DEF từ nguyên liệu khi được Fusion Summon
+    -- ============================================================
+    -- Effect 1 — Continuous: Combined ATK/DEF from materials
+    -- ============================================================
     local e1=Effect.CreateEffect(c)
     e1:SetType(EFFECT_TYPE_SINGLE)
     e1:SetCode(EFFECT_MATERIAL_CHECK)
-    e1:SetOperation(s.matop)
+    e1:SetValue(s.matop)
     c:RegisterEffect(e1)
 
-    -- HU2: Miễn dịch hiệu ứng đối thủ khi Field Spell 45128 đang hoạt động
+    -- ============================================================
+    -- Effect 3 — Continuous: Immune to opponent effects while Styxia on field
+    -- ============================================================
     local e2=Effect.CreateEffect(c)
     e2:SetType(EFFECT_TYPE_SINGLE)
     e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
@@ -197,29 +55,218 @@ function s.initial_effect(c)
     e2:SetValue(s.efilter)
     c:RegisterEffect(e2)
 
-    -- HU3a: Bắt sát thương chiến đấu (EVENT_PRE_BATTLE_DAMAGE)
-    local e4=Effect.CreateEffect(c)
-    e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-    e4:SetCode(EVENT_PRE_BATTLE_DAMAGE)
-    e4:SetRange(LOCATION_MZONE)
-    e4:SetCondition(s.damcon)
-    e4:SetOperation(s.damop)
-    c:RegisterEffect(e4)
-    -- HU3b: Bắt sát thương từ hiệu ứng (EVENT_DAMAGE) - dùng logic riêng
-    local e4b=Effect.CreateEffect(c)
-    e4b:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-    e4b:SetCode(EVENT_DAMAGE)
-    e4b:SetRange(LOCATION_MZONE)
-    e4b:SetOperation(s.edamop)
-    c:RegisterEffect(e4b)
+    -- ============================================================
+    -- Effect 4a — Continuous: Replace battle damage with DEF loss
+    -- ============================================================
+    local e3=Effect.CreateEffect(c)
+    e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e3:SetCode(EVENT_PRE_BATTLE_DAMAGE)
+    e3:SetRange(LOCATION_MZONE)
+    e3:SetCondition(s.con_replace_battle)
+    e3:SetOperation(s.op_replace_battle)
+    c:RegisterEffect(e3)
 
-    -- HU4: Khi rời sân: hồi LP, trả Extra Deck, phá hủy quái thú đối thủ
-    local e5=Effect.CreateEffect(c)
-    e5:SetCategory(CATEGORY_RECOVER+CATEGORY_DESTROY+CATEGORY_TOEXTRA)
-    e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
-    e5:SetCode(EVENT_LEAVE_FIELD)
-    e5:SetCondition(s.lfcon)
-    e5:SetTarget(s.lftg)
-    e5:SetOperation(s.lfop)
-    c:RegisterEffect(e5)
+    -- ============================================================
+    -- Effect 4b — Field: Replace effect damage (set to 0)
+    --   Value function only stores pending DEF loss in Lua variable;
+    --   actual DEF reduction applied by Effect 4c on EVENT_CHAIN_SOLVED.
+    -- ============================================================
+    local e3b=Effect.CreateEffect(c)
+    e3b:SetType(EFFECT_TYPE_FIELD)
+    e3b:SetCode(EFFECT_CHANGE_DAMAGE)
+    e3b:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+    e3b:SetRange(LOCATION_MZONE)
+    e3b:SetTargetRange(1,0)
+    e3b:SetValue(s.val_replace_effdmg)
+    c:RegisterEffect(e3b)
+
+    -- ============================================================
+    -- Effect 4c — Apply pending DEF reduction after chain resolves
+    -- ============================================================
+    local e3c=Effect.CreateEffect(c)
+    e3c:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e3c:SetCode(EVENT_CHAIN_SOLVED)
+    e3c:SetRange(LOCATION_MZONE)
+    e3c:SetOperation(s.op_apply_pending_def)
+    c:RegisterEffect(e3c)
+
+    -- ============================================================
+    -- Effect 5 — Trigger: When leaves the field
+    -- ============================================================
+    local e4=Effect.CreateEffect(c)
+    e4:SetCategory(CATEGORY_RECOVER+CATEGORY_DESTROY+CATEGORY_TOEXTRA)
+    e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
+    e4:SetCode(EVENT_LEAVE_FIELD)
+    e4:SetCondition(s.lfcon)
+    e4:SetTarget(s.lftg)
+    e4:SetOperation(s.lfop)
+    c:RegisterEffect(e4)
+end
+
+-- ============================================================
+-- Effect 1: Filter — Valid materials (GY or MZone if summoned from GY)
+-- ============================================================
+function s.ffilter(c,fc,sumtype,tp)
+    return c:IsLocation(LOCATION_GRAVE) or (c:IsLocation(LOCATION_MZONE) and c:IsSummonLocation(LOCATION_GRAVE))
+end
+
+-- ============================================================
+-- Effect 1: Operation — Set original ATK/DEF and register flags
+-- ============================================================
+function s.matop(e,c)
+    local g=c:GetMaterial()
+    if not g or #g==0 then return end
+    local atk,def=0,0
+    for tc in aux.Next(g) do
+        atk=atk+math.max(tc:GetBaseAttack(),0)
+        def=def+math.max(tc:GetBaseDefense(),0)
+    end
+    -- Set base ATK
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_SINGLE)
+    e1:SetCode(EFFECT_SET_BASE_ATTACK)
+    e1:SetValue(atk)
+    e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD)
+    c:RegisterEffect(e1)
+    -- Set base DEF
+    local e2=e1:Clone()
+    e2:SetCode(EFFECT_SET_BASE_DEFENSE)
+    e2:SetValue(def)
+    c:RegisterEffect(e2)
+
+    -- Register flag effects for leaving field stats
+    c:ResetFlagEffect(id)
+    c:ResetFlagEffect(id+100)
+    c:RegisterFlagEffect(id,0,0,1,atk)
+    c:RegisterFlagEffect(id+100,0,0,1,def)
+end
+
+-- ============================================================
+-- Effect 3: Condition — Styxia is in your Field Zone
+-- ============================================================
+function s.immcon(e)
+    return Duel.IsExistingMatchingCard(Card.IsCode,e:GetHandlerPlayer(),LOCATION_FZONE,0,1,nil,45128)
+end
+
+-- ============================================================
+-- Effect 3: Filter — Immune only to opponent's effects
+-- ============================================================
+function s.efilter(e,re)
+    return e:GetHandlerPlayer()~=re:GetOwnerPlayer()
+end
+
+-- ============================================================
+-- Effect 4a: Condition — Only for damage to this card's controller
+-- ============================================================
+function s.con_replace_battle(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    return ep==tp and ev>0 and c:GetDefense()>=math.floor(ev/2)
+end
+
+-- ============================================================
+-- Effect 4a: Operation — Replace battle damage with DEF loss
+-- ============================================================
+function s.op_replace_battle(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    if not Duel.SelectYesNo(tp,aux.Stringid(id,0)) then return end
+    local half=math.floor(ev/2)
+    Duel.Hint(HINT_CARD,0,id)
+    Duel.ChangeBattleDamage(tp,0)
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_SINGLE)
+    e1:SetCode(EFFECT_UPDATE_DEFENSE)
+    e1:SetValue(-half)
+    e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+    c:RegisterEffect(e1)
+end
+
+-- ============================================================
+-- Effect 4b: Value — Prevent effect damage, store pending DEF loss
+--   Engine API calls are silently ignored inside value functions,
+--   so we only use Lua variable to store pending DEF reduction.
+--   Battle damage is handled by Effect 4a.
+-- ============================================================
+function s.val_replace_effdmg(e,re,dam,r,rp,rc)
+    if dam<=0 then return dam end
+    -- Only handle effect damage
+    if (r&REASON_EFFECT)==0 then return dam end
+    local c=e:GetHandler()
+    local half=math.floor(dam/2)
+    if c:GetDefense()<half then return dam end
+    -- Store pending DEF loss (applied by Effect 4c after chain resolves)
+    s.pending_def_loss=s.pending_def_loss+half
+    return 0
+end
+
+-- ============================================================
+-- Effect 4c: Operation — Apply pending DEF reduction
+-- ============================================================
+function s.op_apply_pending_def(e,tp,eg,ep,ev,re,r,rp)
+    if s.pending_def_loss<=0 then return end
+    local c=e:GetHandler()
+    local half=s.pending_def_loss
+    s.pending_def_loss=0
+    Duel.Hint(HINT_CARD,0,id)
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_SINGLE)
+    e1:SetCode(EFFECT_UPDATE_DEFENSE)
+    e1:SetValue(-half)
+    e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+    c:RegisterEffect(e1)
+end
+
+-- ============================================================
+-- Effect 5: Condition — Must be face-up on the field before leaving
+-- ============================================================
+function s.lfcon(e,tp,eg,ep,ev,re,r,rp)
+    return e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD)
+end
+
+-- ============================================================
+-- Effect 5: Target — Declare categories and operations
+--   Store reason info via e:SetLabel since it's reliable at
+--   target time (before chain resolution moves the card).
+-- ============================================================
+function s.lftg(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return true end
+    local c=e:GetHandler()
+    local def=c:GetFlagEffectLabel(id+100) or 0
+    -- Check if opponent caused the card to leave (via card effect or battle)
+    local by_opponent=(rp==1-tp) and (r&(REASON_EFFECT+REASON_BATTLE+REASON_DESTROY))~=0
+    -- Store in label: 1 = opponent caused, 0 = not
+    e:SetLabel(by_opponent and 1 or 0)
+    Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,def)
+    if c:IsType(TYPE_FUSION) then
+        Duel.SetOperationInfo(0,CATEGORY_TOEXTRA,c,1,0,0)
+    end
+    if by_opponent then
+        Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,1-tp,LOCATION_MZONE)
+    end
+end
+
+-- ============================================================
+-- Effect 5: Operation — Send to Extra Deck, gain LP, destroy opponent's monsters
+-- ============================================================
+function s.lfop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    local atk=c:GetFlagEffectLabel(id) or 0
+    local def=c:GetFlagEffectLabel(id+100) or 0
+    local removed_by_opponent=e:GetLabel()==1
+    -- Clear flag effects
+    c:ResetFlagEffect(id)
+    c:ResetFlagEffect(id+100)
+    -- Return to Extra Deck (face-down)
+    if c:IsType(TYPE_FUSION) then
+        Duel.SendtoDeck(c,nil,SEQ_DECKTOP,REASON_EFFECT)
+    end
+    -- Gain LP equal to original DEF
+    Duel.Recover(tp,def,REASON_EFFECT)
+    -- Destroy opponent monsters with ATK < original ATK
+    if removed_by_opponent and atk>0 then
+        local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
+        local dg=g:Filter(function(tc) return tc:GetAttack()<atk end,nil)
+        if #dg>0 then
+            Duel.Destroy(dg,REASON_EFFECT)
+        end
+    end
 end
