@@ -5,8 +5,8 @@
 - **Thư mục gốc:** `d:\TTF\TTFCustomCards`
 - **Lệnh validate:** `.\script-test\validate_scripts.ps1`
 - **Lệnh check sync:** `python .\script-test\manage_db.py check-sync`
-- **Tác vụ ưu tiên tiếp theo:** Đọc hàng đợi tiếp theo hoặc xử lý các lỗi linter/warning tồn đọng trong các card khác nếu cần.
-- **Sự cố chặn hiện tại:** Không có
+- **Tác vụ ưu tiên tiếp theo:** Xử lý 2 issue sync tồn đọng nếu cần (`78900102` thiếu script, `79900002` thiếu DB entry), hoặc đọc hàng đợi tiếp theo.
+- **Sự cố chặn hiện tại:** Không có blocker cho 3 card Mikanko mới.
 
 ---
 
@@ -240,5 +240,41 @@
   - `.\script-test\lint_scripts.ps1` -> Cả 5 script mới 100% sạch linter warnings/errors.
   - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo (không phát sinh lỗi đồng bộ nào mới).
 - **Files/artifacts đã cập nhật:** [c29600002.lua](file:///d:/TTF/TTFCustomCards/script/c29600002.lua), [c29600003.lua](file:///d:/TTF/TTFCustomCards/script/c29600003.lua), [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua), [c42600002.lua](file:///d:/TTF/TTFCustomCards/script/c42600002.lua), [c42600003.lua](file:///d:/TTF/TTFCustomCards/script/c42600003.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 022 — 2026-06-02
+
+- **Mục tiêu:** Code 3 card pending Mikanko trong `feature_list.json`.
+- **Đã hoàn thành:**
+  - OCR/đối chiếu artwork queue và thiết kế 3 card Mikanko:
+    - [c34100001.lua](file:///d:/TTF/TTFCustomCards/script/c34100001.lua) (Ohime the Curious Mikanko)
+    - [c34100002.lua](file:///d:/TTF/TTFCustomCards/script/c34100002.lua) (Mikanko Illusion Dance)
+    - [c34100003.lua](file:///d:/TTF/TTFCustomCards/script/c34100003.lua) (Mikanko Fire Soul)
+  - Đăng ký 3 card vào database `custom_cards_zesty.cdb` với `ot=32`, setcode Mikanko `0x18e`.
+  - Copy artwork sang `pics/34100001.jpg`, `pics/34100002.jpg`, `pics/34100003.jpg`.
+  - Đổi queue prefix từ `p_` sang `d_` và cập nhật `feature_list.json` sang `done`.
+  - Review và sửa `Ohime the Curious Mikanko`: effect upgrade Xyz lấy monster từ Extra Deck thay vì Main Deck để khớp rule Xyz Monster.
+  - Reformat 3 script Mikanko theo bố cục template effect block.
+  - Double-check và harden effect:
+    - `c34100001.lua`: effect upgrade kiểm tra Xyz material/zone hợp lệ, có equip target hợp lệ, và chỉ equip sau khi Xyz Summon thành công.
+    - `c34100002.lua`: effect 3 chỉ dùng được khi card đang thật sự equipped.
+    - `c34100003.lua`: khai báo operation info đúng số lượng Special Summon tối đa 2.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK, 29 WARN, 0 FAIL. Cả 3 script Mikanko mới đều OK không warning.
+  - `.\script-test\lint_scripts.ps1` -> Không có lint issue mới cho `c34100001.lua`, `c34100002.lua`, `c34100003.lua`; các issue còn lại là file cũ.
+  - `python .\script-test\manage_db.py check-sync` -> 3 card Mikanko đã có script/DB; còn 2 issue tồn đọng ngoài phạm vi: `78900102` thiếu Lua script, `79900002` thiếu DB entry.
+  - `Test-Path` -> 3 script, 3 ảnh trong `pics/`, 3 queue file `d_` đều tồn tại.
+- **Files/artifacts đã cập nhật:** [c34100001.lua](file:///d:/TTF/TTFCustomCards/script/c34100001.lua), [c34100002.lua](file:///d:/TTF/TTFCustomCards/script/c34100002.lua), [c34100003.lua](file:///d:/TTF/TTFCustomCards/script/c34100003.lua), `custom_cards_zesty.cdb`, `feature_list.json`, `pics/34100001.jpg`, `pics/34100002.jpg`, `pics/34100003.jpg`, `docs/queues/Mikanko/d_ohime_the_curious_mikanko.jpg`, `docs/queues/Mikanko/d_Mikanko_Illusion_Dance.jpg`, `docs/queues/Mikanko/d_mikanko_fire_soul.jpg`, `claude-progress.md`
+
+### Phiên 023 — 2026-06-02
+
+- **Mục tiêu:** Sửa lỗi "Ko thấy effect mộ của verre magic" cho card `c29600004.lua` ("Verre Magic Mastery").
+- **Đã hoàn thành:**
+  - Xác định nguyên nhân: Do hiệu ứng Graveyard của `c29600004.lua` (một Trap card) được đăng ký dưới dạng `EFFECT_TYPE_IGNITION`. Trong engine EDOPro/YGOPRO, các hiệu ứng kích hoạt từ Mộ của bẫy phải sử dụng `EFFECT_TYPE_QUICK_O` kèm `EVENT_FREE_CHAIN` mới kích hoạt được.
+  - Cập nhật [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua):
+    - Đổi loại hiệu ứng `e3` từ `EFFECT_TYPE_IGNITION` sang `EFFECT_TYPE_QUICK_O`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 66 OK, 30 WARN, 0 FAIL (`c29600004.lua` đạt trạng thái OK không cảnh báo).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo với database.
+- **Files/artifacts đã cập nhật:** [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._

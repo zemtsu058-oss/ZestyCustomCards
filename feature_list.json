@@ -202,6 +202,33 @@
         }
       ]
     },
+    "Mikanko": {
+      "setcode": "0x18e",
+      "passcode_range": "34100001-34199999",
+      "cards": [
+        {
+          "name": "Ohime the Curious Mikanko",
+          "passcode": "34100001",
+          "status": "done",
+          "script": "script/c34100001.lua",
+          "queue_file": "docs/queues/Mikanko/d_ohime_the_curious_mikanko.jpg"
+        },
+        {
+          "name": "Mikanko Illusion Dance",
+          "passcode": "34100002",
+          "status": "done",
+          "script": "script/c34100002.lua",
+          "queue_file": "docs/queues/Mikanko/d_Mikanko_Illusion_Dance.jpg"
+        },
+        {
+          "name": "Mikanko Fire Soul",
+          "passcode": "34100003",
+          "status": "done",
+          "script": "script/c34100003.lua",
+          "queue_file": "docs/queues/Mikanko/d_mikanko_fire_soul.jpg"
+        }
+      ]
+    },
     "Common": {
       "note": "Card không thuộc archetype cụ thể",
       "cards": [
