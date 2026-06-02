@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29",
+  "last_updated": "2026-06-02",
   "note": "Trạng thái: pending(p) | working(w) | review(r) | done(d) | skipped(x). Phản ánh prefix trong docs/queues/<archetype>/",
   "archetypes": {
     "Labrynth": {
@@ -23,7 +23,23 @@
     "Witchcrafter": {
       "setcode": "0x128",
       "passcode_range": "29600001-29699999",
-      "cards": []
+      "cards": [
+        {
+          "name": "Witchcrafter Bumble Magic",
+          "status": "pending",
+          "queue_file": "docs/queues/Witchcrafter/p_Witchcrafter_bumble_magic.jpg"
+        },
+        {
+          "name": "Witchcrafter Unit Furnacer",
+          "status": "pending",
+          "queue_file": "docs/queues/Witchcrafter/p_Witchcrafter_unit_furnacer.jpg"
+        },
+        {
+          "name": "Verre Magic Mastery",
+          "status": "pending",
+          "queue_file": "docs/queues/Witchcrafter/p_Verre_Magic_Mastery.jpg"
+        }
+      ]
     },
     "Dragonmaid": {
       "setcode": "0x133",
@@ -48,6 +64,16 @@
           "status": "done",
           "script": "script/c42600001.lua",
           "queue_file": "docs/queues/White_Forest/d_Whispers_of_the_White_Forest.png"
+        },
+        {
+          "name": "Memory of the White Forest",
+          "status": "pending",
+          "queue_file": "docs/queues/White_Forest/p_Memory_of_the_White_Forest.jpg"
+        },
+        {
+          "name": "Knowledge of the White Forest",
+          "status": "pending",
+          "queue_file": "docs/queues/White_Forest/p_Knowledge_of_the_White_Forest.jpg"
         }
       ]
     },
@@ -149,7 +175,7 @@
           "passcode": "32100001",
           "status": "done",
           "script": "script/c32100001.lua",
-          "queue_file": "docs/queues/Rikka/p_Teardrop_the_Rikka_Fairy.jpg"
+          "queue_file": "docs/queues/Rikka/d_Teardrop_the_Rikka_Fairy.jpg"
         }
       ]
     },
@@ -187,6 +213,69 @@
           "status": "done",
           "script": "script/c44700001.lua",
           "queue_file": "docs/queues/Common/d_Power_of_the_Dominators.jpg"
+        },
+        {
+          "name": "Witchcrafter Trick",
+          "passcode": "29600001",
+          "status": "done",
+          "script": "script/c29600001.lua",
+          "queue_file": "docs/queues/Common/d_witchcrafter_trick.jpg"
+        },
+        {
+          "name": "Blessing of the Fire Charmer",
+          "passcode": "19100002",
+          "status": "done",
+          "script": "script/c19100002.lua",
+          "queue_file": "docs/queues/Common/d_blessing_of_the_fire_charmer.jpg"
+        },
+        {
+          "name": "Blessing of the Water Charmer",
+          "passcode": "19100003",
+          "status": "done",
+          "script": "script/c19100003.lua",
+          "queue_file": "docs/queues/Common/d_blessing_of_the_water_charmer.jpg"
+        },
+        {
+          "name": "Blessing of the Earth Charmer",
+          "passcode": "19100001",
+          "status": "done",
+          "script": "script/c19100001.lua",
+          "queue_file": "docs/queues/Common/d_blessing_of_the_earth_charmer.jpg"
+        },
+        {
+          "name": "Blessing of the Wind Charmer",
+          "passcode": "19100004",
+          "status": "done",
+          "script": "script/c19100004.lua",
+          "queue_file": "docs/queues/Common/d_blessing_of_the_wind_charmer.jpg"
+        },
+        {
+          "name": "First Day Of Witch",
+          "passcode": "79900003",
+          "status": "done",
+          "script": "script/c79900003.lua",
+          "queue_file": "docs/queues/Common/d_First_Day_Of_Witch.jpg"
+        },
+        {
+          "name": "Waking Nightmare",
+          "passcode": "79900004",
+          "status": "done",
+          "script": "script/c79900004.lua",
+          "queue_file": "docs/queues/Common/d_Waking_Nightmare.jpg"
+        },
+        {
+          "name": "Don't Ash The Witch!",
+          "passcode": "79900006",
+          "status": "done",
+          "script": "script/c79900006.lua",
+          "queue_file": "docs/queues/Common/d_Dont_Ash_The_Witch.jpg"
+        },
+        {
+          "name": "WANTED: A Lazy Trouble Witch",
+          "passcode": "79900007",
+          "status": "done",
+          "script": "script/c79900007.lua",
+          "queue_file": "docs/queues/Common/d_WANTED__A_Lazy_Trouble_Witch.jpg"
         }
       ]
     }

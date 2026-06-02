@@ -16,6 +16,25 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 007) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 017 — 2026-06-02
+
+- **Mục tiêu:** Thiết kế và lập trình 5 card pending còn lại của Common trong `feature_list.json`.
+- **Đã hoàn thành:**
+  - Thiết kế và lập trình 5 script mới:
+    - [c29600001.lua](file:///d:/TTF/TTFCustomCards/script/c29600001.lua) (Witchcrafter Trick)
+    - [c79900003.lua](file:///d:/TTF/TTFCustomCards/script/c79900003.lua) (First Day Of Witch)
+    - [c79900004.lua](file:///d:/TTF/TTFCustomCards/script/c79900004.lua) (Waking Nightmare)
+    - [c79900006.lua](file:///d:/TTF/TTFCustomCards/script/c79900006.lua) (Don't Ash The Witch!)
+    - [c79900007.lua](file:///d:/TTF/TTFCustomCards/script/c79900007.lua) (WANTED: A Lazy Trouble Witch)
+  - Đăng ký 5 card vào database `custom_cards_zesty.cdb` (ot=32, passcodes 29600001, 79900003, 79900004, 79900006, 79900007).
+  - Di chuyển ảnh artwork từ `docs/queues/Common/` sang `pics/` và đổi tên queue files thành prefix `d_`.
+  - Cập nhật thông tin card trong `feature_list.json`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 57 OK, 31 WARN, 0 FAIL (Cả 5 script mới đều đạt trạng thái OK không cảnh báo).
+  - `.\script-test\lint_scripts.ps1` -> Cả 5 script mới 100% sạch linter warnings/errors.
+  - `python .\script-test\manage_db.py check-sync` -> Hoạt động bình thường, database khớp hoàn hảo với script.
+- **Files/artifacts đã cập nhật:** [c29600001.lua](file:///d:/TTF/TTFCustomCards/script/c29600001.lua), [c79900003.lua](file:///d:/TTF/TTFCustomCards/script/c79900003.lua), [c79900004.lua](file:///d:/TTF/TTFCustomCards/script/c79900004.lua), [c79900006.lua](file:///d:/TTF/TTFCustomCards/script/c79900006.lua), [c79900007.lua](file:///d:/TTF/TTFCustomCards/script/c79900007.lua), `custom_cards_zesty.cdb`, `feature_list.json`, `claude-progress.md`
+
 ### Phiên 008 — 2026-05-30
 
 - **Mục tiêu:** Sửa hiệu ứng 1 của card `79900010` ("Monica, The Legendary Witch") để cho phép Special Summon nguyên liệu lên sân đối thủ ở những zone mà card này chỉ tới.
@@ -142,5 +161,36 @@
   - `.\script-test\validate_scripts.ps1` -> 48 OK (c79900010.lua OK không lỗi), 31 WARN, 0 FAIL.
   - `python .\script-test\manage_db.py check-sync` -> Hoạt động bình thường, không phát sinh lỗi đồng bộ mới cho Monica.
 - **Files/artifacts đã cập nhật:** [c79900010.lua](file:///d:/TTF/TTFCustomCards/script/c79900010.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 016 — 2026-06-02
+
+- **Mục tiêu:** Vibe check, thiết kế và lập trình 4 Spell card mới: Blessing of the Earth/Fire/Water/Wind Charmer.
+- **Đã hoàn thành:**
+  - Thiết kế và lập trình 4 card mới với logic HOPT, unnegatable costs và dynamic turn reset:
+    - [c19100001.lua](file:///d:/TTF/TTFCustomCards/script/c19100001.lua) (Blessing of the Earth Charmer)
+    - [c19100002.lua](file:///d:/TTF/TTFCustomCards/script/c19100002.lua) (Blessing of the Fire Charmer)
+    - [c19100003.lua](file:///d:/TTF/TTFCustomCards/script/c19100003.lua) (Blessing of the Water Charmer)
+    - [c19100004.lua](file:///d:/TTF/TTFCustomCards/script/c19100004.lua) (Blessing of the Wind Charmer)
+  - Đăng ký 4 card vào database `custom_cards_zesty.cdb` (ot=32, setcode=0xbf, passcodes 19100001 - 19100004).
+  - Di chuyển ảnh artwork từ `docs/queues/Common/` sang `pics/` và đổi tên queue files thành prefix `d_`.
+  - Cập nhật thông tin card trong `feature_list.json`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 52 OK, 31 WARN, 0 FAIL (Cả 4 script mới đều đạt trạng thái OK không cảnh báo).
+  - `.\script-test\lint_scripts.ps1` -> Cả 4 script mới 100% sạch linter warnings.
+  - `python .\script-test\manage_db.py check-sync` -> Hoạt động bình thường, database khớp hoàn hảo với script.
+- **Files/artifacts đã cập nhật:** [c19100001.lua](file:///d:/TTF/TTFCustomCards/script/c19100001.lua), [c19100002.lua](file:///d:/TTF/TTFCustomCards/script/c19100002.lua), [c19100003.lua](file:///d:/TTF/TTFCustomCards/script/c19100003.lua), [c19100004.lua](file:///d:/TTF/TTFCustomCards/script/c19100004.lua), `custom_cards_zesty.cdb`, `feature_list.json`, `claude-progress.md`
+
+### Phiên 018 — 2026-06-02
+
+- **Mục tiêu:** Định dạng lại và kiểm tra kỹ hiệu ứng cho 9 card mới tạo chưa commit: `c19100001` - `c19100004`, `c29600001`, `c79900003`, `c79900004`, `c79900006`, `c79900007`.
+- **Đã hoàn thành:**
+  - Chuẩn hóa toàn bộ tên hàm filter/target/operation trong cả 9 script theo đúng code style tiêu chuẩn (`filter_...`, `tg_...`, `op_...`, `con_...`, `val_...`).
+  - Sửa lỗi runtime cực kỳ nghiêm trọng trong `c79900003.lua` và `c79900006.lua`: Thay thế hàm gọi không tồn tại `Duel.BreakEffectIfReady()` bằng hàm chuẩn `Duel.BreakEffect()`.
+  - Sửa lỗi logic/runtime trong `c19100004.lua` khi check attribute lúc rời sân: Thay thế hàm không tồn tại `c:IsPreviousAttributeOnField(ATTRIBUTE_WIND)` bằng phép kiểm tra bitmask chuẩn `(c:GetPreviousAttributeOnField()&ATTRIBUTE_WIND)~=0`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 57 OK, 31 WARN, 0 FAIL (Cả 9 script mới đều đạt trạng thái OK không cảnh báo).
+  - `.\script-test\lint_scripts.ps1` -> Cả 9 script mới 100% sạch linter warnings/errors.
+  - `python .\script-test\manage_db.py check-sync` -> Đồng bộ thành công, không phát sinh lỗi liên quan đến các card mới.
+- **Files/artifacts đã cập nhật:** [c19100001.lua](file:///d:/TTF/TTFCustomCards/script/c19100001.lua), [c19100002.lua](file:///d:/TTF/TTFCustomCards/script/c19100002.lua), [c19100003.lua](file:///d:/TTF/TTFCustomCards/script/c19100003.lua), [c19100004.lua](file:///d:/TTF/TTFCustomCards/script/c19100004.lua), [c29600001.lua](file:///d:/TTF/TTFCustomCards/script/c29600001.lua), [c79900003.lua](file:///d:/TTF/TTFCustomCards/script/c79900003.lua), [c79900004.lua](file:///d:/TTF/TTFCustomCards/script/c79900004.lua), [c79900006.lua](file:///d:/TTF/TTFCustomCards/script/c79900006.lua), [c79900007.lua](file:///d:/TTF/TTFCustomCards/script/c79900007.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._
