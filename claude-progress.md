@@ -5,7 +5,7 @@
 - **Thư mục gốc:** `d:\TTF\TTFCustomCards`
 - **Lệnh validate:** `.\script-test\validate_scripts.ps1`
 - **Lệnh check sync:** `python .\script-test\manage_db.py check-sync`
-- **Tác vụ ưu tiên tiếp theo:** Thiết kế hoặc sửa lỗi các card tiếp theo trong hàng đợi (Common/queues/ hoặc do user yêu cầu)
+- **Tác vụ ưu tiên tiếp theo:** Đọc hàng đợi tiếp theo hoặc xử lý các lỗi linter/warning tồn đọng trong các card khác nếu cần.
 - **Sự cố chặn hiện tại:** Không có
 
 ---
@@ -15,6 +15,25 @@
 > [!NOTE]
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 007) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
+
+### Phiên 020 — 2026-06-02
+
+- **Mục tiêu:** Nhận diện và thiết kế 5 card pending còn lại của Witchcrafter và White Forest trong hàng đợi.
+- **Đã hoàn thành:**
+  - Đăng ký 5 card vào database `custom_cards_zesty.cdb` (ot=32, passcodes 29600002-29600004, 42600002-42600003).
+  - Thiết kế và lập trình 5 script mới:
+    - [c29600002.lua](file:///d:/TTF/TTFCustomCards/script/c29600002.lua) (Witchcrafter Bumble Magic)
+    - [c29600003.lua](file:///d:/TTF/TTFCustomCards/script/c29600003.lua) (Witchcrafter Unit Furnacer)
+    - [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua) (Verre Magic Mastery)
+    - [c42600002.lua](file:///d:/TTF/TTFCustomCards/script/c42600002.lua) (Memory of the White Forest)
+    - [c42600003.lua](file:///d:/TTF/TTFCustomCards/script/c42600003.lua) (Knowledge of the White Forest)
+  - Di chuyển ảnh artwork từ `docs/queues/` sang `pics/` và đổi tên queue files thành prefix `d_`.
+  - Cập nhật thông tin card trong `feature_list.json`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 64 OK (Cả 5 script mới đạt trạng thái OK không cảnh báo), 29 WARN, 0 FAIL.
+  - `.\script-test\lint_scripts.ps1` -> Cả 5 script mới 100% sạch linter warnings/errors.
+  - `python .\script-test\manage_db.py check-sync` -> Hoạt động bình thường, database khớp hoàn hảo với script.
+- **Files/artifacts đã cập nhật:** [c29600002.lua](file:///d:/TTF/TTFCustomCards/script/c29600002.lua), [c29600003.lua](file:///d:/TTF/TTFCustomCards/script/c29600003.lua), [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua), [c42600002.lua](file:///d:/TTF/TTFCustomCards/script/c42600002.lua), [c42600003.lua](file:///d:/TTF/TTFCustomCards/script/c42600003.lua), `custom_cards_zesty.cdb`, `feature_list.json`, `claude-progress.md`
 
 ### Phiên 019 — 2026-06-02
 
@@ -205,5 +224,21 @@
   - `.\script-test\lint_scripts.ps1` -> Cả 9 script mới 100% sạch linter warnings/errors.
   - `python .\script-test\manage_db.py check-sync` -> Đồng bộ thành công, không phát sinh lỗi liên quan đến các card mới.
 - **Files/artifacts đã cập nhật:** [c19100001.lua](file:///d:/TTF/TTFCustomCards/script/c19100001.lua), [c19100002.lua](file:///d:/TTF/TTFCustomCards/script/c19100002.lua), [c19100003.lua](file:///d:/TTF/TTFCustomCards/script/c19100003.lua), [c19100004.lua](file:///d:/TTF/TTFCustomCards/script/c19100004.lua), [c29600001.lua](file:///d:/TTF/TTFCustomCards/script/c29600001.lua), [c79900003.lua](file:///d:/TTF/TTFCustomCards/script/c79900003.lua), [c79900004.lua](file:///d:/TTF/TTFCustomCards/script/c79900004.lua), [c79900006.lua](file:///d:/TTF/TTFCustomCards/script/c79900006.lua), [c79900007.lua](file:///d:/TTF/TTFCustomCards/script/c79900007.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 021 — 2026-06-02
+
+- **Mục tiêu:** Định dạng lại, kiểm tra kỹ lưỡng hiệu ứng và cập nhật chuỗi mô tả (option strings) trong database cho 5 card: `c29600002` - `c29600004`, `c42600002` - `c42600003`.
+- **Đã hoàn thành:**
+  - Chuẩn hóa toàn bộ tên hàm filter/target/operation trong cả 5 script theo đúng code style tiêu chuẩn của project (`filter_...`, `tg_...`, `op_...`, `con_...`).
+  - Cập nhật database SQLite `custom_cards_zesty.cdb`: Đăng ký đầy đủ các chuỗi option strings (`str1` đến `str6` tương ứng với các chỉ mục `Stringid` trong code Lua) cho cả 5 card, khắc phục lỗi thiếu mô tả lựa chọn trong simulator.
+  - Sửa lỗi logic hiệu ứng:
+    - [c29600002.lua](file:///d:/TTF/TTFCustomCards/script/c29600002.lua): Chuyển description của Effect 2 (End Phase GY recovery) sang index 5 tách biệt để không bị trùng lặp với Effect 1.
+    - [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua): Xóa prompt `SelectYesNo` tại hiệu ứng Fusion Summon để biến hiệu ứng này thành bắt buộc (mandatory) khớp chính xác với mô tả card text gốc.
+    - [c42600002.lua](file:///d:/TTF/TTFCustomCards/script/c42600002.lua) & [c42600003.lua](file:///d:/TTF/TTFCustomCards/script/c42600003.lua): Đăng ký category `CATEGORY_SET` cho hiệu ứng Set từ GY, rút gọn điều kiện kích hoạt `con_set` bằng cách sử dụng trực tiếp tham số `re` và `re:IsMonsterEffect()` tương thích 100% với official scripts của archetype White Forest.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 64 OK (cả 5 script đều đạt trạng thái OK không cảnh báo), 29 WARN, 0 FAIL.
+  - `.\script-test\lint_scripts.ps1` -> Cả 5 script mới 100% sạch linter warnings/errors.
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo (không phát sinh lỗi đồng bộ nào mới).
+- **Files/artifacts đã cập nhật:** [c29600002.lua](file:///d:/TTF/TTFCustomCards/script/c29600002.lua), [c29600003.lua](file:///d:/TTF/TTFCustomCards/script/c29600003.lua), [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua), [c42600002.lua](file:///d:/TTF/TTFCustomCards/script/c42600002.lua), [c42600003.lua](file:///d:/TTF/TTFCustomCards/script/c42600003.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._

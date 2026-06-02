@@ -26,18 +26,24 @@
       "cards": [
         {
           "name": "Witchcrafter Bumble Magic",
-          "status": "pending",
-          "queue_file": "docs/queues/Witchcrafter/p_Witchcrafter_bumble_magic.jpg"
+          "passcode": "29600002",
+          "status": "done",
+          "script": "script/c29600002.lua",
+          "queue_file": "docs/queues/Witchcrafter/d_Witchcrafter_bumble_magic.jpg"
         },
         {
           "name": "Witchcrafter Unit Furnacer",
-          "status": "pending",
-          "queue_file": "docs/queues/Witchcrafter/p_Witchcrafter_unit_furnacer.jpg"
+          "passcode": "29600003",
+          "status": "done",
+          "script": "script/c29600003.lua",
+          "queue_file": "docs/queues/Witchcrafter/d_Witchcrafter_unit_furnacer.jpg"
         },
         {
           "name": "Verre Magic Mastery",
-          "status": "pending",
-          "queue_file": "docs/queues/Witchcrafter/p_Verre_Magic_Mastery.jpg"
+          "passcode": "29600004",
+          "status": "done",
+          "script": "script/c29600004.lua",
+          "queue_file": "docs/queues/Witchcrafter/d_Verre_Magic_Mastery.jpg"
         }
       ]
     },
@@ -67,13 +73,17 @@
         },
         {
           "name": "Memory of the White Forest",
-          "status": "pending",
-          "queue_file": "docs/queues/White_Forest/p_Memory_of_the_White_Forest.jpg"
+          "passcode": "42600002",
+          "status": "done",
+          "script": "script/c42600002.lua",
+          "queue_file": "docs/queues/White_Forest/d_Memory_of_the_White_Forest.jpg"
         },
         {
           "name": "Knowledge of the White Forest",
-          "status": "pending",
-          "queue_file": "docs/queues/White_Forest/p_Knowledge_of_the_White_Forest.jpg"
+          "passcode": "42600003",
+          "status": "done",
+          "script": "script/c42600003.lua",
+          "queue_file": "docs/queues/White_Forest/d_Knowledge_of_the_White_Forest.jpg"
         }
       ]
     },
