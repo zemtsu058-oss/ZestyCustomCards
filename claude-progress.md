@@ -16,7 +16,22 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 007) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 025 — 2026-06-02
+
+- **Mục tiêu:** Sửa lỗi hiệu ứng sau khi đối thủ kích hoạt effect không hoạt động cho card `c79900003.lua` ("First Day of Witch") và `c42600002.lua` ("Memory of the White Forest").
+- **Đã hoàn thành:**
+  - Xác định nguyên nhân: Cả hai script trên sử dụng hàm filter tự định nghĩa `s.filter_chain` trả về `false` cho `AddCustomActivityCounter` nhằm đếm số lần kích hoạt của đối thủ (`1-tp`). Trên một số phiên bản của EDOPro/YGOPro engine, cơ chế callback với các hàm Lua tự định nghĩa cho đối thủ (hoặc khi không được liên kết trực tiếp trong global context) có thể hoạt động không đúng hoặc không đếm được.
+  - Sửa đổi [c79900003.lua](file:///d:/TTF/TTFCustomCards/script/c79900003.lua) và [c42600002.lua](file:///d:/TTF/TTFCustomCards/script/c42600002.lua):
+    - Chuyển sang sử dụng hàm built-in `aux.FALSE` chuẩn của hệ thống cho `AddCustomActivityCounter` (khớp chính xác với cách làm của các card official tương tự như *Heavy Armored Knight Babeldecker*).
+    - Xóa hàm thừa `s.filter_chain` trong cả hai file.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK, 29 WARN, 0 FAIL (Cả hai script sửa đổi đều OK 100% không cảnh báo).
+  - `.\script-test\lint_scripts.ps1` -> Hoàn thành sạch sẽ, không có cảnh báo/lỗi định dạng mới nào.
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo với cơ sở dữ liệu.
+- **Files/artifacts đã cập nhật:** [c79900003.lua](file:///d:/TTF/TTFCustomCards/script/c79900003.lua), [c42600002.lua](file:///d:/TTF/TTFCustomCards/script/c42600002.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 020 — 2026-06-02
+
 
 - **Mục tiêu:** Nhận diện và thiết kế 5 card pending còn lại của Witchcrafter và White Forest trong hàng đợi.
 - **Đã hoàn thành:**

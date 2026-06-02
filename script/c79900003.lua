@@ -27,11 +27,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 
     -- Custom activity counter to track any activation by the opponent
-    Duel.AddCustomActivityCounter(id,ACTIVITY_CHAIN,s.filter_chain)
-end
-
-function s.filter_chain(re,tp,cid)
-    return false
+    Duel.AddCustomActivityCounter(id,ACTIVITY_CHAIN,aux.FALSE)
 end
 
 function s.filter_tg(c)
