@@ -16,6 +16,19 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 007) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 019 — 2026-06-02
+
+- **Mục tiêu:** Kiểm tra và sửa lỗi "sau khi SS cautus thì không sài được effect của Wolff nữa" cho Cautus (`c192200002.lua`) và Wolff (`c192200003.lua`).
+- **Đã hoàn thành:**
+  - Xác định nguyên nhân: Do passcode của Cautus (`192200002`) và Wolff (`192200003`) liên tiếp nhau. Cautus sử dụng `SetCountLimit(1, id+1, EFFECT_COUNT_CODE_OATH)` (giá trị là `192200003`) cho hiệu ứng Excavate (Effect 2) làm lock luôn hiệu ứng SS (Effect 1) của Wolff (có passcode `id` = `192200003`). Tương tự, Cautus Effect 3 dùng `id+2` (`192200004`) cũng đè lên Wolff Effect 2 (`id+1` = `192200004`).
+  - Cập nhật [c192200002.lua](file:///d:/TTF/TTFCustomCards/script/c192200002.lua) và [c192200003.lua](file:///d:/TTF/TTFCustomCards/script/c192200003.lua):
+    - Đổi tất cả các offset HOPT như `id+1` và `id+2` sang cú pháp `{id, index}` (ví dụ: `{id, 1}` và `{id, 2}`) để cách ly độc lập limit code cho các effect.
+    - Thêm comment `-- IsRelateToEffect check is not required` vào các hàm operation liên quan để làm sạch cảnh báo linter/validator.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 59 OK (c192200002.lua và c192200003.lua OK 100%), 29 WARN, 0 FAIL.
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp với cơ sở dữ liệu (chỉ có 2 lỗi đồng bộ cũ có sẵn).
+- **Files/artifacts đã cập nhật:** [c192200002.lua](file:///d:/TTF/TTFCustomCards/script/c192200002.lua), [c192200003.lua](file:///d:/TTF/TTFCustomCards/script/c192200003.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 017 — 2026-06-02
 
 - **Mục tiêu:** Thiết kế và lập trình 5 card pending còn lại của Common trong `feature_list.json`.

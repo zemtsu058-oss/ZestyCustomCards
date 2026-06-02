@@ -40,7 +40,7 @@ function s.initial_effect(c)
     e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
     e2:SetCode(EFFECT_DESTROY_REPLACE)
     e2:SetRange(LOCATION_GRAVE)
-    e2:SetCountLimit(1,id+1,EFFECT_COUNT_CODE_OATH)
+    e2:SetCountLimit(1,{id,1},EFFECT_COUNT_CODE_OATH)
     e2:SetTarget(s.reptg)
     e2:SetValue(s.repval)
     e2:SetOperation(s.repop)
@@ -77,6 +77,7 @@ end
 -- Effect 1: Operation — Select and SS 1 Castle of Dreams monster
 -- ============================================================
 function s.op_ss(e,tp,eg,ep,ev,re,r,rp)
+    -- IsRelateToEffect check is not required for tribute-tossed procedure
     if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
     local g=Duel.SelectMatchingCard(tp,s.filter_ss,tp,LOCATION_HAND+LOCATION_DECK,0,1,1,nil,e,tp)
@@ -115,6 +116,7 @@ end
 -- Effect 2: Operation — Banish this card from GY
 -- ============================================================
 function s.repop(e,tp,eg,ep,ev,re,r,rp)
+    -- IsRelateToEffect check is not required for replacement effect
     local c=e:GetHandler()
     Duel.Remove(c,POS_FACEUP,REASON_EFFECT+REASON_REPLACE)
 end

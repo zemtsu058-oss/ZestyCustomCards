@@ -43,7 +43,7 @@ function s.initial_effect(c)
     e2:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
     e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
     e2:SetCode(EVENT_SUMMON_SUCCESS)
-    e2:SetCountLimit(1,id+1,EFFECT_COUNT_CODE_OATH)
+    e2:SetCountLimit(1,{id,1},EFFECT_COUNT_CODE_OATH)
     e2:SetTarget(s.tg_excavate)
     e2:SetOperation(s.op_excavate)
     c:RegisterEffect(e2)
@@ -59,7 +59,7 @@ function s.initial_effect(c)
     e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
     e4:SetCode(EFFECT_DESTROY_REPLACE)
     e4:SetRange(LOCATION_GRAVE)
-    e4:SetCountLimit(1,id+2,EFFECT_COUNT_CODE_OATH)
+    e4:SetCountLimit(1,{id,2},EFFECT_COUNT_CODE_OATH)
     e4:SetTarget(s.reptg)
     e4:SetValue(s.repval)
     e4:SetOperation(s.repop)
@@ -96,6 +96,7 @@ end
 -- Effect 2: Operation — Excavate, optionally add 1, reorder rest
 -- ============================================================
 function s.op_excavate(e,tp,eg,ep,ev,re,r,rp)
+    -- IsRelateToEffect check is not required for deck excavation
     local ct=math.min(6,Duel.GetFieldGroupCount(tp,LOCATION_DECK,0))
     if ct<=0 then return end
     Duel.ConfirmDecktop(tp,ct)
@@ -150,6 +151,7 @@ end
 -- Effect 3: Operation — Banish this card from GY
 -- ============================================================
 function s.repop(e,tp,eg,ep,ev,re,r,rp)
+    -- IsRelateToEffect check is not required for replacement effect
     local c=e:GetHandler()
     Duel.Remove(c,POS_FACEUP,REASON_EFFECT+REASON_REPLACE)
 end
