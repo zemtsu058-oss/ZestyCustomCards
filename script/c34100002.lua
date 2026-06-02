@@ -98,26 +98,36 @@ end
 
 function s.cost_other_to_hand(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
+    local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
     if chk==0 then
-        return Duel.IsExistingMatchingCard(s.filter_other_to_hand,tp,LOCATION_ONFIELD,0,1,nil,c)
+        if ft<0 then return false end
+        if ft==0 then
+            return Duel.IsExistingMatchingCard(s.filter_other_to_hand,tp,LOCATION_MZONE,0,1,nil,c)
+        else
+            return Duel.IsExistingMatchingCard(s.filter_other_to_hand,tp,LOCATION_ONFIELD,0,1,nil,c)
+        end
     end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
-    local g=Duel.SelectMatchingCard(tp,s.filter_other_to_hand,tp,LOCATION_ONFIELD,0,1,1,nil,c)
+    local g
+    if ft==0 then
+        g=Duel.SelectMatchingCard(tp,s.filter_other_to_hand,tp,LOCATION_MZONE,0,1,1,nil,c)
+    else
+        g=Duel.SelectMatchingCard(tp,s.filter_other_to_hand,tp,LOCATION_ONFIELD,0,1,1,nil,c)
+    end
     Duel.SendtoHand(g,nil,REASON_COST)
 end
 
 function s.tg_summon_hand_deck(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then
-        return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-            and Duel.IsExistingMatchingCard(s.filter_mikanko_summon,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil,e,tp)
+        return Duel.IsExistingMatchingCard(s.filter_mikanko_summon,tp,LOCATION_HAND|LOCATION_DECK,0,1,nil,e,tp)
     end
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_DECK)
+    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_DECK)
 end
 
 function s.op_summon_hand_deck(e,tp,eg,ep,ev,re,r,rp)
     if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-    local g=Duel.SelectMatchingCard(tp,s.filter_mikanko_summon,tp,LOCATION_HAND+LOCATION_DECK,0,1,1,nil,e,tp)
+    local g=Duel.SelectMatchingCard(tp,s.filter_mikanko_summon,tp,LOCATION_HAND|LOCATION_DECK,0,1,1,nil,e,tp)
     if #g>0 then
         Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
     end

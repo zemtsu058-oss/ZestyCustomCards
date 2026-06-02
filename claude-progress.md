@@ -6,7 +6,7 @@
 - **Lệnh validate:** `.\script-test\validate_scripts.ps1`
 - **Lệnh check sync:** `python .\script-test\manage_db.py check-sync`
 - **Tác vụ ưu tiên tiếp theo:** Xử lý 2 issue sync tồn đọng nếu cần (`78900102` thiếu script, `79900002` thiếu DB entry), hoặc đọc hàng đợi tiếp theo.
-- **Sự cố chặn hiện tại:** Không có blocker cho 3 card Mikanko mới.
+- **Sự cố chặn hiện tại:** Không có blocker.
 
 ---
 
@@ -276,5 +276,20 @@
   - `.\script-test\validate_scripts.ps1` -> 66 OK, 30 WARN, 0 FAIL (`c29600004.lua` đạt trạng thái OK không cảnh báo).
   - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo với database.
 - **Files/artifacts đã cập nhật:** [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 024 — 2026-06-02
+
+- **Mục tiêu:** Sửa lỗi không thể triệu hồi từ Deck của card `c34100002.lua` ("Mikanko Illusion Dance") do lỗi kiểm tra zone trống trước khi trả cost.
+- **Đã hoàn thành:**
+  - Xác định nguyên nhân: Do hiệu ứng triệu hồi từ Deck/Tay của `c34100002.lua` kiểm tra `Duel.GetLocationCount(tp, LOCATION_MZONE) > 0` trong Target chk==0. Điều này làm cho hiệu ứng không thể kích hoạt được khi người chơi có 0 zone quái thú trống, kể cả khi cost kích hoạt (đưa 1 quái thú Mikanko từ sân về tay) sẽ giải phóng 1 zone trống.
+  - Cập nhật [c34100002.lua](file:///d:/TTF/TTFCustomCards/script/c34100002.lua):
+    - Tái cấu trúc hàm cost `s.cost_other_to_hand` và target `s.tg_summon_hand_deck` tương tự như Blackwing - Zephyros the Elite.
+    - Chuyển việc kiểm tra zone trống vào hàm cost: nếu `ft == 0`, bắt buộc phải chọn card ở `LOCATION_MZONE` làm cost; nếu `ft > 0`, cho phép chọn card ở `LOCATION_ONFIELD`.
+    - Loại bỏ kiểm tra `Duel.GetLocationCount(tp, LOCATION_MZONE) > 0` trong Target chk==0.
+    - Thay thế `LOCATION_HAND+LOCATION_DECK` bằng toán tử chuẩn `LOCATION_HAND|LOCATION_DECK`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK, 29 WARN, 0 FAIL (`c34100002.lua` đạt trạng thái OK không cảnh báo).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo với database (chỉ có 2 lỗi đồng bộ cũ có sẵn).
+- **Files/artifacts đã cập nhật:** [c34100002.lua](file:///d:/TTF/TTFCustomCards/script/c34100002.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._
