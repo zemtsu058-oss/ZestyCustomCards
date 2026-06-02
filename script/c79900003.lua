@@ -26,8 +26,19 @@ function s.initial_effect(c)
     e1:SetOperation(s.op_activate)
     c:RegisterEffect(e1)
 
-    -- Custom activity counter to track any activation by the opponent
-    Duel.AddCustomActivityCounter(id,ACTIVITY_CHAIN,aux.FALSE)
+    -- Global check to track if a player activated a card or effect this turn
+    if not s.global_check then
+        s.global_check=true
+        local ge1=Effect.CreateEffect(c)
+        ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+        ge1:SetCode(EVENT_CHAINING)
+        ge1:SetOperation(s.checkop)
+        Duel.RegisterEffect(ge1,0)
+    end
+end
+
+function s.checkop(e,tp,eg,ep,ev,re,r,rp)
+    Duel.RegisterFlagEffect(rp,id,RESET_PHASE|PHASE_END,0,1)
 end
 
 function s.filter_tg(c)
@@ -47,7 +58,7 @@ function s.op_activate(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
     local g=Duel.SelectMatchingCard(tp,s.filter_tg,tp,LOCATION_DECK,0,1,1,nil)
     if #g>0 and Duel.SendtoGrave(g,REASON_EFFECT)>0 and g:GetFirst():IsLocation(LOCATION_GRAVE) then
-        if Duel.GetCustomActivityCount(id,1-tp,ACTIVITY_CHAIN)>0
+        if Duel.GetFlagEffect(1-tp,id)>0
             and Duel.IsExistingMatchingCard(s.filter_spell,tp,LOCATION_DECK,0,1,nil)
             and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
             Duel.BreakEffect()

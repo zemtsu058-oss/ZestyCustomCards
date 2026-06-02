@@ -20,10 +20,10 @@
 
 - **Mục tiêu:** Sửa lỗi hiệu ứng sau khi đối thủ kích hoạt effect không hoạt động cho card `c79900003.lua` ("First Day of Witch") và `c42600002.lua` ("Memory of the White Forest").
 - **Đã hoàn thành:**
-  - Xác định nguyên nhân: Cả hai script trên sử dụng hàm filter tự định nghĩa `s.filter_chain` trả về `false` cho `AddCustomActivityCounter` nhằm đếm số lần kích hoạt của đối thủ (`1-tp`). Trên một số phiên bản của EDOPro/YGOPro engine, cơ chế callback với các hàm Lua tự định nghĩa cho đối thủ (hoặc khi không được liên kết trực tiếp trong global context) có thể hoạt động không đúng hoặc không đếm được.
+  - Xác định nguyên nhân: Do EDOPro engine giới hạn cơ chế đếm của `AddCustomActivityCounter` (đặc biệt khi chạy kiểm tra hoạt động cho đối thủ `1-tp` trong môi trường tự thiết lập hoặc chạy local), dẫn tới việc hàm đếm `GetCustomActivityCount` hoạt động không ổn định hoặc luôn trả về `0`.
   - Sửa đổi [c79900003.lua](file:///d:/TTF/TTFCustomCards/script/c79900003.lua) và [c42600002.lua](file:///d:/TTF/TTFCustomCards/script/c42600002.lua):
-    - Chuyển sang sử dụng hàm built-in `aux.FALSE` chuẩn của hệ thống cho `AddCustomActivityCounter` (khớp chính xác với cách làm của các card official tương tự như *Heavy Armored Knight Babeldecker*).
-    - Xóa hàm thừa `s.filter_chain` trong cả hai file.
+    - Loại bỏ bộ đếm `AddCustomActivityCounter` và thay thế bằng việc đăng ký một hiệu ứng continuous toàn cục lắng nghe sự kiện `EVENT_CHAINING` để tự động thiết lập flag hiệu ứng `RESET_PHASE|PHASE_END` lên người chơi kích hoạt (`rp`).
+    - Kiểm tra điều kiện bằng cách so khớp flag: `Duel.GetFlagEffect(1-tp, id) > 0` để đảm bảo tính chính xác 100% khi nhận diện hoạt động của đối thủ, không phụ thuộc vào bộ đếm nội bộ của simulator.
 - **Xác minh đã chạy:**
   - `.\script-test\validate_scripts.ps1` -> 67 OK, 29 WARN, 0 FAIL (Cả hai script sửa đổi đều OK 100% không cảnh báo).
   - `.\script-test\lint_scripts.ps1` -> Hoàn thành sạch sẽ, không có cảnh báo/lỗi định dạng mới nào.

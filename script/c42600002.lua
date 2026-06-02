@@ -39,8 +39,19 @@ function s.initial_effect(c)
     e2:SetOperation(s.op_set)
     c:RegisterEffect(e2)
 
-    -- Custom activity counter to track any activation by the opponent
-    Duel.AddCustomActivityCounter(id,ACTIVITY_CHAIN,aux.FALSE)
+    -- Global check to track if a player activated a card or effect this turn
+    if not s.global_check then
+        s.global_check=true
+        local ge1=Effect.CreateEffect(c)
+        ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+        ge1:SetCode(EVENT_CHAINING)
+        ge1:SetOperation(s.checkop)
+        Duel.RegisterEffect(ge1,0)
+    end
+end
+
+function s.checkop(e,tp,eg,ep,ev,re,r,rp)
+    Duel.RegisterFlagEffect(rp,id,RESET_PHASE|PHASE_END,0,1)
 end
 
 -- ============================================================
@@ -68,7 +79,7 @@ function s.op_search(e,tp,eg,ep,ev,re,r,rp)
     local tc=g:GetFirst()
     if tc then
         local can_sp = Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0
-            and Duel.GetCustomActivityCount(id,1-tp,ACTIVITY_CHAIN)>0
+            and Duel.GetFlagEffect(1-tp,id)>0
             and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
             and tc:IsCanBeSpecialSummoned(e,0,tp,false,false)
             
