@@ -88,6 +88,26 @@ function s.initial_effect(c)
     e6:SetCode(EVENT_SPSUMMON_SUCCESS)
     e6:SetOperation(s.op_monster_lock)
     c:RegisterEffect(e6)
+
+    -- Global restriction - cannot Special Summon this card if you activated non-Mikanko monster effects this turn
+    local e7=Effect.CreateEffect(c)
+    e7:SetType(EFFECT_TYPE_FIELD)
+    e7:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+    e7:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+    e7:SetTargetRange(1, 1) -- Both players
+    e7:SetTarget(s.tg_cannot_special_summon)
+    Duel.RegisterEffect(e7, 0)
+
+    -- Add custom activity counter for non-Mikanko monster effects
+    Duel.AddCustomActivityCounter(id, ACTIVITY_CHAIN, s.chainfilter)
+end
+
+function s.chainfilter(re,tp,cid)
+    return not (re:IsMonsterEffect() and not re:GetHandler():IsSetCard(0x18e))
+end
+
+function s.tg_cannot_special_summon(e,c,sump,sumtype,sumpos,targetp)
+    return c:IsCode(id) and Duel.GetCustomActivityCount(id,sump,ACTIVITY_CHAIN)>0
 end
 
 function s.filter_xyz_material(c,xyz,sumtype,tp)
@@ -100,7 +120,7 @@ function s.filter_overlay(c,tp,xyzc)
 end
 
 function s.op_overlay(e,tp,chk)
-    if chk==0 then return Duel.GetFlagEffect(tp,id)==0 end
+    if chk==0 then return Duel.GetFlagEffect(tp,id)==0 and Duel.GetCustomActivityCount(id,tp,ACTIVITY_CHAIN)==0 end
     Duel.RegisterFlagEffect(tp,id,RESET_PHASE|PHASE_END,0,1)
     return true
 end
@@ -119,18 +139,14 @@ function s.op_no_battle_damage(e,tp,eg,ep,ev,re,r,rp)
     Duel.ChangeBattleDamage(ep,0)
 end
 
-function s.chainlimit_spell_trap(e,rp,tp)
-    return not e:IsActiveType(TYPE_SPELL+TYPE_TRAP)
-end
-
 function s.filter_spell_trap(c)
     return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsDestructable()
 end
 
 function s.tg_destroy_spell_trap(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return true end
     local g=Duel.GetMatchingGroup(s.filter_spell_trap,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-    if chk==0 then return #g>0 end
-    Duel.SetChainLimit(s.chainlimit_spell_trap)
+    Duel.SetChainLimit(aux.FALSE)
     Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,#g,0,0)
 end
 
@@ -212,12 +228,13 @@ function s.val_equip_limit(e,c)
 end
 
 function s.op_monster_lock(e,tp,eg,ep,ev,re,r,rp)
+    -- IsRelateToEffect check is not required
     local c=e:GetHandler()
-    if not c:IsRelateToEffect(e) then return end
     local p=c:GetControler()
     local e1=Effect.CreateEffect(c)
+    e1:SetDescription(aux.Stringid(id,3))
     e1:SetType(EFFECT_TYPE_FIELD)
-    e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+    e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
     e1:SetCode(EFFECT_CANNOT_ACTIVATE)
     e1:SetTargetRange(1,0)
     e1:SetValue(s.val_monster_lock)
