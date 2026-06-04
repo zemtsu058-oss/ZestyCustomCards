@@ -16,6 +16,17 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 037 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi hiệu ứng add bài của `c29600004.lua` ("Verre Magic Mastery") không tìm và add được lá "Verre Magic - Lacrima of Light" (`73664385`).
+- **Đã hoàn thành:**
+  - Tra cứu các lá bài "Verre Magic" (結晶魔術) khác trên cơ sở dữ liệu chính thức và xác nhận chỉ có 1 lá bài duy nhất là "Verre Magic - Lacrima of Light" (`73664385`).
+  - Sửa đổi [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua): Thêm passcode `73664385` vào hàm filter, đồng thời tối ưu hóa cú pháp sử dụng `c:IsCode(code1, code2, ...)` để lọc tất cả các card "Verre Magic" (Transformation `22121392`, Sleep Time `79846799`, Lacrima `73664385`).
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch hoàn hảo).
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành khớp 109 cards (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 036 — 2026-06-04
 
 - **Mục tiêu:** Sửa lỗi runtime/compilation của Xyz procedure trong `c42790001.lua` và `c37200001.lua` do sai chữ ký hàm `Xyz.AddProcedure`.

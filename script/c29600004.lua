@@ -136,8 +136,8 @@ end
 -- Effect 2: Filter — Verre Magic card to search
 -- ============================================================
 function s.filter_search_target(c)
-    -- Verre Magic cards except itself (transformation 22121392, sleep time 79846799)
-    return (c:IsCode(22121392) or c:IsCode(79846799)) and c:IsAbleToHand()
+    -- Verre Magic cards except itself (transformation, sleep time, lacrima)
+    return c:IsCode(22121392, 79846799, 73664385) and c:IsAbleToHand()
 end
 
 -- ============================================================
