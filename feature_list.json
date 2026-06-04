@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-02",
+  "last_updated": "2026-06-04",
   "note": "Trạng thái: pending(p) | working(w) | review(r) | done(d) | skipped(x). Phản ánh prefix trong docs/queues/<archetype>/",
   "archetypes": {
     "Labrynth": {
@@ -44,6 +44,13 @@
           "status": "done",
           "script": "script/c29600004.lua",
           "queue_file": "docs/queues/Witchcrafter/d_Verre_Magic_Mastery.jpg"
+        },
+        {
+          "name": "Witchcrafter Garden",
+          "passcode": "29600005",
+          "status": "done",
+          "script": "script/c29600005.lua",
+          "queue_file": "docs/queues/Common/d_witchcrafter_garden.jpg"
         }
       ]
     },
@@ -229,6 +236,78 @@
         }
       ]
     },
+    "Exosister": {
+      "setcode": "0x174",
+      "passcode_range": "37200001-37299999",
+      "cards": [
+        {
+          "name": "Exosister Nunctis",
+          "passcode": "37200001",
+          "status": "done",
+          "script": "script/c37200001.lua",
+          "queue_file": "docs/queues/Exosister/d_exosister_nunctis.png"
+        }
+      ]
+    },
+    "Traptrix": {
+      "setcode": "0x8a",
+      "passcode_range": "13800001-13899999",
+      "cards": [
+        {
+          "name": "Return of the Red Ant",
+          "passcode": "13800001",
+          "status": "done",
+          "script": "script/c13800001.lua",
+          "queue_file": "docs/queues/Traptrix/d_Return_of_the_Red_Ant.jpg"
+        },
+        {
+          "name": "Seventh Traptrix",
+          "passcode": "13800002",
+          "status": "done",
+          "script": "script/c13800002.lua",
+          "queue_file": "docs/queues/Traptrix/d_Seventh_Traptrix.jpg"
+        }
+      ]
+    },
+    "Umi": {
+      "setcode": "0x179",
+      "passcode_range": "37700001-37799999",
+      "cards": [
+        {
+          "name": "Lemuria, the Slumbering Eternal City",
+          "passcode": "37700001",
+          "status": "done",
+          "script": "script/c37700001.lua",
+          "queue_file": "docs/queues/Umi/d_Lemuria_the_Slumbering_Eternal_City.jpg"
+        }
+      ]
+    },
+    "Outer_Entity": {
+      "setcode": "0x10b7",
+      "passcode_range": "42790001-42799999",
+      "cards": [
+        {
+          "name": "Outer Entity Sothoth",
+          "passcode": "42790001",
+          "status": "done",
+          "script": "script/c42790001.lua",
+          "queue_file": "docs/queues/Common/d_Outer_Entity_Sothoth.jpg"
+        }
+      ]
+    },
+    "Rank_Up_Magic": {
+      "setcode": "0x95",
+      "passcode_range": "14900001-14999999",
+      "cards": [
+        {
+          "name": "Rank-Up-Magic Rising Force",
+          "passcode": "14900001",
+          "status": "done",
+          "script": "script/c14900001.lua",
+          "queue_file": "docs/queues/Common/d_Rank_up_magic_rising_force.jpg"
+        }
+      ]
+    },
     "Common": {
       "note": "Card không thuộc archetype cụ thể",
       "cards": [
@@ -313,6 +392,48 @@
           "status": "done",
           "script": "script/c79900007.lua",
           "queue_file": "docs/queues/Common/d_WANTED__A_Lazy_Trouble_Witch.jpg"
+        },
+        {
+          "name": "Dragon Restday",
+          "passcode": "79900011",
+          "status": "done",
+          "script": "script/c79900011.lua",
+          "queue_file": "docs/queues/Common/d_Dragon_Restday.jpg"
+        },
+        {
+          "name": "Ghost Twin & Spring Rabbit",
+          "passcode": "79900012",
+          "status": "done",
+          "script": "script/c79900012.lua",
+          "queue_file": "docs/queues/Common/d_ghost_twin_and_spring_rabit.jpg"
+        },
+        {
+          "name": "Green Reboot",
+          "passcode": "79900013",
+          "status": "done",
+          "script": "script/c79900013.lua",
+          "queue_file": "docs/queues/Common/d_Green_reboot.jpg"
+        },
+        {
+          "name": "Guided by the Stars",
+          "passcode": "79900014",
+          "status": "done",
+          "script": "script/c79900014.lua",
+          "queue_file": "docs/queues/Common/d_Guided_by_the_stars.png"
+        },
+        {
+          "name": "Retfihs Noisnemid",
+          "passcode": "79900015",
+          "status": "done",
+          "script": "script/c79900015.lua",
+          "queue_file": "docs/queues/Common/d_Retfihs_Noisnemid.jpg"
+        },
+        {
+          "name": "Surtr, Sarkaz of Laevateinn",
+          "passcode": "79900016",
+          "status": "done",
+          "script": "script/c79900016.lua",
+          "queue_file": "docs/queues/Common/d_Surtr_Sarkaz_of_Laevateinn.jpg"
         }
       ]
     }

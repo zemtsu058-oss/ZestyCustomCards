@@ -5,7 +5,7 @@
 - **Thư mục gốc:** `d:\TTF\TTFCustomCards`
 - **Lệnh validate:** `.\script-test\validate_scripts.ps1`
 - **Lệnh check sync:** `python .\script-test\manage_db.py check-sync`
-- **Tác vụ ưu tiên tiếp theo:** Xử lý 2 issue sync tồn đọng nếu cần (`78900102` thiếu script, `79900002` thiếu DB entry), hoặc đọc hàng đợi tiếp theo.
+- **Tác vụ ưu tiên tiếp theo:** Xử lý các issue sync cũ còn tồn đọng (78900102, 79900002) hoặc chờ hàng đợi/tác vụ tiếp theo.
 - **Sự cố chặn hiện tại:** Không có blocker.
 
 ---
@@ -15,6 +15,69 @@
 > [!NOTE]
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
+
+### Phiên 035 — 2026-06-04
+
+- **Mục tiêu:** Rà soát và kiểm tra kỹ lưỡng logic hiệu ứng của cả 13 card script mới so với yêu cầu gốc, sửa đổi các lỗi tiềm ẩn để tối ưu tính năng.
+- **Đã hoàn thành:**
+  - Kiểm tra toàn diện logic của cả 13 script, sửa đổi các phần sau:
+    - **Witchcrafter Garden** (`c29600005.lua`): Sửa lỗi hàm `target` và `activate` khiến card không thể kích hoạt được nếu trong Deck chỉ còn Trap (nhưng đã đủ điều kiện điều khiển Witchcrafter monster).
+    - **Surtr, Sarkaz of Laevateinn** (`c79900016.lua`): Sửa điều kiện bảo vệ `s.protcon` từ "chỉ khi được Link Summon" thành "trong lượt được Special Summon" nói chung để khớp chính xác mô tả hiệu ứng.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Vẫn biên dịch hoàn hảo).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** [c29600005.lua](file:///d:/TTF/TTFCustomCards/script/c29600005.lua), [c79900016.lua](file:///d:/TTF/TTFCustomCards/script/c79900016.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 034 — 2026-06-04
+
+- **Mục tiêu:** Sao chép hình ảnh artwork vào thư mục `pics/` dưới dạng tên passcode và định dạng lại toàn bộ 13 script Lua mới theo đúng template chuẩn.
+- **Đã hoàn thành:**
+  - Sao chép 13 file ảnh từ hàng đợi vào [pics/](file:///d:/TTF/TTFCustomCards/pics/) đặt tên theo `<passcode>.<ext>`.
+  - Định dạng lại tiêu đề và các khối chú thích trong 13 file script Lua tại [script/](file:///d:/TTF/TTFCustomCards/script/) cho đồng bộ với template tại [template-card/](file:///d:/TTF/TTFCustomCards/template-card/).
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch hoàn hảo sau định dạng).
+  - `python .\script-test\manage_db.py check-sync` -> Toàn bộ khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** 13 file script tại [script/](file:///d:/TTF/TTFCustomCards/script/), hình ảnh tại [pics/](file:///d:/TTF/TTFCustomCards/pics/), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 033 — 2026-06-04
+
+- **Mục tiêu:** Hoàn thiện định dạng hàng đợi, đổi tên tiền tố file ảnh từ `p_` (pending) sang `d_` (done) cho 13 card đã triển khai và đồng bộ đường dẫn trong `feature_list.json`.
+- **Đã hoàn thành:**
+  - Đổi tên toàn bộ 13 file ảnh queue trong thư mục `docs/queues/` từ `p_` sang `d_`.
+  - Cập nhật các đường dẫn `queue_file` tương ứng trong [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json) sang dạng `d_`.
+- **Xác minh đã chạy:**
+  - `git status` -> Tất cả file cũ dạng `p_` biến mất, thay bằng file dạng `d_` tương ứng.
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL**.
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành khớp 109 cards (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 032 — 2026-06-04
+
+- **Mục tiêu:** Hiện thực hóa mã nguồn (script Lua) và đăng ký thông số vào database cho cả 13 card pending.
+- **Đã hoàn thành:**
+  - Viết thành công 13 file script Lua tại [script/](file:///d:/TTF/TTFCustomCards/script/) khớp chính xác logic mô tả từ ảnh queue.
+  - Viết script Python đăng ký thành công thông tin (stats, name, desc) của 13 card vào SQLite database `custom_cards_zesty.cdb` (Link arrows, type, setcodes, ot=32).
+  - Cập nhật trạng thái của cả 13 card từ `pending` sang `done` trong [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json), gắn thêm thuộc tính `script` chỉ định tệp.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Tất cả 13 script mới biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành khớp 109 cards (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 031 — 2026-06-04
+
+- **Mục tiêu:** Quét hàng đợi, tìm và đăng ký các card pending (`p_`) vào `feature_list.json`, lập kế hoạch chi tiết cho các card này.
+- **Đã hoàn thành:**
+  - Quét thư mục `docs/queues/` phát hiện 13 card pending mới có tiền tố `p_`.
+  - Phân tích và trích xuất thành công toàn bộ thông số, hiệu ứng của 13 card từ file ảnh bằng `view_file`.
+  - Cập nhật [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json):
+    - Đăng ký 13 card mới vào các archetype phù hợp (`Witchcrafter`, `Exosister`, `Traptrix`, `Umi`, `Outer_Entity`, `Rank_Up_Magic`, `Common`).
+    - Gán các dải passcode theo chuẩn `{setcode_decimal}{sequential_5digits}` cho từng card mới.
+    - Cập nhật ngày sửa đổi cuối thành `"2026-06-04"`.
+  - Lập bản kế hoạch triển khai [implementation_plan.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/c9d7d85a-b7dd-4173-a797-5a45c936a65c/implementation_plan.md) phân tích chi tiết hiệu ứng và hướng đi cho từng card.
+- **Xác minh đã chạy:**
+  - `Get-Content feature_list.json | ConvertFrom-Json` -> File JSON hợp lệ.
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp với database (không phát sinh lỗi mới từ các card pending).
+- **Files/artifacts đã cập nhật:** [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 ### Phiên 030 — 2026-06-04
 
