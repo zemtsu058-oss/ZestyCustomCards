@@ -16,6 +16,18 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 029 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi Ohime the Curious Mikanko (`c34100001.lua`) bị mất hiệu ứng và lỗi turn lock/response protection không hoạt động.
+- **Đã hoàn thành:**
+  - Sửa đổi database SQLite `custom_cards_zesty.cdb`:
+    - Cập nhật `setcode` của 3 card custom Mikanko (`34100001`, `34100002`, `34100003`) từ `3356984` (hex `0x333938` - do nhập sai định dạng chuỗi "398") về đúng giá trị số `398` (hex `0x18e`).
+    - Việc sửa setcode giúp hệ thống nhận diện đúng Ohime và các card Mikanko custom là thuộc archetype Mikanko, giúp Ohime không tự khóa hiệu ứng của chính mình khi register `EFFECT_CANNOT_ACTIVATE` cho non-Mikanko monsters trong lượt cô ấy được Special Summon.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK, 29 WARN, 0 FAIL.
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành khớp cơ sở dữ liệu (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 028 — 2026-06-04
 
 - **Mục tiêu:** Sửa lỗi "effect mộ vẫn không xài được" của card Verre Magic Mastery (`c29600004.lua`).
