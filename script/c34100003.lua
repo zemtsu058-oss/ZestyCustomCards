@@ -31,20 +31,14 @@ function s.initial_effect(c)
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,0))
     e2:SetCategory(CATEGORY_TOGRAVE+CATEGORY_SPECIAL_SUMMON)
-    e2:SetType(EFFECT_TYPE_QUICK_O)
+    e2:SetType(EFFECT_TYPE_IGNITION)
     e2:SetCode(EVENT_FREE_CHAIN)
     e2:SetRange(LOCATION_SZONE)
-    e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
     e2:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
-    e2:SetCondition(s.con_main_phase)
     e2:SetCost(s.cost_send_equipped)
     e2:SetTarget(s.tg_summon_deck_grave)
     e2:SetOperation(s.op_summon_deck_grave)
     c:RegisterEffect(e2)
-end
-
-function s.con_main_phase(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.IsMainPhase()
 end
 
 function s.cost_send_equipped(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -62,8 +56,10 @@ function s.filter_mikanko_summon(c,e,tp)
 end
 
 function s.tg_summon_deck_grave(e,tp,eg,ep,ev,re,r,rp,chk)
+    local c=e:GetHandler()
+    local ec=c:GetEquipTarget()
     if chk==0 then
-        return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+        return ec and Duel.GetMZoneCount(tp,ec)>0
             and Duel.IsExistingMatchingCard(s.filter_mikanko_summon,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp)
     end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_DECK+LOCATION_GRAVE)
