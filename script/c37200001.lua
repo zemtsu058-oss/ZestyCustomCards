@@ -26,6 +26,14 @@ function s.initial_effect(c)
     c:EnableReviveLimit()
     Xyz.AddProcedure(c,s.xyzfilter,nil,2)
 
+    -- Must be Xyz Summoned using the correct materials
+    local e0=Effect.CreateEffect(c)
+    e0:SetType(EFFECT_TYPE_SINGLE)
+    e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+    e0:SetCode(EFFECT_SPSUMMON_CONDITION)
+    e0:SetValue(s.splimit)
+    c:RegisterEffect(e0)
+
     -- ============================================================
     -- Effect 1 — Continuous Protection: Destruction replacement
     -- ============================================================
@@ -76,6 +84,10 @@ s.listed_series={0x174}
 -- ============================================================
 function s.xyzfilter(c,xyz,sumtype,tp)
     return c:IsType(TYPE_XYZ,xyz,sumtype,tp) and c:IsSetCard(0x174,xyz,sumtype,tp) and c:IsRank(4)
+end
+
+function s.splimit(e,se,sp,st)
+    return (st&SUMMON_TYPE_XYZ)==SUMMON_TYPE_XYZ and not se
 end
 
 -- ============================================================
@@ -166,6 +178,7 @@ function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
     local g=Duel.GetMatchingGroup(s.xyzfilter_gy,tp,LOCATION_GRAVE,0,nil)
     if chk==0 then
         return c:IsAbleToExtraAsCost()
+            and #g>0
             and not g:IsExists(function(tc) return not tc:IsAbleToExtraAsCost() end,1,nil)
     end
     local tg=Group.FromCards(c)

@@ -16,6 +16,18 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 039 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi hiệu ứng 3 của "Exosister Nunctis" (`c37200001.lua`) không kiểm tra số lượng quái vật Xyz trong GY dẫn đến việc kích hoạt được khi không có Xyz dưới mộ. Đồng thời sửa lỗi tương tác với "Rank-Up-Magic Rising Force" (`c14900001.lua`) bằng cách bổ sung điều kiện triệu hồi nghiêm ngặt.
+- **Đã hoàn thành:**
+  - Sửa đổi [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua):
+    - Đăng ký hiệu ứng `EFFECT_SPSUMMON_CONDITION` với hàm kiểm tra `s.splimit` tương tự `Exosisters Magnifica` (`c59242457.lua`) để ngăn chặn việc triệu hồi từ Extra Deck bằng card effect (như Rank-Up-Magic) mà không thỏa mãn điều kiện nguyên liệu chuẩn.
+    - Sửa lại hàm `s.spcost` để kiểm tra `#g > 0`, bắt buộc phải có ít nhất một quái vật Xyz dưới Graveyard mới cho phép kích hoạt hiệu ứng 3.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành khớp 109 cards (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 038 — 2026-06-04
 
 - **Mục tiêu:** Sửa lỗi hiệu ứng 2 của "Return of the Red Ant" (`c13800001.lua`) không kích hoạt được khi một lá "Hole" Normal Trap bị phá hủy, đồng thời tối ưu hóa logic chọn "any number" khi Set bẫy từ GY.
