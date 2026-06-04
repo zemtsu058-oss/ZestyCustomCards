@@ -16,6 +16,21 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 040 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi hiệu ứng 2 của "Return of the Red Ant" (`c13800001.lua`) và hiệu ứng tương tự của "Seventh Traptrix" (`c13800002.lua`) chỉ cho phép set 5 lá bẫy "Hole" Normal Trap có setcode `0x89` (Hole) mà bỏ qua các lá bẫy "Trap Hole" Normal Trap khác có setcode `0x4c` (Trap Hole).
+- **Đã hoàn thành:**
+  - Sửa đổi [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua):
+    - Cập nhật `s.listed_series` thành `{0x89, 0x4c}`.
+    - Sửa hàm `s.holefilter` sử dụng `c:IsSetCard({0x89, 0x4c})` để bao quát toàn bộ card Normal Trap thuộc hai archetype `Hole` (0x89) và `Trap Hole` (0x4c).
+  - Sửa đổi [c13800002.lua](file:///d:/TTF/TTFCustomCards/script/c13800002.lua):
+    - Cập nhật `s.listed_series` thành `{0x8a, 0x89, 0x4c}`.
+    - Sửa hàm `s.setfilter` sử dụng `c:IsSetCard({0x89, 0x4c})`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp (2 sync issues cũ).
+- **Files/artifacts đã cập nhật:** [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua), [c13800002.lua](file:///d:/TTF/TTFCustomCards/script/c13800002.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 039 — 2026-06-04
 
 - **Mục tiêu:** Sửa lỗi hiệu ứng 3 của "Exosister Nunctis" (`c37200001.lua`) không kiểm tra số lượng quái vật Xyz trong GY dẫn đến việc kích hoạt được khi không có Xyz dưới mộ. Đồng thời sửa lỗi tương tác với "Rank-Up-Magic Rising Force" (`c14900001.lua`) bằng cách bổ sung điều kiện triệu hồi nghiêm ngặt.

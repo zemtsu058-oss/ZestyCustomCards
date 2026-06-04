@@ -29,7 +29,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 end
 
-s.listed_series={0x8a, 0x89}
+s.listed_series={0x8a,0x89,0x4c}
 
 -- ============================================================
 -- Effect 1: Filter — Valid Special Summon targets
@@ -85,7 +85,7 @@ end
 -- Effect 1: Filter — Valid "Hole" Normal Traps in Deck
 -- ============================================================
 function s.setfilter(c)
-    return c:IsSetCard(0x89) and c:IsNormalTrap() and c:IsSSetable()
+    return c:IsSetCard({0x89,0x4c}) and c:IsNormalTrap() and c:IsSSetable()
 end
 
 -- ============================================================
