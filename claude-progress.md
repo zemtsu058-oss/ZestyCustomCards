@@ -16,6 +16,17 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 036 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi runtime/compilation của Xyz procedure trong `c42790001.lua` và `c37200001.lua` do sai chữ ký hàm `Xyz.AddProcedure`.
+- **Đã hoàn thành:**
+  - Sửa đổi [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua): Loại bỏ đối số `99` (maxc) bị truyền sai vị trí (vị trí thứ 5 làm lệch các đối số sau và khiến `SetDescription` nhận nhầm function filter làm description). Thay đổi thành `Xyz.AddProcedure(c,s.xyzfilter,5,3,s.altfilter,aux.Stringid(id,0),99,s.altop)`.
+  - Sửa đổi [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua): Loại bỏ đối số thứ 5 (`2`) thừa thãi vì hệ thống tự động gán `maxct = ct` (nếu không có alternative summon filter thì không cần truyền 5 đối số). Thay đổi thành `Xyz.AddProcedure(c,s.xyzfilter,nil,2)`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Vẫn biên dịch hoàn hảo).
+  - `python .\script-test\manage_db.py check-sync` -> 2 sync issues quen thuộc.
+- **Files/artifacts đã cập nhật:** [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua), [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 035 — 2026-06-04
 
 - **Mục tiêu:** Rà soát và kiểm tra kỹ lưỡng logic hiệu ứng của cả 13 card script mới so với yêu cầu gốc, sửa đổi các lỗi tiềm ẩn để tối ưu tính năng.

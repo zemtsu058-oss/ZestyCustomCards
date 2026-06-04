@@ -24,7 +24,7 @@ local s,id=GetID()
 function s.initial_effect(c)
     -- Must be Xyz Summoned
     c:EnableReviveLimit()
-    Xyz.AddProcedure(c,s.xyzfilter,nil,2,2)
+    Xyz.AddProcedure(c,s.xyzfilter,nil,2)
 
     -- ============================================================
     -- Effect 1 — Continuous Protection: Destruction replacement
