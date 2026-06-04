@@ -25,7 +25,7 @@ local s,id=GetID()
 function s.initial_effect(c)
     -- Xyz Summon Procedure
     c:EnableReviveLimit()
-    Xyz.AddProcedure(c,s.xyzfilter,5,3,s.altfilter,aux.Stringid(id,0),99,s.altop)
+    Xyz.AddProcedure(c,s.xyzfilter,5,3,s.altfilter,aux.Stringid(id,0),Xyz.InfiniteMats,s.altop)
 
     -- ============================================================
     -- Effect 2 — Quick Effect: Attach 1 Fusion, Synchro, or Xyz
