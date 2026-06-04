@@ -16,6 +16,20 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 038 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi hiệu ứng 2 của "Return of the Red Ant" (`c13800001.lua`) không kích hoạt được khi một lá "Hole" Normal Trap bị phá hủy, đồng thời tối ưu hóa logic chọn "any number" khi Set bẫy từ GY.
+- **Đã hoàn thành:**
+  - Sửa đổi [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua):
+    - Đổi code trigger của hiệu ứng Graveyard `e2` từ `EVENT_TO_GRAVE` sang `EVENT_DESTROYED` (event chuẩn cho sự kiện phá hủy bài trên sân) và thêm `EFFECT_FLAG_DAMAGE_STEP`.
+    - Loại bỏ điều kiện kiểm tra reason `c:IsReason(REASON_DESTROY)` trong hàm lọc `s.cfilter` do `EVENT_DESTROYED` đã đảm bảo tất cả các card đều bị phá hủy, đồng thời tăng tính tương thích.
+    - Sửa lại hàm `s.setop` để cho phép người chơi chọn kích hoạt Set tùy chọn bất kỳ số lượng lá bẫy "Hole" Normal Trap nào (từ 1 đến số lượng vùng trống / số lượng bẫy trong GY) bằng cách sử dụng `g:Select(tp, 1, maxc, nil)` thay vì ép buộc Set tất cả/Set số lượng cố định.
+    - Thêm `RESET_PHASE|PHASE_END` vào hiệu ứng `EFFECT_TRAP_ACT_IN_SET_TURN` để dọn dẹp thuộc tính sạch sẽ vào cuối lượt.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp (2 sync issues cũ).
+- **Files/artifacts đã cập nhật:** [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 037 — 2026-06-04
 
 - **Mục tiêu:** Sửa lỗi hiệu ứng add bài của `c29600004.lua` ("Verre Magic Mastery") không tìm và add được lá "Verre Magic - Lacrima of Light" (`73664385`).
