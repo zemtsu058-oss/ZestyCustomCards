@@ -16,6 +16,20 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 028 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi "effect mộ vẫn không xài được" của card Verre Magic Mastery (`c29600004.lua`).
+- **Đã hoàn thành:**
+  - Sửa đổi [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua):
+    - Loại bỏ điều kiện kiểm tra turn player `and Duel.IsTurnPlayer(tp)` trong hàm `s.con_search` vì hiệu ứng hoạt động trong Main Phase của cả hai người chơi.
+    - Thêm `e3:SetHintTiming(0,TIMING_MAIN_END)` cho hiệu ứng Graveyard `e3` để EDOPro hiển thị prompt kích hoạt trong open game state (chain mode AUTO).
+    - Dọn dẹp khoảng trắng thừa (trailing whitespace) ở các dòng comment 7-14.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK (c29600004.lua OK), 29 WARN, 0 FAIL.
+  - `.\script-test\lint_scripts.ps1` -> c29600004.lua không còn bất kỳ lỗi/cảnh báo linter nào.
+  - `python .\script-test\manage_db.py check-sync` -> Đồng bộ thành công, không phát sinh lỗi đồng bộ nào mới.
+- **Files/artifacts đã cập nhật:** [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 027 — 2026-06-03
 
 - **Mục tiêu:** Sửa lỗi response protection và lỗi hiệu ứng turn lock của Ohime the Curious Mikanko (`c34100001.lua`).

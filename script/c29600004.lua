@@ -4,8 +4,15 @@
 -- Type     : Trap / Counter
 -- Archetype: Witchcrafter (0x128) & Magistus (0x152)
 -- ============================================================
--- Effect 1: When a monster effect is activated, while you control a LIGHT Spellcaster monster with 2800 DEF: Negate the activation, then take control of that monster (if it was on the field), and if you do, its Type becomes Spellcaster, then immediately after this effect resolves, Fusion Summon 1 monster, using monsters you control as materials.
--- Effect 2: During the Main Phase, while this card is in your GY: You can banish this card; add 1 "Verre Magic" card from your Deck to your hand, except "Verre Magic Mastery".
+-- Effect 1: When a monster effect is activated, while you control
+--           a LIGHT Spellcaster monster with 2800 DEF: Negate the
+--           activation, then take control of that monster (if it
+--           was on the field), and if you do, its Type becomes
+--           Spellcaster, then immediately after this effect resolves,
+--           Fusion Summon 1 monster, using monsters you control as materials.
+-- Effect 2: During the Main Phase, while this card is in your GY:
+--           You can banish this card; add 1 "Verre Magic" card from
+--           your Deck to your hand, except "Verre Magic Mastery".
 -- ============================================================
 
 local s,id=GetID()
@@ -50,6 +57,7 @@ function s.initial_effect(c)
     e3:SetCost(s.cost_search)
     e3:SetTarget(s.tg_search)
     e3:SetOperation(s.op_search)
+    e3:SetHintTiming(0,TIMING_MAIN_END)
     c:RegisterEffect(e3)
 end
 
@@ -133,10 +141,10 @@ function s.filter_search_target(c)
 end
 
 -- ============================================================
--- Effect 2: Condition — Main Phase during your turn
+-- Effect 2: Condition — During the Main Phase
 -- ============================================================
 function s.con_search(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.IsMainPhase() and Duel.IsTurnPlayer(tp)
+    return Duel.IsMainPhase()
 end
 
 -- ============================================================
