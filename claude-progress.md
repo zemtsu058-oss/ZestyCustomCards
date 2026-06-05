@@ -16,6 +16,26 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 043 — 2026-06-05
+
+- **Mục tiêu:**
+  - Kiểm tra hiệu ứng và mã nguồn của "Rank-Up-Magic Rising Force" (`c14900001.lua`), tìm các lá có hiệu ứng tương tự (như `c33816.lua` - DoomZ Command J.U.P.I.T.E.R) và sửa lại theo chuẩn.
+- **Đã hoàn thành:**
+  - Sửa đổi [c14900001.lua](file:///d:/TTF/TTFCustomCards/script/c14900001.lua):
+    - Đổi setcode hex `0x95` thành hằng số `SET_RANK_UP_MAGIC` từ constants.
+    - Sửa CountLimit thành `EFFECT_COUNT_CODE_OATH` cho HOPT kích hoạt.
+    - Bổ sung `IsPlayerCanSpecialSummonCount(tp,2)` trong target check.
+    - Viết lại hàm lọc `s.filter1` và `s.filter2` theo chuẩn của "Rank-Up-Magic Soul Shave Force" với `IsCanBeXyzMaterial`, `rum_limit` và `GetLocationCountFromEx`.
+    - Thêm `Duel.BreakEffect()` giữa hai lần triệu hồi.
+    - Gọi `c:CancelToGrave()` trước khi overlay Spell card làm material.
+  - Sửa đổi [c33816.lua](file:///d:/TTF/TTFCustomCards/script/c33816.lua):
+    - Đổi setcode hex `0x95` thành `SET_RANK_UP_MAGIC`.
+    - Thay thế CountLimit `SetCountLimit(1)` (SOPT) thành logic "Once per Chain" chuẩn hóa bằng cờ hiệu `RESET_CHAIN`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** [c14900001.lua](file:///d:/TTF/TTFCustomCards/script/c14900001.lua), [c33816.lua](file:///d:/TTF/TTFCustomCards/script/c33816.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 042 — 2026-06-05
 
 - **Mục tiêu:**
