@@ -20,12 +20,16 @@
 
 - **Mục tiêu:**
   - Sửa lỗi hiệu ứng 2 của "Outer Entity Sothoth" (`c42790001.lua`) có thể chọn chính nó làm nguyên liệu để đính kèm (attach), gây lỗi runtime `Attempt to overlay a card with itself`.
+  - Khắc phục lỗi hiển thị `???` cho các prompt/lựa chọn hiệu ứng của "Outer Entity Sothoth" (`42790001`) trong game do thiếu các cột mô tả/option chuỗi (`str1` đến `str4`) trong bảng `texts` của SQLite database.
 - **Đã hoàn thành:**
   - Sửa đổi [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua):
     - Đưa `e:GetHandler()` (card kích hoạt hiệu ứng) vào tham số `exceptg` (tham số cuối cùng) của cả hai hàm `Duel.IsExistingMatchingCard` và `Duel.SelectMatchingCard` trong `s.atttg` và `s.attop`, loại trừ chính bản thân card khỏi việc làm nguyên liệu đính kèm.
+  - Cập nhật database SQLite `custom_cards_zesty.cdb`:
+    - Thiết lập đầy đủ chuỗi text trong bảng `texts` từ `str1` đến `str4` cho card `42790001` tương ứng với các mô tả/lựa chọn của hiệu ứng Summon và Detach.
 - **Xác minh đã chạy:**
   - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
-- **Files/artifacts đã cập nhật:** [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 ### Phiên 044 — 2026-06-05
 
