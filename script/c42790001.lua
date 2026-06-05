@@ -91,9 +91,10 @@ end
 -- Effect 2: Target — Check if attach is possible
 -- ============================================================
 function s.atttg(e,tp,eg,ep,ev,re,r,rp,chk)
+    local c=e:GetHandler()
     if chk==0 then
-        return e:GetHandler():IsType(TYPE_XYZ)
-            and Duel.IsExistingMatchingCard(s.attfilter,tp,LOCATION_MZONE+LOCATION_EXTRA+LOCATION_GRAVE,0,1,nil)
+        return c:IsType(TYPE_XYZ)
+            and Duel.IsExistingMatchingCard(s.attfilter,tp,LOCATION_MZONE+LOCATION_EXTRA+LOCATION_GRAVE,0,1,c)
     end
 end
 
@@ -104,7 +105,7 @@ function s.attop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATTACH)
-    local g=Duel.SelectMatchingCard(tp,s.attfilter,tp,LOCATION_MZONE+LOCATION_EXTRA+LOCATION_GRAVE,0,1,1,nil)
+    local g=Duel.SelectMatchingCard(tp,s.attfilter,tp,LOCATION_MZONE+LOCATION_EXTRA+LOCATION_GRAVE,0,1,1,c)
     if #g>0 then
         Duel.Overlay(c,g)
     end

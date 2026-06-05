@@ -16,6 +16,17 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 045 — 2026-06-05
+
+- **Mục tiêu:**
+  - Sửa lỗi hiệu ứng 2 của "Outer Entity Sothoth" (`c42790001.lua`) có thể chọn chính nó làm nguyên liệu để đính kèm (attach), gây lỗi runtime `Attempt to overlay a card with itself`.
+- **Đã hoàn thành:**
+  - Sửa đổi [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua):
+    - Đưa `e:GetHandler()` (card kích hoạt hiệu ứng) vào tham số `exceptg` (tham số cuối cùng) của cả hai hàm `Duel.IsExistingMatchingCard` và `Duel.SelectMatchingCard` trong `s.atttg` và `s.attop`, loại trừ chính bản thân card khỏi việc làm nguyên liệu đính kèm.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+- **Files/artifacts đã cập nhật:** [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 044 — 2026-06-05
 
 - **Mục tiêu:**
