@@ -60,24 +60,27 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 -- ============================================================
--- Effect 1: Redirect filter — Exclude cards banished from GY
---           Also tags redirected cards with a flag for burn tracking
+-- Effect 1: Redirect filter — Only redirect cards NOT from GY
+-- At redirect check time, the card is still at its current
+-- location before being removed. IsLocation(LOCATION_GRAVE)
+-- means the card is currently in GY (being banished FROM GY),
+-- which we exclude.
 -- ============================================================
 function s.redirect_filter(e,c)
-	if c:GetPreviousLocation()==LOCATION_GRAVE then return false end
-	-- Tag this card so the burn trigger can identify it
-	c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
-	return true
+	return not c:IsLocation(LOCATION_GRAVE)
 end
 
 -- ============================================================
 -- Effect 1: Operation — Register redirect + burn trigger
+-- Uses EFFECT_REMOVE_REDIRECT (value=64, defined in ocgcore)
+-- to redirect cards being banished to GY instead.
+-- Dimension Shifter uses EFFECT_TO_GRAVE_REDIRECT to do the
+-- opposite (GY → banished). This mirrors that pattern.
 -- ============================================================
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	-- (1) Redirect: any card that would be banished (except from GY)
-	--     is sent to GY instead
-	--     Pattern mirrors Dimension Shifter's EFFECT_TO_GRAVE_REDIRECT
+	-- (1) Redirect: cards that would be banished (except from GY)
+	--     are sent to GY instead
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE+EFFECT_FLAG_IGNORE_IMMUNE)
@@ -87,8 +90,8 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetValue(LOCATION_GRAVE)
 	e1:SetTarget(s.redirect_filter)
 	Duel.RegisterEffect(e1,tp)
-	-- (2) Burn trigger: when cards are sent to GY by this redirect,
-	--     deal 100 damage per card to opponent
+	-- (2) Burn trigger: continuous field effect monitors EVENT_TO_GRAVE
+	--     Detects redirected cards via REASON_REDIRECT (0x4000000)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EVENT_TO_GRAVE)
@@ -99,27 +102,25 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 end
 
 -- ============================================================
--- Effect 1: Burn condition — Check if any cards were redirected
+-- Effect 1: Burn filter — Cards arriving in GY via redirect
+-- Engine adds REASON_REDIRECT (0x4000000) to card reason
+-- when destination is changed by a redirect effect
 -- ============================================================
-function s.flagfilter(c)
-	return c:GetFlagEffect(id)>0
+function s.burn_filter(c)
+	return bit.band(c:GetReason(),REASON_REDIRECT)~=0
 end
 
 function s.burn_condition(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.flagfilter,1,nil)
+	return eg:IsExists(s.burn_filter,1,nil)
 end
 
 -- ============================================================
 -- Effect 1: Burn operation — Deal 100 damage per redirected card
 -- ============================================================
 function s.burn_operation(e,tp,eg,ep,ev,re,r,rp)
-	local g=eg:Filter(s.flagfilter,nil)
+	local g=eg:Filter(s.burn_filter,nil)
 	local ct=#g
 	if ct>0 then
-		-- Clear flags to prevent double-counting
-		for tc in g:Iter() do
-			tc:ResetFlagEffect(id)
-		end
 		Duel.Damage(1-tp,ct*100,REASON_EFFECT)
 	end
 end
