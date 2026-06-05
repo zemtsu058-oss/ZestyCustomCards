@@ -16,6 +16,47 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 042 — 2026-06-05
+
+- **Mục tiêu:**
+  - Tham khảo và sửa đổi hiệu ứng lọc / kiểm tra các lá bài "Hole" Normal Trap của "Return of the Red Ant" (`c13800001.lua`) và "Seventh Traptrix" (`c13800002.lua`) theo đúng chuẩn của card official "Traptrix Myrmeleo".
+- **Đã hoàn thành:**
+  - Thay thế cách viết setcode dạng table không chuẩn `c:IsSetCard({0x89, 0x4c})` bằng cách sử dụng các hằng số chính thức `SET_TRAP_HOLE` và `SET_HOLE` với phép logic OR `(c:IsSetCard(SET_TRAP_HOLE) or c:IsSetCard(SET_HOLE))` giống như script của "Traptrix Myrmeleo".
+  - Sửa đổi [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua):
+    - Đổi `s.listed_series` thành `{SET_TRAP_HOLE, SET_HOLE}`.
+    - Cập nhật `s.holefilter` sử dụng logic OR để lọc card.
+  - Sửa đổi [c13800002.lua](file:///d:/TTF/TTFCustomCards/script/c13800002.lua):
+    - Đổi `s.listed_series` thành `{SET_TRAPTRIX, SET_TRAP_HOLE, SET_HOLE}`.
+    - Cập nhật `s.setfilter` sử dụng logic OR.
+    - Thay thế setcode `0x8a` bằng hằng số `SET_TRAPTRIX` trong `s.xyzfilter` và check condition trong `s.operation`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công, không phát sinh cảnh báo mới).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua), [c13800002.lua](file:///d:/TTF/TTFCustomCards/script/c13800002.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 041 — 2026-06-05
+
+- **Mục tiêu:**
+  1. Khắc phục lỗi card "Dragon Restday" (`c79900011.lua`) và các card custom trong nhóm `79900011` đến `79900016` hiển thị `???` trong game do thiếu các cột mô tả/option chuỗi (`str1` đến `str4`) trong bảng `texts` của SQLite database.
+  2. Sửa lỗi hiệu ứng thay thế chuyển hướng trục xuất sang Graveyard của "Retfihs Noisnemid" (`c79900015.lua`) không hoạt động sau khi trả cost kích hoạt.
+  3. Sửa lỗi hiệu ứng tấn công nhiều lần của "Surtr, Sarkaz of Laevateinn" (`c79900016.lua`) không hoạt động khi kích hoạt ở Main Phase (do số lượng quái đối thủ bị đếm tĩnh bằng 0 ở thời điểm kích hoạt thay vì đếm tại Battle Phase).
+  4. Chuyển đổi hiệu ứng bảo vệ khỏi bị hủy diệt (Effect 1) của "Exosister Nunctis" (`c37200001.lua`) từ tự chọn (hỏi Yes/No) sang tự động kích hoạt (bắt buộc).
+- **Đã hoàn thành:**
+  - Viết và chạy script Python cập nhật đầy đủ các cột `str1` đến `str4` cho 6 card (từ `79900011` đến `79900016`) trong `custom_cards_zesty.cdb`.
+  - Thiết lập chuỗi text chính xác cho các lựa chọn prompt và hiệu ứng của `c79900011.lua` (Dragon Restday).
+  - Sửa đổi [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua):
+    - Loại bỏ hàm không tồn tại `tc:SetDestination(LOCATION_GRAVE)`.
+    - Sử dụng chuẩn `KeepAlive()` và `e:SetLabelObject(g)` để chuyển group `g` các card bị chuyển hướng từ target sang operation.
+    - Trong hàm operation `s.repop`, thực hiện việc gửi các card sang Graveyard bằng cách sử dụng `Duel.SendtoGrave(g, REASON_EFFECT+REASON_REPLACE)`.
+  - Sửa đổi [c79900016.lua](file:///d:/TTF/TTFCustomCards/script/c79900016.lua):
+    - Viết hàm giá trị động `s.atkval` cho `EFFECT_EXTRA_ATTACK` để tự động kiểm tra số lượng quái thú đối phương và lưu lại (cache) vào flag effect `c:RegisterFlagEffect` ngay khi Battle Phase bắt đầu (hoặc ngay lúc check trong Battle Phase), giúp giữ nguyên số lượt tấn công tối đa kể cả khi quái thú đối phương bị tiêu diệt dần qua các đòn đánh.
+  - Sửa đổi [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua):
+    - Chuyển đổi hiệu ứng 1 từ `EFFECT_DESTROY_REPLACE` (vẫn tự động hiển thị prompt lựa chọn Yes/No do engine quy định đối với field replacement) sang `EFFECT_INDESTRUCTABLE_COUNT` với giới hạn count limit là 1. Điều này đảm bảo hiệu ứng tự động ngăn chặn phá hủy 1 lần mỗi lượt mà không hiện bất kỳ prompt hỏi người chơi nào.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo (chỉ còn 2 issue sync cũ có sẵn).
+- **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua), [c79900016.lua](file:///d:/TTF/TTFCustomCards/script/c79900016.lua), [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 040 — 2026-06-04
 
 - **Mục tiêu:** Sửa lỗi hiệu ứng 2 của "Return of the Red Ant" (`c13800001.lua`) và hiệu ứng tương tự của "Seventh Traptrix" (`c13800002.lua`) chỉ cho phép set 5 lá bẫy "Hole" Normal Trap có setcode `0x89` (Hole) mà bỏ qua các lá bẫy "Trap Hole" Normal Trap khác có setcode `0x4c` (Trap Hole).

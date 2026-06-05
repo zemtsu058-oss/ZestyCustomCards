@@ -29,7 +29,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 end
 
-s.listed_series={0x8a,0x89,0x4c}
+s.listed_series={SET_TRAPTRIX,SET_TRAP_HOLE,SET_HOLE}
 
 -- ============================================================
 -- Effect 1: Filter — Valid Special Summon targets
@@ -43,7 +43,7 @@ end
 -- Effect 1: Filter — Valid Traptrix Xyz monsters in Extra
 -- ============================================================
 function s.xyzfilter(c,e,tp)
-    return c:IsType(TYPE_XYZ) and c:IsSetCard(0x8a)
+    return c:IsType(TYPE_XYZ) and c:IsSetCard(SET_TRAPTRIX)
         and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp,c:GetRace())
 end
 
@@ -85,7 +85,7 @@ end
 -- Effect 1: Filter — Valid "Hole" Normal Traps in Deck
 -- ============================================================
 function s.setfilter(c)
-    return c:IsSetCard({0x89,0x4c}) and c:IsNormalTrap() and c:IsSSetable()
+    return (c:IsSetCard(SET_TRAP_HOLE) or c:IsSetCard(SET_HOLE)) and c:IsNormalTrap() and c:IsSSetable()
 end
 
 -- ============================================================
@@ -109,7 +109,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
     if #g>0 then
         local tc=g:GetFirst()
         if Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)>0 then
-            if tc:IsSetCard(0x8a) and Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil)
+            if tc:IsSetCard(SET_TRAPTRIX) and Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil)
                 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
                 Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
                 local sg=Duel.SelectMatchingCard(tp,s.setfilter,tp,LOCATION_DECK,0,1,1,nil)

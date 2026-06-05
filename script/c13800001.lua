@@ -45,7 +45,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e2)
 end
 
-s.listed_series={0x89,0x4c}
+s.listed_series={SET_TRAP_HOLE,SET_HOLE}
 
 -- ============================================================
 -- Effect 1: Filter — Valid Special Summon targets
@@ -82,7 +82,7 @@ end
 -- Effect 2: Filter — Valid "Hole" Normal Traps in GY
 -- ============================================================
 function s.holefilter(c)
-    return c:IsNormalTrap() and c:IsSetCard({0x89,0x4c})
+    return c:IsNormalTrap() and (c:IsSetCard(SET_TRAP_HOLE) or c:IsSetCard(SET_HOLE))
 end
 
 -- ============================================================
