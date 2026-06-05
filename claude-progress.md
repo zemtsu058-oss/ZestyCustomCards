@@ -16,6 +16,32 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 048 — 2026-06-05
+
+- **Mục tiêu:**
+  - Khắc phục lỗi hiệu ứng thay thế trục xuất sang Graveyard và gây sát thương của "Retfihs Noisnemid" (`79900015`) không hoạt động.
+- **Đã hoàn thành:**
+  - Sửa đổi [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua):
+    - Thay thế cơ chế `EFFECT_SEND_REPLACE` không tương thích bằng `EFFECT_REMOVE_REDIRECT` (SetValue = `LOCATION_GRAVE`).
+    - Lọc các card được chuyển hướng thông qua hàm `s.reptg` loại trừ các card trong Graveyard (`not c:IsLocation(LOCATION_GRAVE)`).
+    - Triển khai gắn flag trên card bị chuyển hướng và theo dõi tại sự kiện `EVENT_TO_GRAVE` để đếm và gây damage tương ứng cho đối thủ.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn toàn (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 047 — 2026-06-05
+
+- **Mục tiêu:**
+  - Khắc phục lỗi hiệu ứng tăng lần tấn công của "Surtr, Sarkaz of Laevateinn" (`79900016`) không hoạt động do lỗi nil reference khi truy cập parameter `c` trong hàm giá trị động.
+- **Đã hoàn thành:**
+  - Sửa đổi [c79900016.lua](file:///d:/TTF/TTFCustomCards/script/c79900016.lua):
+    - Đổi logic trong hàm `s.atkval` sử dụng `e:GetHandler()` làm đối tượng card thay vì truy cập trực tiếp qua parameter `c` (vì parameter `c` có thể bị `nil` tùy thuộc vào ngữ cảnh gọi từ EDOPro core engine).
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [c79900016.lua](file:///d:/TTF/TTFCustomCards/script/c79900016.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 046 — 2026-06-05
 
 - **Mục tiêu:**

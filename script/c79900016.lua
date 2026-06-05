@@ -221,17 +221,19 @@ end
 -- Effect 3: Value — Calculate extra attack count dynamically
 -- ============================================================
 function s.atkval(e,c)
+    local handler=e:GetHandler()
     local tp=e:GetHandlerPlayer()
-    if c:HasFlagEffect(id) then
-        local label=c:GetFlagEffectLabel(id)
+    if handler:HasFlagEffect(id) then
+        local label=handler:GetFlagEffectLabel(id)
         if label then return label end
     end
     
     local phase=Duel.GetCurrentPhase()
     if phase>=PHASE_BATTLE_START and phase<=PHASE_BATTLE then
         local opp_count=Duel.GetFieldGroupCount(tp,0,LOCATION_MZONE)
-        c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1,opp_count)
+        handler:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1,opp_count)
         return opp_count
     end
     return Duel.GetFieldGroupCount(tp,0,LOCATION_MZONE)
 end
+

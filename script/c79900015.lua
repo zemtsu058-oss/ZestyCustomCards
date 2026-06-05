@@ -65,46 +65,57 @@ end
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     
-    -- Register field replacement effect: banish -> GY
+    -- Redirect banished cards to GY
     local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-    e1:SetCode(EFFECT_SEND_REPLACE)
-    e1:SetTarget(s.reptg)
-    e1:SetOperation(s.repop)
+    e1:SetType(EFFECT_TYPE_FIELD)
+    e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE+EFFECT_FLAG_IGNORE_IMMUNE)
+    e1:SetCode(EFFECT_REMOVE_REDIRECT)
+    e1:SetTargetRange(0xff,0xff)
     e1:SetReset(RESET_PHASE+PHASE_END,2)
+    e1:SetValue(LOCATION_GRAVE)
+    e1:SetTarget(s.reptg)
     Duel.RegisterEffect(e1,tp)
-end
-
--- ============================================================
--- Effect 1: Filter — Cards moving to banish zone not from GY
--- ============================================================
-function s.repfilter(c)
-    return c:GetDestination()==LOCATION_REMOVED and not c:IsLocation(LOCATION_GRAVE)
-end
-
--- ============================================================
--- Effect 1: Replacement Target — Divert to GY instead
--- ============================================================
-function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then
-        return eg:IsExists(s.repfilter,1,nil)
-    end
     
-    local g=eg:Filter(s.repfilter,nil)
-    g:KeepAlive()
-    e:SetLabelObject(g)
-    return true
+    -- Burn damage when redirected
+    local e2=Effect.CreateEffect(c)
+    e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e2:SetCode(EVENT_TO_GRAVE)
+    e2:SetReset(RESET_PHASE+PHASE_END,2)
+    e2:SetCondition(s.damcon)
+    e2:SetOperation(s.damop)
+    Duel.RegisterEffect(e2,tp)
 end
 
 -- ============================================================
--- Effect 1: Replacement Operation — Deal damage based on diverted count
+-- Effect 1: Target — Filter cards moving to banish zone not from GY
 -- ============================================================
-function s.repop(e,tp,eg,ep,ev,re,r,rp)
-    local g=e:GetLabelObject()
-    if not g then return end
-    local count=Duel.SendtoGrave(g,REASON_EFFECT+REASON_REPLACE)
+function s.reptg(e,c)
+    -- Ignore if card is already in GY (except from GY)
+    if not c:IsLocation(LOCATION_GRAVE) then
+        c:RegisterFlagEffect(id,RESET_PHASE+PHASE_END,0,1)
+        return true
+    end
+    return false
+end
+
+-- ============================================================
+-- Effect 1: Burn logic for redirected cards
+-- ============================================================
+function s.damfilter(c)
+    return c:GetFlagEffect(id)>0
+end
+
+function s.damcon(e,tp,eg,ep,ev,re,r,rp)
+    return eg:IsExists(s.damfilter,1,nil)
+end
+
+function s.damop(e,tp,eg,ep,ev,re,r,rp)
+    local g=eg:Filter(s.damfilter,nil)
+    local count=#g
     if count>0 then
+        for tc in aux.Next(g) do
+            tc:ResetFlagEffect(id)
+        end
         Duel.Damage(1-tp,count*100,REASON_EFFECT)
     end
-    g:DeleteGroup()
 end
