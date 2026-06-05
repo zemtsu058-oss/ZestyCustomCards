@@ -191,11 +191,10 @@ function s.atkop(e,tp,eg,ep,ev,re,r,rp)
     c:RegisterEffect(e1)
     
     -- Extra attacks
-    local opp_count=Duel.GetFieldGroupCount(tp,0,LOCATION_MZONE)
     local e2=Effect.CreateEffect(c)
     e2:SetType(EFFECT_TYPE_SINGLE)
     e2:SetCode(EFFECT_EXTRA_ATTACK)
-    e2:SetValue(opp_count)
+    e2:SetValue(s.atkval)
     e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
     c:RegisterEffect(e2)
 end
@@ -216,4 +215,23 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
     if c:IsRelateToEffect(e) then
         Duel.Destroy(c,REASON_EFFECT)
     end
+end
+
+-- ============================================================
+-- Effect 3: Value — Calculate extra attack count dynamically
+-- ============================================================
+function s.atkval(e,c)
+    local tp=e:GetHandlerPlayer()
+    if c:HasFlagEffect(id) then
+        local label=c:GetFlagEffectLabel(id)
+        if label then return label end
+    end
+    
+    local phase=Duel.GetCurrentPhase()
+    if phase>=PHASE_BATTLE_START and phase<=PHASE_BATTLE then
+        local opp_count=Duel.GetFieldGroupCount(tp,0,LOCATION_MZONE)
+        c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1,opp_count)
+        return opp_count
+    end
+    return Duel.GetFieldGroupCount(tp,0,LOCATION_MZONE)
 end

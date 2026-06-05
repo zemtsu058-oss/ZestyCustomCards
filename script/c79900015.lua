@@ -91,11 +91,8 @@ function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
     end
     
     local g=eg:Filter(s.repfilter,nil)
-    for tc in g:Iter() do
-        tc:SetDestination(LOCATION_GRAVE)
-    end
-    
-    e:SetLabel(#g)
+    g:KeepAlive()
+    e:SetLabelObject(g)
     return true
 end
 
@@ -103,8 +100,11 @@ end
 -- Effect 1: Replacement Operation — Deal damage based on diverted count
 -- ============================================================
 function s.repop(e,tp,eg,ep,ev,re,r,rp)
-    local count=e:GetLabel()
+    local g=e:GetLabelObject()
+    if not g then return end
+    local count=Duel.SendtoGrave(g,REASON_EFFECT+REASON_REPLACE)
     if count>0 then
         Duel.Damage(1-tp,count*100,REASON_EFFECT)
     end
+    g:DeleteGroup()
 end

@@ -38,12 +38,13 @@ function s.initial_effect(c)
     -- Effect 1 — Continuous Protection: Destruction replacement
     -- ============================================================
     local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-    e1:SetCode(EFFECT_DESTROY_REPLACE)
+    e1:SetType(EFFECT_TYPE_FIELD)
+    e1:SetCode(EFFECT_INDESTRUCTABLE_COUNT)
     e1:SetRange(LOCATION_MZONE)
-    e1:SetTarget(s.reptg)
-    e1:SetValue(s.repval)
-    e1:SetOperation(s.repop)
+    e1:SetTargetRange(LOCATION_ONFIELD,0)
+    e1:SetTarget(s.indtg)
+    e1:SetValue(s.indval)
+    e1:SetCountLimit(1)
     c:RegisterEffect(e1)
 
     -- ============================================================
@@ -91,40 +92,17 @@ function s.splimit(e,se,sp,st)
 end
 
 -- ============================================================
--- Effect 1: Filter — Valid replacement targets
+-- Effect 1: Target — Filter protected cards
 -- ============================================================
-function s.repfilter(c,tp)
-    return c:IsControler(tp) and c:IsLocation(LOCATION_ONFIELD)
-        and not c:IsReason(REASON_REPLACE)
+function s.indtg(e,c)
+    return c:IsControler(e:GetHandlerPlayer()) and c:IsLocation(LOCATION_ONFIELD)
 end
 
 -- ============================================================
--- Effect 1: Target — Check if protection can be applied
+-- Effect 1: Value — Protect from battle and card effects
 -- ============================================================
-function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then
-        return Duel.GetFlagEffect(tp,id)==0
-            and eg:IsExists(s.repfilter,1,nil,tp)
-    end
-    if Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
-        Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
-        return true
-    end
-    return false
-end
-
--- ============================================================
--- Effect 1: Value — Target restriction
--- ============================================================
-function s.repval(e,c)
-    return s.repfilter(c,e:GetHandlerPlayer())
-end
-
--- ============================================================
--- Effect 1: Operation — Print activation hint
--- ============================================================
-function s.repop(e,tp,eg,ep,ev,re,r,rp)
-    Duel.Hint(HINT_CARD,0,id)
+function s.indval(e,re,r,rp)
+    return (r&REASON_BATTLE+REASON_EFFECT)~=0
 end
 
 -- ============================================================
