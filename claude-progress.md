@@ -16,6 +16,17 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 046 — 2026-06-05
+
+- **Mục tiêu:**
+  - Khắc phục lỗi hiển thị `???` khi lựa chọn thêm vào tay (add) / Triệu hồi Đặc biệt (Special Summon) quái thú "Mermail" hoặc "Atlantean" và khi kích hoạt hiệu ứng phủ nhận của "Lemuria, the Slumbering Eternal City" (`37700001`).
+- **Đã hoàn thành:**
+  - Cập nhật các trường `str1` đến `str4` cho card `37700001` trong bảng `texts` của SQLite database `custom_cards_zesty.cdb` để hiển thị đúng mô tả hiệu ứng khi kích hoạt và các lựa chọn trong game.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 045 — 2026-06-05
 
 - **Mục tiêu:**
