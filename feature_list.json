@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04",
+  "last_updated": "2026-06-06",
   "note": "Trạng thái: pending(p) | working(w) | review(r) | done(d) | skipped(x). Phản ánh prefix trong docs/queues/<archetype>/",
   "archetypes": {
     "Labrynth": {
@@ -434,6 +434,96 @@
           "status": "done",
           "script": "script/c79900016.lua",
           "queue_file": "docs/queues/Common/d_Surtr_Sarkaz_of_Laevateinn.jpg"
+        }
+      ]
+    },
+    "Wezaemon": {
+      "setcode": "0x783",
+      "passcode_range": "192300001-192399999",
+      "cards": [
+        {
+          "name": "Wezaemon the Tombguard",
+          "passcode": "192300001",
+          "status": "done",
+          "script": "script/c192300001.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Wezaemon_The_Tombguard.jpg"
+        },
+        {
+          "name": "Setsuna of Bygone Days",
+          "passcode": "192300002",
+          "status": "done",
+          "script": "script/c192300002.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Setsuna_Of_Bygone_Days.jpg"
+        },
+        {
+          "name": "Battle Machine - Kirin Armor",
+          "passcode": "192300003",
+          "status": "done",
+          "script": "script/c192300003.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Battle_Machine_Kirin_Armor.jpg"
+        },
+        {
+          "name": "Challenge to Tombguard",
+          "passcode": "192300004",
+          "status": "done",
+          "script": "script/c192300004.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Challange_To_Tombguard.jpg"
+        },
+        {
+          "name": "The End of Greatest Warrior",
+          "passcode": "192300005",
+          "status": "done",
+          "script": "script/c192300005.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_The_End_Of_Greatest_Warrior.jpg"
+        },
+        {
+          "name": "Tachikaze",
+          "passcode": "192300006",
+          "status": "done",
+          "script": "script/c192300006.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Tachikaze.jpg"
+        },
+        {
+          "name": "Raisho",
+          "passcode": "192300007",
+          "status": "done",
+          "script": "script/c192300007.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Raisho.jpg"
+        },
+        {
+          "name": "Nyudogumo",
+          "passcode": "192300008",
+          "status": "done",
+          "script": "script/c192300008.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Nyudogumo.jpg"
+        },
+        {
+          "name": "Ohshike",
+          "passcode": "192300009",
+          "status": "done",
+          "script": "script/c192300009.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Ohshike.jpg"
+        },
+        {
+          "name": "Battle Machine - Kirin",
+          "passcode": "192300010",
+          "status": "done",
+          "script": "script/c192300010.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Battle_Machine_Kirin.jpg"
+        },
+        {
+          "name": "Seiten Taisei",
+          "passcode": "192300011",
+          "status": "done",
+          "script": "script/c192300011.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Seiten_Taisen.jpg"
+        },
+        {
+          "name": "Tenshei",
+          "passcode": "192300012",
+          "status": "done",
+          "script": "script/c192300012.lua",
+          "queue_file": "docs/queues/Wezaemon The Tombguard/d_Tenshei.jpg"
         }
       ]
     }
