@@ -16,6 +16,19 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 050 — 2026-06-06
+
+- **Mục tiêu:**
+  - Khắc phục lỗi card "Battle Machine - Kirin Armor" (`192300003`) không hiển thị trong Deck Builder của game EDOPro.
+- **Đã hoàn thành:**
+  - Sửa lỗi trong database SQLite `custom_cards_zesty.cdb`:
+    - Cập nhật `type` từ `16417` (Token) thành `97` (Fusion / Effect Monster) để EDOPro hiển thị card trong Deck Builder.
+    - Cập nhật `race` từ `131072` (Fish) thành `32` (Machine) để khớp đúng mô tả lore/tên card.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **75 OK, 46 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn toàn (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 049 — 2026-06-06
 
 - **Mục tiêu:**
