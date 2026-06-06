@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29",
+  "last_updated": "2026-06-04",
   "note": "Trạng thái: pending(p) | working(w) | review(r) | done(d) | skipped(x). Phản ánh prefix trong docs/queues/<archetype>/",
   "archetypes": {
     "Labrynth": {
@@ -23,7 +23,36 @@
     "Witchcrafter": {
       "setcode": "0x128",
       "passcode_range": "29600001-29699999",
-      "cards": []
+      "cards": [
+        {
+          "name": "Witchcrafter Bumble Magic",
+          "passcode": "29600002",
+          "status": "done",
+          "script": "script/c29600002.lua",
+          "queue_file": "docs/queues/Witchcrafter/d_Witchcrafter_bumble_magic.jpg"
+        },
+        {
+          "name": "Witchcrafter Unit Furnacer",
+          "passcode": "29600003",
+          "status": "done",
+          "script": "script/c29600003.lua",
+          "queue_file": "docs/queues/Witchcrafter/d_Witchcrafter_unit_furnacer.jpg"
+        },
+        {
+          "name": "Verre Magic Mastery",
+          "passcode": "29600004",
+          "status": "done",
+          "script": "script/c29600004.lua",
+          "queue_file": "docs/queues/Witchcrafter/d_Verre_Magic_Mastery.jpg"
+        },
+        {
+          "name": "Witchcrafter Garden",
+          "passcode": "29600005",
+          "status": "done",
+          "script": "script/c29600005.lua",
+          "queue_file": "docs/queues/Common/d_witchcrafter_garden.jpg"
+        }
+      ]
     },
     "Dragonmaid": {
       "setcode": "0x133",
@@ -48,6 +77,20 @@
           "status": "done",
           "script": "script/c42600001.lua",
           "queue_file": "docs/queues/White_Forest/d_Whispers_of_the_White_Forest.png"
+        },
+        {
+          "name": "Memory of the White Forest",
+          "passcode": "42600002",
+          "status": "done",
+          "script": "script/c42600002.lua",
+          "queue_file": "docs/queues/White_Forest/d_Memory_of_the_White_Forest.jpg"
+        },
+        {
+          "name": "Knowledge of the White Forest",
+          "passcode": "42600003",
+          "status": "done",
+          "script": "script/c42600003.lua",
+          "queue_file": "docs/queues/White_Forest/d_Knowledge_of_the_White_Forest.jpg"
         }
       ]
     },
@@ -149,7 +192,7 @@
           "passcode": "32100001",
           "status": "done",
           "script": "script/c32100001.lua",
-          "queue_file": "docs/queues/Rikka/p_Teardrop_the_Rikka_Fairy.jpg"
+          "queue_file": "docs/queues/Rikka/d_Teardrop_the_Rikka_Fairy.jpg"
         }
       ]
     },
@@ -163,6 +206,105 @@
           "status": "done",
           "script": "script/c44100001.lua",
           "queue_file": "docs/queues/Maliss/d_Maliss_Of_The_Fallen_Game.png"
+        }
+      ]
+    },
+    "Mikanko": {
+      "setcode": "0x18e",
+      "passcode_range": "34100001-34199999",
+      "cards": [
+        {
+          "name": "Ohime the Curious Mikanko",
+          "passcode": "34100001",
+          "status": "done",
+          "script": "script/c34100001.lua",
+          "queue_file": "docs/queues/Mikanko/d_ohime_the_curious_mikanko.jpg"
+        },
+        {
+          "name": "Mikanko Illusion Dance",
+          "passcode": "34100002",
+          "status": "done",
+          "script": "script/c34100002.lua",
+          "queue_file": "docs/queues/Mikanko/d_Mikanko_Illusion_Dance.jpg"
+        },
+        {
+          "name": "Mikanko Fire Soul",
+          "passcode": "34100003",
+          "status": "done",
+          "script": "script/c34100003.lua",
+          "queue_file": "docs/queues/Mikanko/d_mikanko_fire_soul.jpg"
+        }
+      ]
+    },
+    "Exosister": {
+      "setcode": "0x174",
+      "passcode_range": "37200001-37299999",
+      "cards": [
+        {
+          "name": "Exosister Nunctis",
+          "passcode": "37200001",
+          "status": "done",
+          "script": "script/c37200001.lua",
+          "queue_file": "docs/queues/Exosister/d_exosister_nunctis.png"
+        }
+      ]
+    },
+    "Traptrix": {
+      "setcode": "0x8a",
+      "passcode_range": "13800001-13899999",
+      "cards": [
+        {
+          "name": "Return of the Red Ant",
+          "passcode": "13800001",
+          "status": "done",
+          "script": "script/c13800001.lua",
+          "queue_file": "docs/queues/Traptrix/d_Return_of_the_Red_Ant.jpg"
+        },
+        {
+          "name": "Seventh Traptrix",
+          "passcode": "13800002",
+          "status": "done",
+          "script": "script/c13800002.lua",
+          "queue_file": "docs/queues/Traptrix/d_Seventh_Traptrix.jpg"
+        }
+      ]
+    },
+    "Umi": {
+      "setcode": "0x179",
+      "passcode_range": "37700001-37799999",
+      "cards": [
+        {
+          "name": "Lemuria, the Slumbering Eternal City",
+          "passcode": "37700001",
+          "status": "done",
+          "script": "script/c37700001.lua",
+          "queue_file": "docs/queues/Umi/d_Lemuria_the_Slumbering_Eternal_City.jpg"
+        }
+      ]
+    },
+    "Outer_Entity": {
+      "setcode": "0x10b7",
+      "passcode_range": "42790001-42799999",
+      "cards": [
+        {
+          "name": "Outer Entity Sothoth",
+          "passcode": "42790001",
+          "status": "done",
+          "script": "script/c42790001.lua",
+          "queue_file": "docs/queues/Common/d_Outer_Entity_Sothoth.jpg"
+        }
+      ]
+    },
+    "Rank_Up_Magic": {
+      "setcode": "0x95",
+      "passcode_range": "14900001-14999999",
+      "cards": [
+        {
+          "name": "Rank-Up-Magic Rising Force",
+          "passcode": "14900001",
+          "status": "done",
+          "script": "script/c14900001.lua",
+          "queue_file": "docs/queues/Common/d_Rank_up_magic_rising_force.jpg"
         }
       ]
     },
@@ -187,6 +329,111 @@
           "status": "done",
           "script": "script/c44700001.lua",
           "queue_file": "docs/queues/Common/d_Power_of_the_Dominators.jpg"
+        },
+        {
+          "name": "Witchcrafter Trick",
+          "passcode": "29600001",
+          "status": "done",
+          "script": "script/c29600001.lua",
+          "queue_file": "docs/queues/Common/d_witchcrafter_trick.jpg"
+        },
+        {
+          "name": "Blessing of the Fire Charmer",
+          "passcode": "19100002",
+          "status": "done",
+          "script": "script/c19100002.lua",
+          "queue_file": "docs/queues/Common/d_blessing_of_the_fire_charmer.jpg"
+        },
+        {
+          "name": "Blessing of the Water Charmer",
+          "passcode": "19100003",
+          "status": "done",
+          "script": "script/c19100003.lua",
+          "queue_file": "docs/queues/Common/d_blessing_of_the_water_charmer.jpg"
+        },
+        {
+          "name": "Blessing of the Earth Charmer",
+          "passcode": "19100001",
+          "status": "done",
+          "script": "script/c19100001.lua",
+          "queue_file": "docs/queues/Common/d_blessing_of_the_earth_charmer.jpg"
+        },
+        {
+          "name": "Blessing of the Wind Charmer",
+          "passcode": "19100004",
+          "status": "done",
+          "script": "script/c19100004.lua",
+          "queue_file": "docs/queues/Common/d_blessing_of_the_wind_charmer.jpg"
+        },
+        {
+          "name": "First Day Of Witch",
+          "passcode": "79900003",
+          "status": "done",
+          "script": "script/c79900003.lua",
+          "queue_file": "docs/queues/Common/d_First_Day_Of_Witch.jpg"
+        },
+        {
+          "name": "Waking Nightmare",
+          "passcode": "79900004",
+          "status": "done",
+          "script": "script/c79900004.lua",
+          "queue_file": "docs/queues/Common/d_Waking_Nightmare.jpg"
+        },
+        {
+          "name": "Don't Ash The Witch!",
+          "passcode": "79900006",
+          "status": "done",
+          "script": "script/c79900006.lua",
+          "queue_file": "docs/queues/Common/d_Dont_Ash_The_Witch.jpg"
+        },
+        {
+          "name": "WANTED: A Lazy Trouble Witch",
+          "passcode": "79900007",
+          "status": "done",
+          "script": "script/c79900007.lua",
+          "queue_file": "docs/queues/Common/d_WANTED__A_Lazy_Trouble_Witch.jpg"
+        },
+        {
+          "name": "Dragon Restday",
+          "passcode": "79900011",
+          "status": "done",
+          "script": "script/c79900011.lua",
+          "queue_file": "docs/queues/Common/d_Dragon_Restday.jpg"
+        },
+        {
+          "name": "Ghost Twin & Spring Rabbit",
+          "passcode": "79900012",
+          "status": "done",
+          "script": "script/c79900012.lua",
+          "queue_file": "docs/queues/Common/d_ghost_twin_and_spring_rabit.jpg"
+        },
+        {
+          "name": "Green Reboot",
+          "passcode": "79900013",
+          "status": "done",
+          "script": "script/c79900013.lua",
+          "queue_file": "docs/queues/Common/d_Green_reboot.jpg"
+        },
+        {
+          "name": "Guided by the Stars",
+          "passcode": "79900014",
+          "status": "done",
+          "script": "script/c79900014.lua",
+          "queue_file": "docs/queues/Common/d_Guided_by_the_stars.png"
+        },
+        {
+          "name": "Retfihs Noisnemid",
+          "passcode": "79900015",
+          "status": "done",
+          "script": "script/c79900015.lua",
+          "queue_file": "docs/queues/Common/d_Retfihs_Noisnemid.jpg"
+        },
+        {
+          "name": "Surtr, Sarkaz of Laevateinn",
+          "passcode": "79900016",
+          "status": "done",
+          "script": "script/c79900016.lua",
+          "queue_file": "docs/queues/Common/d_Surtr_Sarkaz_of_Laevateinn.jpg"
         }
       ]
     }

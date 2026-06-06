@@ -5,8 +5,8 @@
 - **Thư mục gốc:** `d:\TTF\TTFCustomCards`
 - **Lệnh validate:** `.\script-test\validate_scripts.ps1`
 - **Lệnh check sync:** `python .\script-test\manage_db.py check-sync`
-- **Tác vụ ưu tiên tiếp theo:** Thiết kế hoặc sửa lỗi các card tiếp theo trong hàng đợi (Common/queues/ hoặc do user yêu cầu)
-- **Sự cố chặn hiện tại:** Không có
+- **Tác vụ ưu tiên tiếp theo:** Xử lý các issue sync cũ còn tồn đọng (78900102, 79900002) hoặc chờ hàng đợi/tác vụ tiếp theo.
+- **Sự cố chặn hiện tại:** Không có blocker.
 
 ---
 
@@ -14,133 +14,344 @@
 
 > [!NOTE]
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
-> [Xem lịch sử các phiên trước đó (Phiên 001 - 007) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
+> [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
-### Phiên 008 — 2026-05-30
+### Phiên 048 — 2026-06-05
 
-- **Mục tiêu:** Sửa hiệu ứng 1 của card `79900010` ("Monica, The Legendary Witch") để cho phép Special Summon nguyên liệu lên sân đối thủ ở những zone mà card này chỉ tới.
+- **Mục tiêu:**
+  - Khắc phục lỗi hiệu ứng thay thế trục xuất sang Graveyard và gây sát thương của "Retfihs Noisnemid" (`79900015`) không hoạt động.
 - **Đã hoàn thành:**
-  - Cập nhật script `script/c79900010.lua`:
-    - Thay đổi bộ lọc `s.lkfilter` để kiểm tra khả năng Special Summon của card nguyên liệu lên sân của cả người chơi (`tp`) và đối thủ (`1-tp`) trong các zone tương ứng được liên kết.
-    - Cập nhật hàm target `s.lktg` để kiểm tra sự tồn tại của bất kỳ nguyên liệu nào có thể Special Summon được lên một trong hai phần sân.
-    - Tái cấu trúc hàm operation `s.lkop`: Triệu hồi từng nguyên liệu một (step-by-step) bằng `Duel.SpecialSummonStep`. Nếu một nguyên liệu có thể triệu hồi lên cả hai sân, hiển thị prompt cho phép người chơi chọn sân đích (`tp` hoặc `1-tp`). Hoàn tất chuỗi triệu hồi bằng `Duel.SpecialSummonComplete()`.
-  - Cập nhật database SQLite `custom_cards_zesty.cdb`: Thêm các chuỗi mô tả lựa chọn sân đích vào `str7` ("Special Summon to your field") và `str8` ("Special Summon to opponent's field") cho card `79900010`.
+  - Sửa đổi [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua):
+    - Thay thế cơ chế `EFFECT_SEND_REPLACE` không tương thích bằng `EFFECT_REMOVE_REDIRECT` (SetValue = `LOCATION_GRAVE`).
+    - Lọc các card được chuyển hướng thông qua hàm `s.reptg` loại trừ các card trong Graveyard (`not c:IsLocation(LOCATION_GRAVE)`).
+    - Triển khai gắn flag trên card bị chuyển hướng và theo dõi tại sự kiện `EVENT_TO_GRAVE` để đếm và gây damage tương ứng cho đối thủ.
 - **Xác minh đã chạy:**
-  - `.\script-test\validate_scripts.ps1` -> 0 FAIL, c79900010.lua OK.
-  - `.\script-test\lint_scripts.ps1` -> c79900010.lua không có lỗi linter/whitespaces.
-  - `python .\script-test\manage_db.py check-sync` -> Đồng bộ thành công, không phát sinh lỗi liên quan đến Monica.
-- **Files/artifacts đã cập nhật:** [c79900010.lua](file:///d:/TTF/TTFCustomCards/script/c79900010.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn toàn (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
-### Phiên 009 — 2026-05-30
+### Phiên 047 — 2026-06-05
 
-- **Mục tiêu:** Tạo card mới "Maliss of the Fallen Game" (Normal Spell, archetype Maliss 0x1b9)
+- **Mục tiêu:**
+  - Khắc phục lỗi hiệu ứng tăng lần tấn công của "Surtr, Sarkaz of Laevateinn" (`79900016`) không hoạt động do lỗi nil reference khi truy cập parameter `c` trong hàm giá trị động.
 - **Đã hoàn thành:**
-  - Tạo script `script/c44100001.lua` — Normal Spell với effect:
-    - Cost: Pay half LP
-    - Banish all cards in your GY, count Maliss cards banished
-    - For every 2 Maliss cards banished, randomly banish 1 card from opponent's Extra Deck until End Phase
-    - Banished opponent's cards cannot activate effects until End Phase
-    - HOPT (hard once per turn)
-    - At End Phase: return banished Extra Deck cards via `Duel.SendtoDeck`
-  - Thêm entry database vào `custom_cards_zesty.cdb` (passcode 44100001, ot=32, setcode=441=0x1b9)
-  - Copy artwork từ `docs/queues/Maliss/p_Maliss_Of_The_Fallen_Game.png` sang `pics/44100001.png`
+  - Sửa đổi [c79900016.lua](file:///d:/TTF/TTFCustomCards/script/c79900016.lua):
+    - Đổi logic trong hàm `s.atkval` sử dụng `e:GetHandler()` làm đối tượng card thay vì truy cập trực tiếp qua parameter `c` (vì parameter `c` có thể bị `nil` tùy thuộc vào ngữ cảnh gọi từ EDOPro core engine).
 - **Xác minh đã chạy:**
-  - `validate_scripts.ps1` → 0 FAIL, c44100001.lua OK (chỉ còn 1 cảnh báo cấu trúc nhỏ không ảnh hưởng).
-  - `lint_scripts.ps1` → c44100001.lua không có lint issue.
-  - `manage_db.py check-sync` → Đồng bộ (chỉ có lỗi cũ pre-existing).
-  - `Test-Path script\c44100001.lua` → True.
-- **Files/artifacts đã cập nhật:** [c44100001.lua](file:///d:/TTF/TTFCustomCards/script/c44100001.lua), `custom_cards_zesty.cdb`, `pics/44100001.png`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
-- **Rủi ro đã biết:**
-  - `Duel.SendtoDeck` trả card về Extra Deck — cần test in-game xem card có trở về đúng vị trí Extra Deck không.
-  - Các hiệu ứng đơn lẻ `EFFECT_CANNOT_TRIGGER` đăng ký trực tiếp lên từng card bị banish — cần test in-game xem hệ thống có tự động giải phóng/chặn đúng yêu cầu không.
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [c79900016.lua](file:///d:/TTF/TTFCustomCards/script/c79900016.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
-### Phiên 010 — 2026-05-30
+### Phiên 046 — 2026-06-05
 
-- **Mục tiêu:** Thiết kế và code card mới "Elaina, The Wandering Witch" (LIGHT Spellcaster Link-1, ATK 1000)
+- **Mục tiêu:**
+  - Khắc phục lỗi hiển thị `???` khi lựa chọn thêm vào tay (add) / Triệu hồi Đặc biệt (Special Summon) quái thú "Mermail" hoặc "Atlantean" và khi kích hoạt hiệu ứng phủ nhận của "Lemuria, the Slumbering Eternal City" (`37700001`).
 - **Đã hoàn thành:**
-  - Tạo script `script/c79900001.lua` với 2 hiệu ứng:
-    - Hiệu ứng 1: Discard 1 Spell Card -> Chọn số N từ 1 đến 10 để excavate. Nếu có ít nhất 2 Spell Cards, đối thủ chọn 2, ta add 1 vào tay và gửi 1 xuống GY. Các card còn lại shuffle về Deck.
-    - Hiệu ứng 2: End Phase optional trigger trả Elaina từ field/GY về Extra Deck (HOPT).
-  - Đăng ký card vào cơ sở dữ liệu `custom_cards_zesty.cdb` (passcode 79900001, link marker Bottom = 2, ot=32).
-  - Di chuyển artwork từ `docs/queues/Common/p_Elaina_The_Wandering_Witch.jpg` sang `pics/79900001.jpg`.
-  - Đổi tên file trong hàng đợi sang prefix `d_` (`d_Elaina_The_Wandering_Witch.jpg`).
-  - Thêm Elaina vào `feature_list.json` dưới mục `"Common"`.
-  - Đổi tên file artwork queue của "Maliss of the Fallen Game" sang `d_Maliss_Of_The_Fallen_Game.png` và đăng ký archetype `"Maliss"` cùng card này vào `feature_list.json` (status: `"done"`).
+  - Cập nhật các trường `str1` đến `str4` cho card `37700001` trong bảng `texts` của SQLite database `custom_cards_zesty.cdb` để hiển thị đúng mô tả hiệu ứng khi kích hoạt và các lựa chọn trong game.
 - **Xác minh đã chạy:**
-  - Chạy `.\script-test\validate_scripts.ps1` -> c79900001.lua OK (1 OK, 0 WARN, 0 FAIL).
-  - Chạy `.\script-test\lint_scripts.ps1` -> Không có lỗi style cho c79900001.lua.
-  - Chạy `python .\script-test\manage_db.py check-sync` -> c79900001.lua đã đồng bộ 100% với database.
-- **Files/artifacts đã cập nhật:** [c79900001.lua](file:///d:/TTF/TTFCustomCards/script/c79900001.lua), `custom_cards_zesty.cdb`, `feature_list.json`, `pics/79900001.jpg`, `docs/queues/Common/d_Elaina_The_Wandering_Witch.jpg`, `docs/queues/Maliss/d_Maliss_Of_The_Fallen_Game.png`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
-### Phiên 011 — 2026-05-30
+### Phiên 045 — 2026-06-05
 
-- **Mục tiêu:** Thiết kế và code card mới "Power of the Dominators" (Normal Trap, archetype Dominus 0x1bf)
+- **Mục tiêu:**
+  - Sửa lỗi hiệu ứng 2 của "Outer Entity Sothoth" (`c42790001.lua`) có thể chọn chính nó làm nguyên liệu để đính kèm (attach), gây lỗi runtime `Attempt to overlay a card with itself`.
+  - Khắc phục lỗi hiển thị `???` cho các prompt/lựa chọn hiệu ứng của "Outer Entity Sothoth" (`42790001`) trong game do thiếu các cột mô tả/option chuỗi (`str1` đến `str4`) trong bảng `texts` của SQLite database.
 - **Đã hoàn thành:**
-  - Tạo script `script/c44700001.lua` — Normal Trap với các hiệu ứng:
-    - Kích hoạt từ tay khi không có monster trong GY.
-    - Negate kích hoạt hiệu ứng trong GY/banishment của đối thủ hoặc hiệu ứng di chuyển card từ GY/banishment của đối thủ đi nơi khác.
-    - Nếu có Trap trong GY, cho phép add 1 card "Dominus" từ Deck lên tay (optional search).
-    - Phạt khi kích hoạt từ tay: Không được Special Summon từ tay, GY, banishment cho đến hết lượt sau.
-    - HOPT trên kích hoạt.
-  - Thêm entry database vào `custom_cards_zesty.cdb` (passcode 44700001, ot=32, setcode=447=0x1bf)
-  - Copy artwork từ `docs/queues/Common/p_Power_of_the_Dominators.jpg` sang `pics/44700001.jpg`
-  - Đổi tên file artwork queue sang `d_Power_of_the_Dominators.jpg`
-  - Cập nhật card này vào `feature_list.json` dưới mục `"Common"` (status: `"done"`)
-- **Xác minh đã chạy:**
-  - `validate_scripts.ps1` → c44700001.lua OK (chỉ có warning cấu trúc không ảnh hưởng).
-  - `lint_scripts.ps1` → c44700001.lua không có lint issue nào.
-  - `manage_db.py check-sync` → Đồng bộ hoàn chỉnh (chỉ có lỗi cũ pre-existing).
-- **Files/artifacts đã cập nhật:** [c44700001.lua](file:///d:/TTF/TTFCustomCards/script/c44700001.lua), `custom_cards_zesty.cdb`, `feature_list.json`, `pics/44700001.jpg`, `docs/queues/Common/d_Power_of_the_Dominators.jpg`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
-
-### Phiên 012 — 2026-05-30
-
-- **Mục tiêu:** Định dạng lại và kiểm tra kỹ lượng 3 file script: `c44100001.lua`, `c44700001.lua`, `c79900001.lua`.
-- **Đã hoàn thành:**
-  - Chuyển đổi toàn bộ thụt đầu dòng (indentation) từ tabs sang 4 spaces để khớp với code style tiêu chuẩn của project.
-  - Sửa các cảnh báo cấu trúc (validator warnings) trong `c44100001.lua` (thêm kiểm tra `IsRelateToEffect` trong hàm operation của Normal Spell).
-  - Tối ưu hóa logic trả card về Extra Deck ở End Phase của `c44100001.lua` bằng cách sử dụng một continuous field effect duy nhất quản lý Group các card đã banish (`KeepAlive` và `DeleteGroup`), thay vì đăng ký riêng lẻ nhiều effect độc lập. Điều này giúp các card trở về Extra Deck đồng thời cùng lúc theo đúng cơ chế luật OCG/TCG.
-  - Sửa các cảnh báo cấu trúc và linter warnings trong `c44700001.lua` (thêm comment bypass `chk==0` cho `splimit` target, thêm comment bypass `IsRelateToEffect` cho Normal Trap, tách dòng quá dài trên 120 ký tự).
-- **Xác minh đã chạy:**
-  - `validate_scripts.ps1` → Cả 3 file `c44100001.lua`, `c44700001.lua`, `c79900001.lua` đều đạt trạng thái `[ ] OK` không còn bất kỳ cảnh báo/lỗi nào.
-  - `lint_scripts.ps1` → Cả 3 file đều 100% sạch linter warnings (không có lỗi độ dài dòng hay khoảng trắng thừa).
-  - `manage_db.py check-sync` → Không phát sinh lỗi đồng bộ nào mới.
-- **Files/artifacts đã cập nhật:** [c44100001.lua](file:///d:/TTF/TTFCustomCards/script/c44100001.lua), [c44700001.lua](file:///d:/TTF/TTFCustomCards/script/c44700001.lua), [c79900001.lua](file:///d:/TTF/TTFCustomCards/script/c79900001.lua), [README.md](file:///d:/TTF/TTFCustomCards/README.md), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
-
-### Phiên 013 — 2026-05-30
-
-- **Mục tiêu:** Sửa lỗi runtime `IsExists` trong script `c44700001.lua` ("Power of the Dominators").
-- **Đã hoàn thành:**
-  - Sửa hàm condition `s.negcon` tại dòng 59 trong `script/c44700001.lua`: Cung cấp tham số `1, nil` (count và exception) đầy đủ cho hàm `tg:IsExists` để tương thích với signature API C++ của EDOPro/YGOPRO (`Group.IsExists` yêu cầu tối thiểu 4 tham số bao gồm cả `self` implicit).
-- **Xác minh đã chạy:**
-  - `.\script-test\validate_scripts.ps1` -> 48 OK, 31 WARN, 0 FAIL.
-  - `python .\script-test\manage_db.py check-sync` -> Hoạt động bình thường, không phát sinh lỗi liên quan đến c44700001.lua.
-- **Files/artifacts đã cập nhật:** [c44700001.lua](file:///d:/TTF/TTFCustomCards/script/c44700001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
-
-### Phiên 014 — 2026-05-30
-
-- **Mục tiêu:** Sửa lỗi kích hoạt sai của "Power of the Dominators" (`c44700001.lua`) khi đối thủ kích hoạt hiệu ứng trên sân (như Witchcrafter Genni triệu hồi từ Deck) mà không liên quan đến GY/banishment.
-- **Đã hoàn thành:**
-  - Sửa hàm condition `s.negcon` trong `script/c44700001.lua`:
-    - Thay thế kiểm tra category sơ sài (Check 3 cũ) bằng cơ chế kiểm tra `GetOperationInfo` chi tiết tương tự như lá bài Ghost Belle & Haunted Mansion, áp dụng cho cả `LOCATION_GRAVE` và `LOCATION_REMOVED` của đối thủ (`1-tp`).
-    - Lọc kiểm tra chi tiết trên 8 categories di chuyển card tiêu chuẩn: `TOHAND`, `TODECK`, `TOEXTRA`, `SPECIAL_SUMMON`, `REMOVE`, `TOGRAVE`, `EQUIP`, và `LEAVE_GRAVE`.
-    - Loại bỏ các categories/constants không chuẩn là `CATEGORY_GRAVE_SPSUMMON` và `CATEGORY_GRAVE_ACTION` để loại bỏ hoàn toàn cảnh báo (warnings) của linter/validator.
-- **Xác minh đã chạy:**
-  - `.\script-test\validate_scripts.ps1` -> 48 OK (c44700001.lua OK không còn cảnh báo nào), 31 WARN, 0 FAIL.
-  - `python .\script-test\manage_db.py check-sync` -> Thành công, không có lỗi đồng bộ mới.
-- **Files/artifacts đã cập nhật:** [c44700001.lua](file:///d:/TTF/TTFCustomCards/script/c44700001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
-
-### Phiên 015 — 2026-05-30
-
-- **Mục tiêu:** Kiểm tra và sửa lỗi thiếu/trùng description của Effect 1 và Effect 2 cho card `79900010` ("Monica, The Legendary Witch") trong database SQLite.
-- **Đã hoàn thành:**
-  - Cập nhật script `script/c79900010.lua`: Đổi mô tả hiệu ứng 2 `e2:SetDescription` từ `aux.Stringid(id,0)` thành `aux.Stringid(id,8)` nhằm phân tách rõ ràng với hiệu ứng 1.
+  - Sửa đổi [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua):
+    - Đưa `e:GetHandler()` (card kích hoạt hiệu ứng) vào tham số `exceptg` (tham số cuối cùng) của cả hai hàm `Duel.IsExistingMatchingCard` và `Duel.SelectMatchingCard` trong `s.atttg` và `s.attop`, loại trừ chính bản thân card khỏi việc làm nguyên liệu đính kèm.
   - Cập nhật database SQLite `custom_cards_zesty.cdb`:
-    - Cập nhật `str1` (tương ứng với index 0 của Monica) thành `[Link] Special Summon materials`.
-    - Thêm `str9` (tương ứng với index 8 của Monica) thành `[Quick] Tribute/Discard: disable, destroy, or control`.
-    - Sửa lỗi thiếu số `1` trong dòng hạn chế triệu hồi ở cột `desc` (đổi từ `Special Summon "Monica, ..."` thành `Special Summon 1 "Monica, ..."`).
+    - Thiết lập đầy đủ chuỗi text trong bảng `texts` từ `str1` đến `str4` cho card `42790001` tương ứng với các mô tả/lựa chọn của hiệu ứng Summon và Detach.
 - **Xác minh đã chạy:**
-  - `.\script-test\validate_scripts.ps1` -> 48 OK (c79900010.lua OK không lỗi), 31 WARN, 0 FAIL.
-  - `python .\script-test\manage_db.py check-sync` -> Hoạt động bình thường, không phát sinh lỗi đồng bộ mới cho Monica.
-- **Files/artifacts đã cập nhật:** [c79900010.lua](file:///d:/TTF/TTFCustomCards/script/c79900010.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 044 — 2026-06-05
+
+- **Mục tiêu:**
+  - Khắc phục lỗi hiển thị `???` khi lựa chọn Set card bẫy "Hole" từ Deck của "Seventh Traptrix" (`c13800002.lua`) do thiếu các chuỗi option (`str1` và `str2`) trong SQLite database.
+- **Đã hoàn thành:**
+  - Cập nhật các trường `str1` (lựa chọn Special Summon) và `str2` (lựa chọn Set bẫy Hole) cho card "Seventh Traptrix" (`13800002`) và card liên quan "Return of the Red Ant" (`13800001`) trong bảng `texts` của database `custom_cards_zesty.cdb`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn toàn (chỉ còn 2 issue sync cũ có sẵn).
+- **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 043 — 2026-06-05
+
+
+- **Mục tiêu:**
+  - Kiểm tra hiệu ứng và mã nguồn của "Rank-Up-Magic Rising Force" (`c14900001.lua`), tìm các lá có hiệu ứng tương tự (như `c33816.lua` - DoomZ Command J.U.P.I.T.E.R) và sửa lại theo chuẩn.
+- **Đã hoàn thành:**
+  - Sửa đổi [c14900001.lua](file:///d:/TTF/TTFCustomCards/script/c14900001.lua):
+    - Đổi setcode hex `0x95` thành hằng số `SET_RANK_UP_MAGIC` từ constants.
+    - Sửa CountLimit thành `EFFECT_COUNT_CODE_OATH` cho HOPT kích hoạt.
+    - Bổ sung `IsPlayerCanSpecialSummonCount(tp,2)` trong target check.
+    - Viết lại hàm lọc `s.filter1` và `s.filter2` theo chuẩn của "Rank-Up-Magic Soul Shave Force" với `IsCanBeXyzMaterial`, `rum_limit` và `GetLocationCountFromEx`.
+    - Thêm `Duel.BreakEffect()` giữa hai lần triệu hồi.
+    - Gọi `c:CancelToGrave()` trước khi overlay Spell card làm material.
+  - Sửa đổi [c33816.lua](file:///d:/TTF/TTFCustomCards/script/c33816.lua):
+    - Đổi setcode hex `0x95` thành `SET_RANK_UP_MAGIC`.
+    - Thay thế CountLimit `SetCountLimit(1)` (SOPT) thành logic "Once per Chain" chuẩn hóa bằng cờ hiệu `RESET_CHAIN`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** [c14900001.lua](file:///d:/TTF/TTFCustomCards/script/c14900001.lua), [c33816.lua](file:///d:/TTF/TTFCustomCards/script/c33816.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 042 — 2026-06-05
+
+- **Mục tiêu:**
+  - Tham khảo và sửa đổi hiệu ứng lọc / kiểm tra các lá bài "Hole" Normal Trap của "Return of the Red Ant" (`c13800001.lua`) và "Seventh Traptrix" (`c13800002.lua`) theo đúng chuẩn của card official "Traptrix Myrmeleo".
+- **Đã hoàn thành:**
+  - Thay thế cách viết setcode dạng table không chuẩn `c:IsSetCard({0x89, 0x4c})` bằng cách sử dụng các hằng số chính thức `SET_TRAP_HOLE` và `SET_HOLE` với phép logic OR `(c:IsSetCard(SET_TRAP_HOLE) or c:IsSetCard(SET_HOLE))` giống như script của "Traptrix Myrmeleo".
+  - Sửa đổi [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua):
+    - Đổi `s.listed_series` thành `{SET_TRAP_HOLE, SET_HOLE}`.
+    - Cập nhật `s.holefilter` sử dụng logic OR để lọc card.
+  - Sửa đổi [c13800002.lua](file:///d:/TTF/TTFCustomCards/script/c13800002.lua):
+    - Đổi `s.listed_series` thành `{SET_TRAPTRIX, SET_TRAP_HOLE, SET_HOLE}`.
+    - Cập nhật `s.setfilter` sử dụng logic OR.
+    - Thay thế setcode `0x8a` bằng hằng số `SET_TRAPTRIX` trong `s.xyzfilter` và check condition trong `s.operation`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công, không phát sinh cảnh báo mới).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua), [c13800002.lua](file:///d:/TTF/TTFCustomCards/script/c13800002.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 041 — 2026-06-05
+
+- **Mục tiêu:**
+  1. Khắc phục lỗi card "Dragon Restday" (`c79900011.lua`) và các card custom trong nhóm `79900011` đến `79900016` hiển thị `???` trong game do thiếu các cột mô tả/option chuỗi (`str1` đến `str4`) trong bảng `texts` của SQLite database.
+  2. Sửa lỗi hiệu ứng thay thế chuyển hướng trục xuất sang Graveyard của "Retfihs Noisnemid" (`c79900015.lua`) không hoạt động sau khi trả cost kích hoạt.
+  3. Sửa lỗi hiệu ứng tấn công nhiều lần của "Surtr, Sarkaz of Laevateinn" (`c79900016.lua`) không hoạt động khi kích hoạt ở Main Phase (do số lượng quái đối thủ bị đếm tĩnh bằng 0 ở thời điểm kích hoạt thay vì đếm tại Battle Phase).
+  4. Chuyển đổi hiệu ứng bảo vệ khỏi bị hủy diệt (Effect 1) của "Exosister Nunctis" (`c37200001.lua`) từ tự chọn (hỏi Yes/No) sang tự động kích hoạt (bắt buộc).
+- **Đã hoàn thành:**
+  - Viết và chạy script Python cập nhật đầy đủ các cột `str1` đến `str4` cho 6 card (từ `79900011` đến `79900016`) trong `custom_cards_zesty.cdb`.
+  - Thiết lập chuỗi text chính xác cho các lựa chọn prompt và hiệu ứng của `c79900011.lua` (Dragon Restday).
+  - Sửa đổi [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua):
+    - Loại bỏ hàm không tồn tại `tc:SetDestination(LOCATION_GRAVE)`.
+    - Sử dụng chuẩn `KeepAlive()` và `e:SetLabelObject(g)` để chuyển group `g` các card bị chuyển hướng từ target sang operation.
+    - Trong hàm operation `s.repop`, thực hiện việc gửi các card sang Graveyard bằng cách sử dụng `Duel.SendtoGrave(g, REASON_EFFECT+REASON_REPLACE)`.
+  - Sửa đổi [c79900016.lua](file:///d:/TTF/TTFCustomCards/script/c79900016.lua):
+    - Viết hàm giá trị động `s.atkval` cho `EFFECT_EXTRA_ATTACK` để tự động kiểm tra số lượng quái thú đối phương và lưu lại (cache) vào flag effect `c:RegisterFlagEffect` ngay khi Battle Phase bắt đầu (hoặc ngay lúc check trong Battle Phase), giúp giữ nguyên số lượt tấn công tối đa kể cả khi quái thú đối phương bị tiêu diệt dần qua các đòn đánh.
+  - Sửa đổi [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua):
+    - Chuyển đổi hiệu ứng 1 từ `EFFECT_DESTROY_REPLACE` (vẫn tự động hiển thị prompt lựa chọn Yes/No do engine quy định đối với field replacement) sang `EFFECT_INDESTRUCTABLE_COUNT` với giới hạn count limit là 1. Điều này đảm bảo hiệu ứng tự động ngăn chặn phá hủy 1 lần mỗi lượt mà không hiện bất kỳ prompt hỏi người chơi nào.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo (chỉ còn 2 issue sync cũ có sẵn).
+- **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua), [c79900016.lua](file:///d:/TTF/TTFCustomCards/script/c79900016.lua), [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 040 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi hiệu ứng 2 của "Return of the Red Ant" (`c13800001.lua`) và hiệu ứng tương tự của "Seventh Traptrix" (`c13800002.lua`) chỉ cho phép set 5 lá bẫy "Hole" Normal Trap có setcode `0x89` (Hole) mà bỏ qua các lá bẫy "Trap Hole" Normal Trap khác có setcode `0x4c` (Trap Hole).
+- **Đã hoàn thành:**
+  - Sửa đổi [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua):
+    - Cập nhật `s.listed_series` thành `{0x89, 0x4c}`.
+    - Sửa hàm `s.holefilter` sử dụng `c:IsSetCard({0x89, 0x4c})` để bao quát toàn bộ card Normal Trap thuộc hai archetype `Hole` (0x89) và `Trap Hole` (0x4c).
+  - Sửa đổi [c13800002.lua](file:///d:/TTF/TTFCustomCards/script/c13800002.lua):
+    - Cập nhật `s.listed_series` thành `{0x8a, 0x89, 0x4c}`.
+    - Sửa hàm `s.setfilter` sử dụng `c:IsSetCard({0x89, 0x4c})`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp (2 sync issues cũ).
+- **Files/artifacts đã cập nhật:** [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua), [c13800002.lua](file:///d:/TTF/TTFCustomCards/script/c13800002.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 039 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi hiệu ứng 3 của "Exosister Nunctis" (`c37200001.lua`) không kiểm tra số lượng quái vật Xyz trong GY dẫn đến việc kích hoạt được khi không có Xyz dưới mộ. Đồng thời sửa lỗi tương tác với "Rank-Up-Magic Rising Force" (`c14900001.lua`) bằng cách bổ sung điều kiện triệu hồi nghiêm ngặt.
+- **Đã hoàn thành:**
+  - Sửa đổi [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua):
+    - Đăng ký hiệu ứng `EFFECT_SPSUMMON_CONDITION` với hàm kiểm tra `s.splimit` tương tự `Exosisters Magnifica` (`c59242457.lua`) để ngăn chặn việc triệu hồi từ Extra Deck bằng card effect (như Rank-Up-Magic) mà không thỏa mãn điều kiện nguyên liệu chuẩn.
+    - Sửa lại hàm `s.spcost` để kiểm tra `#g > 0`, bắt buộc phải có ít nhất một quái vật Xyz dưới Graveyard mới cho phép kích hoạt hiệu ứng 3.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành khớp 109 cards (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 038 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi hiệu ứng 2 của "Return of the Red Ant" (`c13800001.lua`) không kích hoạt được khi một lá "Hole" Normal Trap bị phá hủy, đồng thời tối ưu hóa logic chọn "any number" khi Set bẫy từ GY.
+- **Đã hoàn thành:**
+  - Sửa đổi [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua):
+    - Đổi code trigger của hiệu ứng Graveyard `e2` từ `EVENT_TO_GRAVE` sang `EVENT_DESTROYED` (event chuẩn cho sự kiện phá hủy bài trên sân) và thêm `EFFECT_FLAG_DAMAGE_STEP`.
+    - Loại bỏ điều kiện kiểm tra reason `c:IsReason(REASON_DESTROY)` trong hàm lọc `s.cfilter` do `EVENT_DESTROYED` đã đảm bảo tất cả các card đều bị phá hủy, đồng thời tăng tính tương thích.
+    - Sửa lại hàm `s.setop` để cho phép người chơi chọn kích hoạt Set tùy chọn bất kỳ số lượng lá bẫy "Hole" Normal Trap nào (từ 1 đến số lượng vùng trống / số lượng bẫy trong GY) bằng cách sử dụng `g:Select(tp, 1, maxc, nil)` thay vì ép buộc Set tất cả/Set số lượng cố định.
+    - Thêm `RESET_PHASE|PHASE_END` vào hiệu ứng `EFFECT_TRAP_ACT_IN_SET_TURN` để dọn dẹp thuộc tính sạch sẽ vào cuối lượt.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp (2 sync issues cũ).
+- **Files/artifacts đã cập nhật:** [c13800001.lua](file:///d:/TTF/TTFCustomCards/script/c13800001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 037 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi hiệu ứng add bài của `c29600004.lua` ("Verre Magic Mastery") không tìm và add được lá "Verre Magic - Lacrima of Light" (`73664385`).
+- **Đã hoàn thành:**
+  - Tra cứu các lá bài "Verre Magic" (結晶魔術) khác trên cơ sở dữ liệu chính thức và xác nhận chỉ có 1 lá bài duy nhất là "Verre Magic - Lacrima of Light" (`73664385`).
+  - Sửa đổi [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua): Thêm passcode `73664385` vào hàm filter, đồng thời tối ưu hóa cú pháp sử dụng `c:IsCode(code1, code2, ...)` để lọc tất cả các card "Verre Magic" (Transformation `22121392`, Sleep Time `79846799`, Lacrima `73664385`).
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch hoàn hảo).
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành khớp 109 cards (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 036 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi runtime/compilation của Xyz procedure trong `c42790001.lua` và `c37200001.lua` do sai chữ ký hàm `Xyz.AddProcedure`.
+- **Đã hoàn thành:**
+  - Sửa đổi [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua): Loại bỏ đối số `99` (maxc) bị truyền sai vị trí (vị trí thứ 5 làm lệch các đối số sau và khiến `SetDescription` nhận nhầm function filter làm description). Thay đổi thành `Xyz.AddProcedure(c,s.xyzfilter,5,3,s.altfilter,aux.Stringid(id,0),Xyz.InfiniteMats,s.altop)` (sử dụng hằng số `Xyz.InfiniteMats` thay cho `99` để loại bỏ cảnh báo deprecation trong EDOPro).
+  - Sửa đổi [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua): Loại bỏ đối số thứ 5 (`2`) thừa thãi vì hệ thống tự động gán `maxct = ct` (nếu không có alternative summon filter thì không cần truyền 5 đối số). Thay đổi thành `Xyz.AddProcedure(c,s.xyzfilter,nil,2)`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Vẫn biên dịch hoàn hảo).
+  - `python .\script-test\manage_db.py check-sync` -> 2 sync issues quen thuộc.
+- **Files/artifacts đã cập nhật:** [c42790001.lua](file:///d:/TTF/TTFCustomCards/script/c42790001.lua), [c37200001.lua](file:///d:/TTF/TTFCustomCards/script/c37200001.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 035 — 2026-06-04
+
+- **Mục tiêu:** Rà soát và kiểm tra kỹ lưỡng logic hiệu ứng của cả 13 card script mới so với yêu cầu gốc, sửa đổi các lỗi tiềm ẩn để tối ưu tính năng.
+- **Đã hoàn thành:**
+  - Kiểm tra toàn diện logic của cả 13 script, sửa đổi các phần sau:
+    - **Witchcrafter Garden** (`c29600005.lua`): Sửa lỗi hàm `target` và `activate` khiến card không thể kích hoạt được nếu trong Deck chỉ còn Trap (nhưng đã đủ điều kiện điều khiển Witchcrafter monster).
+    - **Surtr, Sarkaz of Laevateinn** (`c79900016.lua`): Sửa điều kiện bảo vệ `s.protcon` từ "chỉ khi được Link Summon" thành "trong lượt được Special Summon" nói chung để khớp chính xác mô tả hiệu ứng.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Vẫn biên dịch hoàn hảo).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** [c29600005.lua](file:///d:/TTF/TTFCustomCards/script/c29600005.lua), [c79900016.lua](file:///d:/TTF/TTFCustomCards/script/c79900016.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 034 — 2026-06-04
+
+- **Mục tiêu:** Sao chép hình ảnh artwork vào thư mục `pics/` dưới dạng tên passcode và định dạng lại toàn bộ 13 script Lua mới theo đúng template chuẩn.
+- **Đã hoàn thành:**
+  - Sao chép 13 file ảnh từ hàng đợi vào [pics/](file:///d:/TTF/TTFCustomCards/pics/) đặt tên theo `<passcode>.<ext>`.
+  - Định dạng lại tiêu đề và các khối chú thích trong 13 file script Lua tại [script/](file:///d:/TTF/TTFCustomCards/script/) cho đồng bộ với template tại [template-card/](file:///d:/TTF/TTFCustomCards/template-card/).
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Biên dịch hoàn hảo sau định dạng).
+  - `python .\script-test\manage_db.py check-sync` -> Toàn bộ khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** 13 file script tại [script/](file:///d:/TTF/TTFCustomCards/script/), hình ảnh tại [pics/](file:///d:/TTF/TTFCustomCards/pics/), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 033 — 2026-06-04
+
+- **Mục tiêu:** Hoàn thiện định dạng hàng đợi, đổi tên tiền tố file ảnh từ `p_` (pending) sang `d_` (done) cho 13 card đã triển khai và đồng bộ đường dẫn trong `feature_list.json`.
+- **Đã hoàn thành:**
+  - Đổi tên toàn bộ 13 file ảnh queue trong thư mục `docs/queues/` từ `p_` sang `d_`.
+  - Cập nhật các đường dẫn `queue_file` tương ứng trong [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json) sang dạng `d_`.
+- **Xác minh đã chạy:**
+  - `git status` -> Tất cả file cũ dạng `p_` biến mất, thay bằng file dạng `d_` tương ứng.
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL**.
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành khớp 109 cards (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 032 — 2026-06-04
+
+- **Mục tiêu:** Hiện thực hóa mã nguồn (script Lua) và đăng ký thông số vào database cho cả 13 card pending.
+- **Đã hoàn thành:**
+  - Viết thành công 13 file script Lua tại [script/](file:///d:/TTF/TTFCustomCards/script/) khớp chính xác logic mô tả từ ảnh queue.
+  - Viết script Python đăng ký thành công thông tin (stats, name, desc) của 13 card vào SQLite database `custom_cards_zesty.cdb` (Link arrows, type, setcodes, ot=32).
+  - Cập nhật trạng thái của cả 13 card từ `pending` sang `done` trong [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json), gắn thêm thuộc tính `script` chỉ định tệp.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **72 OK, 37 WARN, 0 FAIL** (Tất cả 13 script mới biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành khớp 109 cards (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 031 — 2026-06-04
+
+- **Mục tiêu:** Quét hàng đợi, tìm và đăng ký các card pending (`p_`) vào `feature_list.json`, lập kế hoạch chi tiết cho các card này.
+- **Đã hoàn thành:**
+  - Quét thư mục `docs/queues/` phát hiện 13 card pending mới có tiền tố `p_`.
+  - Phân tích và trích xuất thành công toàn bộ thông số, hiệu ứng của 13 card từ file ảnh bằng `view_file`.
+  - Cập nhật [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json):
+    - Đăng ký 13 card mới vào các archetype phù hợp (`Witchcrafter`, `Exosister`, `Traptrix`, `Umi`, `Outer_Entity`, `Rank_Up_Magic`, `Common`).
+    - Gán các dải passcode theo chuẩn `{setcode_decimal}{sequential_5digits}` cho từng card mới.
+    - Cập nhật ngày sửa đổi cuối thành `"2026-06-04"`.
+  - Lập bản kế hoạch triển khai [implementation_plan.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/c9d7d85a-b7dd-4173-a797-5a45c936a65c/implementation_plan.md) phân tích chi tiết hiệu ứng và hướng đi cho từng card.
+- **Xác minh đã chạy:**
+  - `Get-Content feature_list.json | ConvertFrom-Json` -> File JSON hợp lệ.
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp với database (không phát sinh lỗi mới từ các card pending).
+- **Files/artifacts đã cập nhật:** [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 030 — 2026-06-04
+
+- **Mục tiêu:** Chỉnh lại card Mikanko Fire Soul (`c34100003.lua`) để hiệu ứng kích hoạt từ field không kích hoạt được trong lượt đối phương.
+- **Đã hoàn thành:**
+  - Sửa đổi [c34100003.lua](file:///d:/TTF/TTFCustomCards/script/c34100003.lua):
+    - Đổi hiệu ứng gửi card và quái vật trang bị từ field xuống GY để Special Summon quái Mikanko (Effect 2) từ Quick Effect (`EFFECT_TYPE_QUICK_O`) sang Ignition Effect (`EFFECT_TYPE_IGNITION`).
+    - Loại bỏ code không cần thiết của Quick Effect/Free Chain: `SetHintTiming` và `SetCondition(s.con_main_phase)`.
+    - Xóa function `s.con_main_phase` không còn sử dụng.
+    - Sửa đổi hàm `tg_summon_deck_grave` để kiểm tra `Duel.GetMZoneCount(tp, ec) > 0` thay vì `Duel.GetLocationCount(tp, LOCATION_MZONE) > 0` nhằm xử lý chính xác trường hợp sân đầy hoặc chỉ có quái thú được trang bị khi kích hoạt hiệu ứng (vì quái thú này được gửi đi làm chi phí).
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK, 29 WARN, 0 FAIL (c34100003.lua OK).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp với database (chỉ còn 2 issue sync cũ).
+  - `.\script-test\lint_scripts.ps1 script\c34100003.lua` -> Sạch linter.
+- **Files/artifacts đã cập nhật:** [c34100003.lua](file:///d:/TTF/TTFCustomCards/script/c34100003.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 029 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi Ohime the Curious Mikanko (`c34100001.lua`) bị mất hiệu ứng và lỗi turn lock/response protection không hoạt động.
+- **Đã hoàn thành:**
+  - Sửa đổi database SQLite `custom_cards_zesty.cdb`:
+    - Cập nhật `setcode` của 3 card custom Mikanko (`34100001`, `34100002`, `34100003`) từ `3356984` (hex `0x333938` - do nhập sai định dạng chuỗi "398") về đúng giá trị số `398` (hex `0x18e`).
+    - Việc sửa setcode giúp hệ thống nhận diện đúng Ohime và các card Mikanko custom là thuộc archetype Mikanko, giúp Ohime không tự khóa hiệu ứng của chính mình khi register `EFFECT_CANNOT_ACTIVATE` cho non-Mikanko monsters trong lượt cô ấy được Special Summon.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK, 29 WARN, 0 FAIL.
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành khớp cơ sở dữ liệu (chỉ còn 2 issue sync cũ).
+- **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 028 — 2026-06-04
+
+- **Mục tiêu:** Sửa lỗi "effect mộ vẫn không xài được" của card Verre Magic Mastery (`c29600004.lua`).
+- **Đã hoàn thành:**
+  - Sửa đổi [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua):
+    - Loại bỏ điều kiện kiểm tra turn player `and Duel.IsTurnPlayer(tp)` trong hàm `s.con_search` vì hiệu ứng hoạt động trong Main Phase của cả hai người chơi.
+    - Thêm `e3:SetHintTiming(0,TIMING_MAIN_END)` cho hiệu ứng Graveyard `e3` để EDOPro hiển thị prompt kích hoạt trong open game state (chain mode AUTO).
+    - Dọn dẹp khoảng trắng thừa (trailing whitespace) ở các dòng comment 7-14.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK (c29600004.lua OK), 29 WARN, 0 FAIL.
+  - `.\script-test\lint_scripts.ps1` -> c29600004.lua không còn bất kỳ lỗi/cảnh báo linter nào.
+  - `python .\script-test\manage_db.py check-sync` -> Đồng bộ thành công, không phát sinh lỗi đồng bộ nào mới.
+- **Files/artifacts đã cập nhật:** [c29600004.lua](file:///d:/TTF/TTFCustomCards/script/c29600004.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 027 — 2026-06-03
+
+- **Mục tiêu:** Sửa lỗi response protection và lỗi hiệu ứng turn lock của Ohime the Curious Mikanko (`c34100001.lua`).
+- **Đã hoàn thành:**
+  - Sửa đổi [c34100001.lua](file:///d:/TTF/TTFCustomCards/script/c34100001.lua):
+    - Đổi logic target `s.tg_destroy_spell_trap` luôn trả về `true` ở `chk==0` để đảm bảo `SetChainLimit` được gọi khi kích hoạt bắt buộc (mandatory trigger) kể cả khi sân không có Spell/Trap.
+    - Sửa response protection thành `Duel.SetChainLimit(aux.FALSE)` (Option B) để ngăn chặn hoàn toàn việc chain các hiệu ứng quái vật hoặc bẫy nhằm bypass khóa hoặc phủ nhận hiệu ứng.
+    - Sửa lỗi function `op_monster_lock` kiểm tra sai `c:IsRelateToEffect(e)` trên hiệu ứng continuous trigger; thêm client hint bằng `aux.Stringid(id,3)`.
+    - Thêm custom activity counter `chainfilter` và field restriction `EFFECT_CANNOT_SPECIAL_SUMMON` để cấm Special Summon Ohime nếu người chơi đã kích hoạt hiệu ứng quái vật non-Mikanko trong lượt; tích hợp kiểm tra này vào `s.op_overlay`.
+  - Cập nhật database SQLite `custom_cards_zesty.cdb`:
+    - Đổi text mô tả card cho passcode `34100001` để khớp với việc cấm kích hoạt bài/hiệu ứng trong response.
+    - Đăng ký chuỗi mô tả lock `'You cannot activate non-Mikanko monster effects'` vào `str4`.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK (c34100001.lua OK không còn cảnh báo structural/relation), 29 WARN, 0 FAIL.
+  - `python .\script-test\manage_db.py check-sync` -> Hoàn thành sạch sẽ, kết quả khớp hoàn toàn với cơ sở dữ liệu.
+- **Files/artifacts đã cập nhật:** [c34100001.lua](file:///d:/TTF/TTFCustomCards/script/c34100001.lua), `custom_cards_zesty.cdb`, [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 026 — 2026-06-03
+
+- **Mục tiêu:** Sửa lỗi Once Per Turn bị nhầm thành HOPT của Iris (`c192200004.lua`) và Morpheus (`c192200005.lua`).
+- **Đã hoàn thành:**
+  - Sửa đổi [c192200004.lua](file:///d:/TTF/TTFCustomCards/script/c192200004.lua):
+    - Đổi count limit của Effect 2 (Ignition Field Spell placement) từ HOPT (`{id, 1}` với `EFFECT_COUNT_CODE_OATH`) sang SOPT (`1`).
+    - Đổi count limit của Effect 3 (Quick Effect negate) từ HOPT (`{id, 2}` với `EFFECT_COUNT_CODE_OATH`) sang SOPT (`1`).
+  - Sửa đổi [c192200005.lua](file:///d:/TTF/TTFCustomCards/script/c192200005.lua):
+    - Xóa hoàn toàn count limit của Effect 2 (Trigger Field Spell placement on SS by own effect) do text description không có giới hạn Once Per Turn (trước đây đặt nhầm `id+1` HOPT).
+    - Đổi count limit của Effect 3 (Quick Effect negate) từ HOPT (`id+2` với `EFFECT_COUNT_CODE_OATH`) sang SOPT (`1`).
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK, 29 WARN, 0 FAIL (Cả hai script sửa đổi đều OK 100% không cảnh báo).
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp với cơ sở dữ liệu (chỉ còn 2 lỗi đồng bộ cũ có sẵn).
+- **Files/artifacts đã cập nhật:** [c192200004.lua](file:///d:/TTF/TTFCustomCards/script/c192200004.lua), [c192200005.lua](file:///d:/TTF/TTFCustomCards/script/c192200005.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
+### Phiên 025 — 2026-06-02
+
+- **Mục tiêu:** Sửa lỗi hiệu ứng sau khi đối thủ kích hoạt effect không hoạt động cho card `c79900003.lua` ("First Day of Witch") và `c42600002.lua` ("Memory of the White Forest").
+- **Đã hoàn thành:**
+  - Xác định nguyên nhân: Do EDOPro engine giới hạn cơ chế đếm của `AddCustomActivityCounter` (đặc biệt khi chạy kiểm tra hoạt động cho đối thủ `1-tp` trong môi trường tự thiết lập hoặc chạy local), dẫn tới việc hàm đếm `GetCustomActivityCount` hoạt động không ổn định hoặc luôn trả về `0`.
+  - Sửa đổi [c79900003.lua](file:///d:/TTF/TTFCustomCards/script/c79900003.lua) và [c42600002.lua](file:///d:/TTF/TTFCustomCards/script/c42600002.lua):
+    - Loại bỏ bộ đếm `AddCustomActivityCounter` và thay thế bằng việc đăng ký một hiệu ứng continuous toàn cục lắng nghe sự kiện `EVENT_CHAINING` để tự động thiết lập flag hiệu ứng `RESET_PHASE|PHASE_END` lên người chơi kích hoạt (`rp`).
+    - Kiểm tra điều kiện bằng cách so khớp flag: `Duel.GetFlagEffect(1-tp, id) > 0` để đảm bảo tính chính xác 100% khi nhận diện hoạt động của đối thủ, không phụ thuộc vào bộ đếm nội bộ của simulator.
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> 67 OK, 29 WARN, 0 FAIL (Cả hai script sửa đổi đều OK 100% không cảnh báo).
+  - `.\script-test\lint_scripts.ps1` -> Hoàn thành sạch sẽ, không có cảnh báo/lỗi định dạng mới nào.
+  - `python .\script-test\manage_db.py check-sync` -> Kết quả khớp hoàn hảo với cơ sở dữ liệu.
+- **Files/artifacts đã cập nhật:** [c79900003.lua](file:///d:/TTF/TTFCustomCards/script/c79900003.lua), [c42600002.lua](file:///d:/TTF/TTFCustomCards/script/c42600002.lua), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._

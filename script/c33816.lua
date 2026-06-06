@@ -9,7 +9,7 @@ function s.initial_effect(c)
     local e0=Effect.CreateEffect(c)
     e0:SetType(EFFECT_TYPE_SINGLE)
     e0:SetCode(EFFECT_ADD_SETCODE)
-    e0:SetValue(0x95) 
+    e0:SetValue(SET_RANK_UP_MAGIC) 
     c:RegisterEffect(e0)
 
     ---------------------------------------------------
@@ -45,7 +45,6 @@ function s.initial_effect(c)
     e3:SetType(EFFECT_TYPE_QUICK_O)
     e3:SetCode(EVENT_FREE_CHAIN)
     e3:SetRange(LOCATION_SZONE)
-    e3:SetCountLimit(1)
     e3:SetCost(s.cost)
     e3:SetTarget(s.tg)
     e3:SetOperation(s.op)
@@ -94,12 +93,15 @@ end
 -- Mục tiêu (Target)
 ---------------------------------------------------
 function s.tg(e,tp,eg,ep,ev,re,r,rp,chk)
-    local mc=e:GetHandler():GetEquipTarget()
+    local c=e:GetHandler()
+    local mc=c:GetEquipTarget()
     if chk==0 then
-        return mc and s.getvalue(mc)>0
+        return c:GetFlagEffect(id)==0
+        and mc and s.getvalue(mc)>0
         and Duel.GetLocationCountFromEx(tp,tp,mc)>0
         and Duel.IsExistingMatchingCard(s.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,mc)
     end
+    c:RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD|RESET_CHAIN,0,1)
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 
