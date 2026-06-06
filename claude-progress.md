@@ -16,6 +16,21 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 024) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 049 — 2026-06-06
+
+- **Mục tiêu:**
+  - Triển khai toàn bộ archetype "Wezaemon the Tombguard" gồm 12 cards từ hàng đợi (Lua scripts, SQLite database, artwork, hằng số cấu hình).
+- **Đã hoàn thành:**
+  - Thiết lập hằng số setcode `SET_WEZAEMON = 0x783` trong [constants.lua](file:///d:/TTF/TTFCustomCards/script/constants.lua) và đăng ký chuỗi `!setname 0x783 Wezaemon` trong [strings.conf](file:///d:/TTF/TTFCustomCards/strings.conf).
+  - Viết 12 file Lua script [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua) đến [c192300012.lua](file:///d:/TTF/TTFCustomCards/script/c192300012.lua) với logic hoàn chỉnh tuân thủ cấu trúc của simulator EDOPro.
+  - Đăng ký thông tin (stats, name, desc, ot=32) cho cả 12 cards vào database SQLite `custom_cards_zesty.cdb`.
+  - Sao chép và đổi tên các file ảnh artwork vào [pics/](file:///d:/TTF/TTFCustomCards/pics/) đặt theo passcode.
+  - Đổi tên tiền tố file trong thư mục hàng đợi từ `p_` sang `d_` tại [docs/queues/Wezaemon The Tombguard/](file:///d:/TTF/TTFCustomCards/docs/queues/Wezaemon%20The%20Tombguard/) và cập nhật đường dẫn `queue_file` trong [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json).
+- **Xác minh đã chạy:**
+  - `.\script-test\validate_scripts.ps1` -> **75 OK, 46 WARN, 0 FAIL** (Biên dịch thành công).
+  - `python .\script-test\manage_db.py check-sync` -> Khớp hoàn hảo.
+- **Files/artifacts đã cập nhật:** 12 file script, `constants.lua`, `strings.conf`, `custom_cards_zesty.cdb`, [pics/](file:///d:/TTF/TTFCustomCards/pics/), [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+
 ### Phiên 048 — 2026-06-05
 
 - **Mục tiêu:**
