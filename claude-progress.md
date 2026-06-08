@@ -23,14 +23,16 @@
 - **Đã hoàn thành:**
   - Trích xuất 993 hằng số EDOPro chuẩn từ `validate_scripts.ps1` ra `script-test/edopro_constants.txt`.
   - Tinh gọn `validate_scripts.ps1` từ 1334 dòng xuống còn 346 dòng (giảm ~75%), tải hằng số động một lần duy nhất lúc khởi tạo.
-  - Sửa lỗi mã hóa Tiếng Việt (Unicode) trên Windows console bằng cách thiết lập mã hóa UTF-8 cho toàn bộ PowerShell script (`validate_scripts.ps1`, `lint_scripts.ps1`, `fetch_official.ps1`) và Python script (`manage_db.py`, `manage_harness.py`).
+  - Sửa lỗi mã hóa Tiếng Việt (Unicode) trên Windows console bằng cách thiết lập mã hóa UTF-8 cho toàn bộ PowerShell script (`validate_scripts.ps1`, `lint_scripts.ps1`, `fetch_official.ps1`) and Python script (`manage_db.py`, `manage_harness.py`).
   - Cập nhật hàm `run_command` trong `manage_harness.py` sử dụng `encoding='utf-8'` khi giải mã output từ sub-process con.
+  - Xây dựng script [archive_progress.py](file:///d:/TTF/TTFCustomCards/script-test/archive_progress.py) để tự động hóa việc di chuyển các phiên cũ (chỉ giữ lại tối đa 25 phiên) từ `claude-progress.md` sang [docs/claude-progress-archive.md](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
+  - Tích hợp Step 6 tự động chạy script này vào cuối pipeline `verify` của [manage_harness.py](file:///d:/TTF/TTFCustomCards/script-test/manage_harness.py).
 - **Xác minh đã chạy:**
   - `python .\script-test\manage_db.py check-sync` -> **100% OK**.
   - `.\script-test\validate_scripts.ps1 -Quiet` -> **122 OK, 0 FAIL** (hoạt động tốt với file txt hằng số).
   - `python .\script-test\manage_db.py query 79900002` -> Tiếng Việt có dấu hiển thị chuẩn xác, sắc nét trên console.
-  - `python .\script-test\manage_harness.py verify 192300010` -> Chạy pipeline harness thành công.
-- **Files/artifacts đã cập nhật:** `validate_scripts.ps1`, `lint_scripts.ps1`, `fetch_official.ps1`, `manage_db.py`, `manage_harness.py`, `edopro_constants.txt`, `claude-progress.md`
+  - `python .\script-test\manage_harness.py verify 192300010` -> Chạy pipeline harness thành công (bao gồm cả Step 6 auto archive).
+- **Files/artifacts đã cập nhật:** `validate_scripts.ps1`, `lint_scripts.ps1`, `fetch_official.ps1`, `manage_db.py`, `manage_harness.py`, `edopro_constants.txt`, `archive_progress.py`, `claude-progress.md`
 
 ### Phiên 053 — 2026-06-08
 
