@@ -38,14 +38,12 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 
     -- ============================================================
-    -- Effect 2 — GY: Banish to Set Nyudogumo or Tachikaze from Deck
+    -- Effect 2 — GY: Banish to Set Nyudogumo or Tachikaze from Deck (FIXED)
     -- ============================================================
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,1))
-    e2:SetType(EFFECT_TYPE_QUICK_O)
-    e2:SetCode(EVENT_FREE_CHAIN)
+    e2:SetType(EFFECT_TYPE_IGNITION) -- Đổi thành IGNITION để chỉ kích hoạt trong Main Phase của mình
     e2:SetRange(LOCATION_GRAVE)
-    e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
     e2:SetCountLimit(1,{id,1},EFFECT_COUNT_CODE_OATH)
     e2:SetCost(s.cost_banish)
     e2:SetTarget(s.tg_set_deck)
@@ -89,7 +87,7 @@ function s.tg_place(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
     end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
     local g=Duel.SelectTarget(tp,s.placefilter,tp,0,LOCATION_MZONE,1,maxc,nil)
-    Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,#g,0,0)
+    -- Đã xóa CATEGORY_REMOVE tại đây vì cơ chế gốc là di chuyển vùng sân (MoveToField)
 end
 
 -- ============================================================
@@ -158,9 +156,15 @@ function s.op_set_deck(e,tp,eg,ep,ev,re,r,rp)
     if #g>0 then
         local tc=g:GetFirst()
         Duel.SSet(tp,tc)
+        
+        -- Cho phép kích hoạt ngay trong lượt đầu tiên Set (Áp dụng cho cả Trap và Quick-Play Spell)
         local e1=Effect.CreateEffect(e:GetHandler())
         e1:SetType(EFFECT_TYPE_SINGLE)
-        e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+        if tc:IsType(TYPE_TRAP) then
+            e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+        else
+            e1:SetCode(EFFECT_QP_ACT_IN_SET_TURN)
+        end
         e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
         e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
         tc:RegisterEffect(e1)

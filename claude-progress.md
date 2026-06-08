@@ -16,6 +16,22 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 056 — 2026-06-08
+
+- **Mục tiêu:**
+  - Cập nhật và tinh chỉnh cơ chế hoạt động cho các card nhóm Wezaemon/Tachikaze (`192300005`, `192300006`, `192300007`, `192300008`, `192300010`) theo yêu cầu sửa lỗi.
+- **Đã hoàn thành:**
+  - Sửa [c192300005.lua](file:///d:/TTF/TTFCustomCards/script/c192300005.lua): Thay `c:IsCode` bằng `c:GetPreviousCode()` trong `s.leavfilter` để kiểm tra danh tính chính xác trước khi rời sân vào vùng úp/mộ.
+  - Sửa [c192300006.lua](file:///d:/TTF/TTFCustomCards/script/c192300006.lua): Chuyển hiệu ứng 2 ở GY từ Quick Effect thành Ignition Effect; hỗ trợ kích hoạt Spell/Trap set-turn động cho cả Quick-Play Spell (`EFFECT_QP_ACT_IN_SET_TURN`) và Trap (`EFFECT_TRAP_ACT_IN_SET_TURN`).
+  - Sửa [c192300007.lua](file:///d:/TTF/TTFCustomCards/script/c192300007.lua): Chuyển hiệu ứng 2 ở GY thành Ignition Effect; hỗ trợ kích hoạt Spell/Trap set-turn động; xóa category remove dư thừa ở Target.
+  - Sửa [c192300008.lua](file:///d:/TTF/TTFCustomCards/script/c192300008.lua): Chuyển hiệu ứng 2 ở GY thành Ignition Effect để chặn kích hoạt trong lượt đối thủ.
+  - Sửa [c192300010.lua](file:///d:/TTF/TTFCustomCards/script/c192300010.lua): Giữ nguyên Quick Effect cho hiệu ứng 2 ở GY, loại bỏ cơ chế cho phép kích hoạt Trap vừa Set ngay trong lượt.
+- **Xác minh đã chạy:**
+  - Chạy `python .\script-test\manage_harness.py verify <passcode>` thành công cho cả 5 card (192300005, 192300006, 192300007, 192300008, 192300010).
+  - Linter sạch lỗi phong cách (trailing whitespace đã được dọn sạch).
+  - Hệ thống cơ sở dữ liệu đồng bộ hoàn hảo (check-sync 100% OK).
+- **Files/artifacts đã cập nhật:** `script/c192300005.lua`, `script/c192300006.lua`, `script/c192300007.lua`, `script/c192300008.lua`, `script/c192300010.lua`, `claude-progress.md`
+
 ### Phiên 055 — 2026-06-08
 
 - **Mục tiêu:**

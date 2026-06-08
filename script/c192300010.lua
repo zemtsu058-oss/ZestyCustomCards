@@ -42,11 +42,11 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 
     -- ============================================================
-    -- Effect 2 — GY: Banish to Set a Trap mentioning Wezaemon
+    -- Effect 2 — GY: Banish to Set a Trap (GIỮ NGUYÊN QUICK_O)
     -- ============================================================
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,1))
-    e2:SetType(EFFECT_TYPE_QUICK_O)
+    e2:SetType(EFFECT_TYPE_QUICK_O) -- Giữ nguyên Quick Effect như cũ theo ý bạn
     e2:SetCode(EVENT_FREE_CHAIN)
     e2:SetRange(LOCATION_GRAVE)
     e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
@@ -186,7 +186,7 @@ function s.tg_set_trap(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 -- ============================================================
--- Effect 2: Operation — Set trap from Deck + can activate this turn
+-- Effect 2: Operation — Set trap from Deck (ĐÃ FIX KHÔNG CHO ACTIVATE)
 -- ============================================================
 function s.op_set_trap(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
@@ -194,11 +194,6 @@ function s.op_set_trap(e,tp,eg,ep,ev,re,r,rp)
     if #g>0 then
         local tc=g:GetFirst()
         Duel.SSet(tp,tc)
-        local e1=Effect.CreateEffect(e:GetHandler())
-        e1:SetType(EFFECT_TYPE_SINGLE)
-        e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-        e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-        e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-        tc:RegisterEffect(e1)
+        -- Đã loại bỏ hoàn toàn block e1 (EFFECT_TRAP_ACT_IN_SET_TURN)
     end
 end

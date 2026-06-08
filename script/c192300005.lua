@@ -167,8 +167,12 @@ end
 function s.leavcon(e,tp,eg,ep,ev,re,r,rp)
     return eg:IsExists(s.leavfilter,1,nil,tp)
 end
+
+-- SỬA TẠI ĐÂY: Thay c:IsCode bằng c:GetPreviousCode() để check danh tính trước khi vào vùng khuất
 function s.leavfilter(c,tp)
-    return c:IsCode(192300001) and c:IsPreviousControler(tp) and c:IsPreviousLocation(LOCATION_MZONE)
+    return c:GetPreviousCode()==192300001
+        and c:IsPreviousControler(tp)
+        and c:IsPreviousLocation(LOCATION_MZONE)
 end
 
 -- ============================================================

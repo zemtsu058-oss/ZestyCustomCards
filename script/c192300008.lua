@@ -40,15 +40,13 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 
     -- ============================================================
-    -- Effect 2 — GY: Banish to add Tachikaze and/or Raisho
+    -- Effect 2 — GY: Banish to add Tachikaze and/or Raisho (FIXED)
     -- ============================================================
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,1))
     e2:SetCategory(CATEGORY_TOHAND)
-    e2:SetType(EFFECT_TYPE_QUICK_O)
-    e2:SetCode(EVENT_FREE_CHAIN)
+    e2:SetType(EFFECT_TYPE_IGNITION) -- Sửa thành IGNITION để chặn kích hoạt trong lượt đối thủ
     e2:SetRange(LOCATION_GRAVE)
-    e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
     e2:SetCountLimit(1,{id,1},EFFECT_COUNT_CODE_OATH)
     e2:SetCost(s.cost_banish)
     e2:SetTarget(s.tg_recover)
@@ -76,7 +74,7 @@ function s.cost_lp(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 -- ============================================================
--- Effect 1: Target — Target up to 2 (or all if opponent has 5+)
+-- Effect 1: Target — Target up to 2 (or all if opponent has 5+) (GIỮ CŨ)
 -- ============================================================
 function s.tg_halve(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
     local omc=Duel.GetFieldGroupCount(tp,0,LOCATION_MZONE)
@@ -93,7 +91,7 @@ end
 
 -- ============================================================
 -- Effect 1: Operation — Halve ATK, then destroy ATK-Position
---           monsters with ATK < Wezaemon's ATK
+--           monsters with ATK < Wezaemon's ATK (GIỮ CŨ)
 -- ============================================================
 function s.op_halve(e,tp,eg,ep,ev,re,r,rp)
     local tg=Duel.GetTargetCards(e)
@@ -113,7 +111,7 @@ function s.op_halve(e,tp,eg,ep,ev,re,r,rp)
     local wg=Duel.GetMatchingGroup(aux.FaceupFilter(Card.IsCode,192300001),tp,LOCATION_MZONE,0,nil)
     if #wg==0 then return end
     local wezatk=wg:GetFirst():GetAttack()
-    -- Step 3: Destroy all ATK Position opponent's monsters with ATK < Wezaemon ATK
+    -- Step 3: Destroy all Attack Position opponent's monsters with ATK < Wezaemon ATK
     local dg=Duel.GetMatchingGroup(s.destfilter,tp,0,LOCATION_MZONE,nil,wezatk)
     if #dg>0 then
         Duel.Destroy(dg,REASON_EFFECT)
