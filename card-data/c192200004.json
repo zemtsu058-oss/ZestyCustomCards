@@ -1,0 +1,22 @@
+{
+  "id": 192200004,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 33,
+  "atk": 2000,
+  "def": 2500,
+  "level": 6,
+  "race": 2,
+  "attribute": 16,
+  "category": 271778304,
+  "name": "Iris, Master of the Castle of Dreams",
+  "desc": "If your opponent controls a monster that was Special Summoned from their Deck or Extra Deck, or you control no monster in your Main Monster Zone, you can Special Summon this card from your hand. You can only Special Summon \"Iris, Master of the Castle of Dreams\" once per turn this way. Once per turn, during your Main Phase: You can place 1 \"Castle of Dreams\" Field Spell from your Deck face-up on your field. Once per turn, when your opponent activates a card or effect, while you control a \"Castle of Dreams\" Field Spell (Quick Effect): You can negate the activation, and if you do, your opponent chooses 1 of these effects for you to apply. (1) You draw 2, then your opponent draws 1. (2) All monsters on the field gain 500 ATK, then all monsters you control gain 500 ATK. (3) You gain 2000 LP, then your opponent gains 1000 LP.",
+  "strings": [
+    "Once per turn: You can place 1 \"Castle of Dreams\" Field Spell from your Deck face-up on your field.",
+    "Once per turn (Quick Effect): Negate opponent activation; opponent chooses effect to apply.",
+    "You draw 2, then your opponent draws 1.",
+    "All monsters on the field gain 500 ATK, then all monsters you control gain 500 ATK.",
+    "You gain 2000 LP, then your opponent gains 1000 LP."
+  ]
+}

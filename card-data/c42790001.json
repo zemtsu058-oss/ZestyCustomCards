@@ -1,0 +1,21 @@
+{
+  "id": 42790001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 4279,
+  "type": 8388641,
+  "atk": 2500,
+  "def": 2500,
+  "level": 5,
+  "race": 8,
+  "attribute": 32,
+  "category": 0,
+  "name": "Outer Entity Sothoth",
+  "desc": "3+ level 5 monster\nOnce per turn, you can also Xyz Summon \"Outer Entity Sothoth\" by using 1 \"Entity\" monster you control as material (Transfer its materials to this card). (Quick effect): You can attach 1 Fusion, Synchro, or Xyz monster from your field, Extra Deck or GY to this card. (Quick effect): You can detach up to 3 different monster types of materials from this card (Fusion, Synchro, Xyz); apply the following effect(s) depending on what was detached.\n●Fusion: Look at your opponent's hand and banish 1 card from it, face-down, until the end of this turn.\n●Synchro: Look at your opponent's Extra Deck and banish 1 monster from it, face-down, until the end of this turn.\n●Xyz: Banish 1 card on the field, face-down, until the end of this turn.\nCards and effects cannot be activated in response to this effect activation. You can only activate each of \"Outer Entity Sothoth\" once per turn.",
+  "strings": [
+    "Xyz Summon by overlaying an \"Entity\" monster",
+    "Attach 1 Fusion, Synchro, or Xyz Monster as material",
+    "Detach materials to banish opponent's cards face-down",
+    "Detach another material?"
+  ]
+}

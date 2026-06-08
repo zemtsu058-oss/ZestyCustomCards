@@ -1,0 +1,16 @@
+{
+  "id": 90078,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 33,
+  "atk": 0,
+  "def": 0,
+  "level": 1,
+  "race": 2,
+  "attribute": 16,
+  "category": 0,
+  "name": "Maiden of White – Dragon Blessing",
+  "desc": "You can only use each effect of \"Maiden of White – Dragon Blessing\" once per turn.\n(1) You can reveal this card in your hand; add 1 card that mentions \"Blue-Eyes White Dragon\" from your Deck or GY to your hand, then discard 1 card, and if you discarded \"Blue-Eyes White Dragon\", draw 1 card.\n(2) During your opponent's turn, when your opponent activates a card or effect in their hand (Quick Effect): You can reveal this card in your hand, then target 1 \"Blue-Eyes White Dragon\" you control, or 1 card you control that mentions it; negate that activation. You cannot target cards with the same name with this effect for the rest of this turn.",
+  "strings": []
+}

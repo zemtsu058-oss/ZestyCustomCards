@@ -1,0 +1,19 @@
+{
+  "id": 79900001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 48,
+  "type": 67108897,
+  "atk": 1000,
+  "def": 2,
+  "level": 1,
+  "race": 2,
+  "attribute": 16,
+  "category": 131320,
+  "name": "Elaina, The Wandering Witch",
+  "desc": "1 non-Link Spellcaster monster\nOnce per turn, during your Main Phase: You can discard 1 Spell Card; excavate up to 10 cards from the top of your Deck, then if you excavated 2 or more Spell Cards, your opponent choose 2 among them, you can add 1 of chosen cards to your hand and send the other card to the GY.\nDuring the End Phase, while this card is on the field or in your GY: You can return this card to the Extra Deck.\nYou can only Special Summon 1 \"Elaina, The Wandering Witch\" per turn.",
+  "strings": [
+    "Excavate and search Spell",
+    "Return to Extra Deck in End Phase"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": 531005,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 98,
+  "type": 4202529,
+  "atk": 4000,
+  "def": 3500,
+  "level": 12,
+  "race": 8192,
+  "attribute": 16,
+  "category": 0,
+  "name": "Toon Shooting Quasar Dragon ",
+  "desc": "1+ \"Toon\" monsters + 1 \"Toon\" Tuner Must first be Synchro Summoned.\n\nFor this card's Synchro Summon, you can treat 1 \"Toon\" monster you control as a Tuner. (Quick Effect): When your opponent activates a card or effect: You can negate the activation, and if you do, destroy that card. If this card is destroyed: You can Special Summon 1 \"Toon\" monster from your Deck, ignoring its Summoning conditions.\n\nYou can only use each effect of \"Toon Shooting Quasar Dragon\" once per turn.",
+  "strings": []
+}

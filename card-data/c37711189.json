@@ -1,0 +1,21 @@
+{
+  "id": 37711189,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 524509,
+  "type": 97,
+  "atk": 3000,
+  "def": 2500,
+  "level": 8,
+  "race": 8192,
+  "attribute": 16,
+  "category": 0,
+  "name": "Blue-eyes HERO Dragon",
+  "desc": "1 Monster added to your hand by an effect + 1 Dragon Monster\nMust be Fusion Summoned.\nIf this card is Fusion Summoned: You can activate 1 of the following effects;\n● Draw 2 cards.\n● Add 1 “Fusion” Spell from your Deck to your hand.\n● Special Summon up to 2 Dragon monsters from your GY in Defense Position.\nYou can only activate this effect of “Blue-Eyes Hero Dragon” once per turn.",
+  "strings": [
+    "",
+    "Draw 2",
+    "Search",
+    "Special Summon form GY"
+  ]
+}

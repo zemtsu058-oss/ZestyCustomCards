@@ -1,0 +1,18 @@
+{
+  "id": 19100003,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 191,
+  "type": 18,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Blessing of the Water Charmer",
+  "desc": "Send 1 WATER monster from your Deck to the GY; until the end of the next turn, WATER monsters you control cannot be targeted by your opponent's card effects. You can only activate 1 \"Blessing of the Water Charmer\" per turn.",
+  "strings": [
+    "Send 1 WATER monster to GY to apply protection"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": 192300001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 33,
+  "atk": -2,
+  "def": 0,
+  "level": 10,
+  "race": 33554432,
+  "attribute": 32,
+  "category": 0,
+  "name": "Wezaemon the Tombguard",
+  "desc": "If you control no monsters, you can Special Summon this card (from your hand). You can only control 1 \"Wezaemon the Tombguard\". This card's ATK becomes the difference between 8000 and your LP. If you Set a card or activate a Spell/Trap that mentions \"Wezaemon the Tombguard\": You can Set 1 Spell/Trap that mentions \"Wezaemon the Tombguard\" directly from your Deck. It can be activated this turn. You cannot activate monster effects on the field or in the GY the turn you activate this effect, except \"Wezaemon the Tombguard\" or monsters that mention it. You can only use this effect of \"Wezaemon the Tombguard\" once per turn.",
+  "strings": [
+    "Set 1 Spell/Trap that mentions \"Wezaemon the Tombguard\" from your Deck"
+  ]
+}

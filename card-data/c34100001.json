@@ -1,0 +1,21 @@
+{
+  "id": 34100001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 398,
+  "type": 8388641,
+  "atk": 0,
+  "def": 0,
+  "level": 3,
+  "race": 4,
+  "attribute": 16,
+  "category": 4609,
+  "name": "Ohime the Curious Mikanko",
+  "desc": "2 Level 3 \"Mikanko\" monsters\nYou can also Xyz Summon \"Ohime the Curious Mikanko\" by using 1 \"Mikanko\" Xyz Monster or 1 \"Mikanko\" Ritual Monster you control as material. (Transfer its materials to this card.) You can only Xyz Summon \"Ohime the Curious Mikanko\" once per turn this way. If all materials on this card are \"Mikanko\" cards, this card cannot be destroyed by battle or card effects, also neither player takes battle damage from battles involving this card. If this card is Special Summoned: Destroy all Spells/Traps on the field, also neither player can activate cards or effects in response to this effect's activation. During your Main Phase: You can detach all materials from this card; Special Summon 1 \"Mikanko\" Xyz Monster from your Extra Deck, using this card as material (this is treated as an Xyz Summon), and if you do, equip 1 Equip Spell from your Deck or GY to 1 monster on the field. You can only use each effect of \"Ohime the Curious Mikanko\" once per turn. You cannot activate monster effects the turn you Special Summon \"Ohime the Curious Mikanko\", except \"Mikanko\" monster effects.",
+  "strings": [
+    "Xyz Summon using 1 Mikanko Xyz/Ritual Monster",
+    "Destroy all Spells/Traps",
+    "Xyz Summon from Extra Deck and equip",
+    "You cannot activate non-Mikanko monster effects"
+  ]
+}

@@ -8,15 +8,15 @@
       "cards": [
         {
           "name": "Labrynth Party",
-          "passcode": "38300001",
+          "passcode": "90177",
           "status": "done",
-          "script": "script/c38300001.lua"
+          "script": "script/c90177.lua"
         },
         {
           "name": "Farewell Labrynth",
-          "passcode": "38300002",
+          "passcode": "90178",
           "status": "done",
-          "script": "script/c38300002.lua"
+          "script": "script/c90178.lua"
         }
       ]
     },
@@ -51,6 +51,54 @@
           "status": "done",
           "script": "script/c29600005.lua",
           "queue_file": "docs/queues/Common/d_witchcrafter_garden.jpg"
+        },
+        {
+          "name": "Witchcrafter Hisho - Madame",
+          "passcode": "78533",
+          "status": "done",
+          "script": "script/c78533.lua"
+        },
+        {
+          "name": "Witchcrafter in Profusion",
+          "passcode": "78544",
+          "status": "done",
+          "script": "script/c78544.lua"
+        },
+        {
+          "name": "Witchcrafter Unit Appeler",
+          "passcode": "78950",
+          "status": "done",
+          "script": "script/c78950.lua"
+        },
+        {
+          "name": "Witchcrafter Magistus Verre",
+          "passcode": "9990204",
+          "status": "done",
+          "script": "script/c9990204.lua"
+        },
+        {
+          "name": "Verre Magic: Transformation",
+          "passcode": "22121392",
+          "status": "done",
+          "script": "script/c22121392.lua"
+        },
+        {
+          "name": "Witchcrafter Return",
+          "passcode": "79845699",
+          "status": "done",
+          "script": "script/c79845699.lua"
+        },
+        {
+          "name": "Verre Magic – Sleep Time!",
+          "passcode": "79846799",
+          "status": "done",
+          "script": "script/c79846799.lua"
+        },
+        {
+          "name": "Witchcrafter Wishes",
+          "passcode": "79857099",
+          "status": "done",
+          "script": "script/c79857099.lua"
         }
       ]
     },
@@ -104,6 +152,12 @@
           "status": "done",
           "script": "script/c35200001.lua",
           "queue_file": "docs/queues/Brandeds/d_Brandeds_New_Adventure.png"
+        },
+        {
+          "name": "Branded in Peace",
+          "passcode": "999002",
+          "status": "done",
+          "script": "script/c999002.lua"
         }
       ]
     },
@@ -114,62 +168,86 @@
         {
           "name": "Iris, Master of the Castle of Dreams",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Iris_Master_of_the_Castle_of_Dreams_.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Iris_Master_of_the_Castle_of_Dreams_.jpg",
+          "passcode": "192200004",
+          "script": "script/c192200004.lua"
         },
         {
           "name": "Bena, Guardian of the Castle of Dreams",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Bena_Guardian_of_the_Castle_of_Dreams_2.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Bena_Guardian_of_the_Castle_of_Dreams_2.jpg",
+          "passcode": "192200001",
+          "script": "script/c192200001.lua"
         },
         {
           "name": "Cautus, Keeper of the Castle of Dreams",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Cautus_Keeper_of_the_Castle_of_Dreams_1.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Cautus_Keeper_of_the_Castle_of_Dreams_1.jpg",
+          "passcode": "192200002",
+          "script": "script/c192200002.lua"
         },
         {
           "name": "Morpheus, Corruptor of the Castle of Dreams",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Morpheus_Corruptor_of_the_Castle_of_Dreams_1.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Morpheus_Corruptor_of_the_Castle_of_Dreams_1.jpg",
+          "passcode": "192200006",
+          "script": "script/c192200006.lua"
         },
         {
           "name": "Morpheus, Dreamspinner of the Castle of Dreams",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Morpheus_Dreamspinner_of_the_Castle_of_Dreams_1.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Morpheus_Dreamspinner_of_the_Castle_of_Dreams_1.jpg",
+          "passcode": "192200005",
+          "script": "script/c192200005.lua"
         },
         {
           "name": "Wandering Ghost of the Castle of Dreams",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Wandering_Ghost_of_the_Castle_of_Dreams_1.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Wandering_Ghost_of_the_Castle_of_Dreams_1.jpg",
+          "passcode": "192200007",
+          "script": "script/c192200007.lua"
         },
         {
           "name": "Wolff, Servant of the Castle of Dreams",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Wolff_Servant_of_the_Castle_of_Dreams_.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Wolff_Servant_of_the_Castle_of_Dreams_.jpg",
+          "passcode": "192200003",
+          "script": "script/c192200003.lua"
         },
         {
           "name": "Castle of Dreams - Betrayal",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Castel_of_Dreams_-_Betrayal.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castel_of_Dreams_-_Betrayal.jpg",
+          "passcode": "192200012",
+          "script": "script/c192200012.lua"
         },
         {
           "name": "Castle of Dreams - Breakout",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Castel_of_Dreams_-_Breakout.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castel_of_Dreams_-_Breakout.jpg",
+          "passcode": "192200013",
+          "script": "script/c192200013.lua"
         },
         {
           "name": "Castle of Dreams - Fall",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Castel_of_Dreams_-_Fall_1.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castel_of_Dreams_-_Fall_1.jpg",
+          "passcode": "192200014",
+          "script": "script/c192200014.lua"
         },
         {
           "name": "Castle of Dreams - Dream Show",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Castle_of_Dreams_-_Dream_Show.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castle_of_Dreams_-_Dream_Show.jpg",
+          "passcode": "192200010",
+          "script": "script/c192200010.lua"
         },
         {
           "name": "Castle of Dreams - Fairytale",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Castle_of_Dreams_-_Fairytale.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castle_of_Dreams_-_Fairytale.jpg",
+          "passcode": "192200008",
+          "script": "script/c192200008.lua"
         },
         {
           "name": "Castle of Dreams - Iriss Necklace",
@@ -179,7 +257,15 @@
         {
           "name": "Castle of Dreams - Stage",
           "status": "done",
-          "queue_file": "docs/queues/Castel_of_dreams/d_Castle_of_Dreams_-_Stage.jpg"
+          "queue_file": "docs/queues/Castel_of_dreams/d_Castle_of_Dreams_-_Stage.jpg",
+          "passcode": "192200009",
+          "script": "script/c192200009.lua"
+        },
+        {
+          "name": "Castle of Dreams - Iris's Necklace",
+          "passcode": "192200011",
+          "status": "done",
+          "script": "script/c192200011.lua"
         }
       ]
     },
@@ -206,6 +292,12 @@
           "status": "done",
           "script": "script/c44100001.lua",
           "queue_file": "docs/queues/Maliss/d_Maliss_Of_The_Fallen_Game.png"
+        },
+        {
+          "name": "The Grand Stage of Maliss",
+          "passcode": "998716",
+          "status": "done",
+          "script": "script/c998716.lua"
         }
       ]
     },
@@ -305,6 +397,12 @@
           "status": "done",
           "script": "script/c14900001.lua",
           "queue_file": "docs/queues/Common/d_Rank_up_magic_rising_force.jpg"
+        },
+        {
+          "name": "DoomZ Command J.U.P.I.T.E.R",
+          "passcode": "33816",
+          "status": "done",
+          "script": "script/c33816.lua"
         }
       ]
     },
@@ -314,7 +412,9 @@
         {
           "name": "Laundry Fusion",
           "status": "done",
-          "queue_file": "docs/queues/Common/d_Laundry_Fusion.jpg"
+          "queue_file": "docs/queues/Common/d_Laundry_Fusion.jpg",
+          "passcode": "30700002",
+          "script": "script/c30700002.lua"
         },
         {
           "name": "Elaina, The Wandering Witch",
@@ -434,6 +534,276 @@
           "status": "done",
           "script": "script/c79900016.lua",
           "queue_file": "docs/queues/Common/d_Surtr_Sarkaz_of_Laevateinn.jpg"
+        },
+        {
+          "name": "The Elation Game",
+          "passcode": "10472",
+          "status": "done",
+          "script": "script/c10472.lua"
+        },
+        {
+          "name": "Dragonbone City Styxia",
+          "passcode": "45128",
+          "status": "done",
+          "script": "script/c45128.lua"
+        },
+        {
+          "name": "Melodious Fusion",
+          "passcode": "58391",
+          "status": "done",
+          "script": "script/c58391.lua"
+        },
+        {
+          "name": "Protection of the Albaz",
+          "passcode": "79300",
+          "status": "done",
+          "script": "script/c79300.lua"
+        },
+        {
+          "name": "Hyperdimension CPU Neptune",
+          "passcode": "90076",
+          "status": "done",
+          "script": "script/c90076.lua"
+        },
+        {
+          "name": "Hyperdimension CPU - Chrome Heart",
+          "passcode": "90077",
+          "status": "done",
+          "script": "script/c90077.lua"
+        },
+        {
+          "name": "Maiden of White – Dragon Blessing",
+          "passcode": "90078",
+          "status": "done",
+          "script": "script/c90078.lua"
+        },
+        {
+          "name": "Drytron Supernova",
+          "passcode": "90188",
+          "status": "done",
+          "script": "script/c90188.lua"
+        },
+        {
+          "name": "Kewl Tune New Era",
+          "passcode": "90199",
+          "status": "done",
+          "script": "script/c90199.lua"
+        },
+        {
+          "name": "Pollux, Netherwing Husk, Ferry of Souls",
+          "passcode": "92047",
+          "status": "done",
+          "script": "script/c92047.lua"
+        },
+        {
+          "name": "A VERY HUMANITY SLIME",
+          "passcode": "99008",
+          "status": "done",
+          "script": "script/c99008.lua"
+        },
+        {
+          "name": "Cây Súng Ngàn Năm",
+          "passcode": "99009",
+          "status": "done",
+          "script": "script/c99009.lua"
+        },
+        {
+          "name": "Toon Shooting Quasar Dragon ",
+          "passcode": "531005",
+          "status": "done",
+          "script": "script/c531005.lua"
+        },
+        {
+          "name": "Monster Redie",
+          "passcode": "709543",
+          "status": "done",
+          "script": "script/c709543.lua"
+        },
+        {
+          "name": "Champion, Artemis of harmony",
+          "passcode": "789900",
+          "status": "done",
+          "script": "script/c789900.lua"
+        },
+        {
+          "name": "Hanako - The Loving Defender Forever",
+          "passcode": "789901",
+          "status": "done",
+          "script": "script/c789901.lua"
+        },
+        {
+          "name": "The Crystal Cave: Mana Field",
+          "passcode": "798599",
+          "status": "done",
+          "script": "script/c798599.lua"
+        },
+        {
+          "name": "Desire HERO Geats - Entry Form",
+          "passcode": "927680",
+          "status": "done",
+          "script": "script/c927680.lua"
+        },
+        {
+          "name": "Desire Grand Prix Invitation",
+          "passcode": "927681",
+          "status": "done",
+          "script": "script/c927681.lua"
+        },
+        {
+          "name": "Boost Buckle",
+          "passcode": "927682",
+          "status": "done",
+          "script": "script/c927682.lua"
+        },
+        {
+          "name": "Magnum Buckle",
+          "passcode": "927683",
+          "status": "done",
+          "script": "script/c927683.lua"
+        },
+        {
+          "name": "Desire Driver",
+          "passcode": "927684",
+          "status": "done",
+          "script": "script/c927684.lua"
+        },
+        {
+          "name": "Desire Hero Geats – Boost And Magnum",
+          "passcode": "927685",
+          "status": "done",
+          "script": "script/c927685.lua"
+        },
+        {
+          "name": "No Stealing",
+          "passcode": "987000",
+          "status": "done",
+          "script": "script/c987000.lua"
+        },
+        {
+          "name": "Witchcrafter Unit Jeweler",
+          "passcode": "998705",
+          "status": "done",
+          "script": "script/c998705.lua"
+        },
+        {
+          "name": "Fall of the Fallen",
+          "passcode": "999003",
+          "status": "done",
+          "script": "script/c999003.lua"
+        },
+        {
+          "name": "Triune Paradox – Axiarch of the End Code",
+          "passcode": "999013",
+          "status": "done",
+          "script": "script/c999013.lua"
+        },
+        {
+          "name": "MELODIOUS FAMILY",
+          "passcode": "999014",
+          "status": "done",
+          "script": "script/c999014.lua"
+        },
+        {
+          "name": "Void Invasion",
+          "passcode": "5506611",
+          "status": "done",
+          "script": "script/c5506611.lua"
+        },
+        {
+          "name": "Quadratic Equation Cannon",
+          "passcode": "8790671",
+          "status": "done",
+          "script": "script/c8790671.lua"
+        },
+        {
+          "name": "Elemental HERO Draconic Neos",
+          "passcode": "37711109",
+          "status": "done",
+          "script": "script/c37711109.lua"
+        },
+        {
+          "name": "Xtra HERO Wonderkid",
+          "passcode": "37711110",
+          "status": "done",
+          "script": "script/c37711110.lua"
+        },
+        {
+          "name": "Blue-eyes HERO Dragon",
+          "passcode": "37711189",
+          "status": "done",
+          "script": "script/c37711189.lua"
+        },
+        {
+          "name": "MAJESTIC QUASAR DRAGON",
+          "passcode": "53100115",
+          "status": "done",
+          "script": "script/c53100115.lua"
+        },
+        {
+          "name": "Ttf Hanako",
+          "passcode": "76900007",
+          "status": "done",
+          "script": "script/c76900007.lua"
+        },
+        {
+          "name": "Ttf Cat Zesty",
+          "passcode": "78800003",
+          "status": "done",
+          "script": "script/c78800003.lua"
+        },
+        {
+          "name": "Ttf Cat \"Nah\"",
+          "passcode": "78900001",
+          "status": "done",
+          "script": "script/c78900001.lua"
+        },
+        {
+          "name": "Cat Squad Founding Day",
+          "passcode": "78900003",
+          "status": "done",
+          "script": "script/c78900003.lua"
+        },
+        {
+          "name": "Ttf Holy Sanctuary",
+          "passcode": "78900102",
+          "status": "done",
+          "script": "script/c78900102.lua"
+        },
+        {
+          "name": "Ttf Cat Luna",
+          "passcode": "79900002",
+          "status": "done",
+          "script": "script/c79900002.lua"
+        },
+        {
+          "name": "Ttf Cat Squad",
+          "passcode": "79900005",
+          "status": "done",
+          "script": "script/c79900005.lua"
+        },
+        {
+          "name": "Ttf Atermis",
+          "passcode": "79900008",
+          "status": "done",
+          "script": "script/c79900008.lua"
+        },
+        {
+          "name": "Chambermaid of the Silver Castle",
+          "passcode": "79900009",
+          "status": "done",
+          "script": "script/c79900009.lua"
+        },
+        {
+          "name": "Monica, The Legendary Witch",
+          "passcode": "79900010",
+          "status": "done",
+          "script": "script/c79900010.lua"
+        },
+        {
+          "name": "Sv Kandy, Master of white dragon ",
+          "passcode": "756340000",
+          "status": "done",
+          "script": "script/c756340000.lua"
         }
       ]
     },

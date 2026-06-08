@@ -1,0 +1,16 @@
+{
+  "id": 79300,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Protection of the Albaz",
+  "desc": "If there is an effect that target to your card, send 1 \"Fallen of Albaz\" from your Deck to your GY and banish Fusion Monster that mention \"Fallen of Albaz\" as material on your field or GY, and if you do, negate all opponent card effect on their field, GY and banishment. Banish this card (face-down) after activate it. For the rest of this turn, monster that has 1500 ATK and 1500 DEF you control cannot be targeted or destroyed by card effect. You can only use \"Protection of the Albaz\" once per turn.",
+  "strings": []
+}

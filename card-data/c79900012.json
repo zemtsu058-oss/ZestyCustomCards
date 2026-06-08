@@ -1,0 +1,19 @@
+{
+  "id": 79900012,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 4129,
+  "atk": 0,
+  "def": 1800,
+  "level": 3,
+  "race": 16,
+  "attribute": 16,
+  "category": 0,
+  "name": "Ghost Twin & Spring Rabbit",
+  "desc": "When a monster on the field activates its effect, or when a Spell/Trap that is already face-up on the field activates its effect (Quick Effect): You can discard this card; destroy that card on field, then you can discard 1 card from your hand, banish that destroyed card and all card with the same name from both player Deck/ Extra Deck. You can only use this effect of \"Ghost Twin & Spring Rabbit\" once per turn.",
+  "strings": [
+    "Discard this card to destroy opponent's card",
+    "Discard 1 card to banish all copies?"
+  ]
+}

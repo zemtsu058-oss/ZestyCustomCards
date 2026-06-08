@@ -1,0 +1,16 @@
+{
+  "id": 33816,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 9765323,
+  "type": 262146,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "DoomZ Command J.U.P.I.T.E.R",
+  "desc": "(This card is always treated as \"Rank-up-magic\" card)\nYour opponent cannot target this card and the equipped monster with card effects. Once per Chain (Quick effect): You can pay 1000LP; Special summon from your Extra Deck, 1 WIND Machine Xyz monster with the same Rank as the equipped monster Level/Rank, by using the equipped monster as material, or if the equipped monster is an Xyz monster, you can special summon 1 Xyz monster that is 1 or 2 ranks higher than the equipped monster instead, and if you do, equip this card to that monster, then you can attach 1 DoomZ card from your Deck to that monster as material (This is treated as an Xyz Summon, transfer its materials to the summoned monster). \"Jupiter the Power Patron of Destruction\" equipped with this card can activate its effects as a Quick Effect, also it gains this effect.\n● If this card is Xyz Summoned: you can destroy all cards your opponent control.",
+  "strings": []
+}

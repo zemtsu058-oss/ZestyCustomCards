@@ -1,0 +1,20 @@
+{
+  "id": 999014,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 155,
+  "type": 97,
+  "atk": 5000,
+  "def": 5000,
+  "level": 12,
+  "race": 4,
+  "attribute": 16,
+  "category": 0,
+  "name": "MELODIOUS FAMILY",
+  "desc": "​\"Bacha the Melodious Maestra\" + \"Flower Rings Etoile the Melodious Magnificat\" + \"Refrain the Melodious Songstress\" + \"Couplet the Melodious Songstress\"\nMust be Fusion Summoned by the effect of a \"Melodious\" monster or a \"Melodious\" card. Your \"Melodious\" monsters, including this card, cannot have their effects negated. Also, they cannot be returned to the hand or Deck, they cannot be Tribute except Tribute Summon and cannot be changed to face-down Defense Position by your opponent’s card effects.\nYou can only use each following effect once per turn:\n​(Quick Effect): You can target up to 3 \"Melodious\" monsters in your GY and/or that are banished; Special Summon them.\n​(Quick Effect): You can Special Summon up to 2 \"Melodious\" monsters from your Deck and/or GY. After this effect resolves, the next time you activate a \"Melodious\" monster effect this turn, after that effect resolves, banish 3 cards on the field (including your own \"Melodious\" monsters).​\nDuring your Main Phase: You can target 1 \"Melodious\" monster in your GY or that is banished; shuffle it into the Deck, and if you do, draw 1 card.",
+  "strings": [
+    "Special Summon from GY and/or Banish",
+    "Special Summon from Deck and/or GY",
+    "Shuffle and draw"
+  ]
+}

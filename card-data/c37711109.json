@@ -1,0 +1,16 @@
+{
+  "id": 37711109,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 602120,
+  "type": 97,
+  "atk": 3000,
+  "def": 2500,
+  "level": 8,
+  "race": 1,
+  "attribute": 16,
+  "category": 0,
+  "name": "Elemental HERO Draconic Neos",
+  "desc": "1 Level 6 or higher \"HERO\" monster + 1 Level 6 or higher Dragon monster\nThis card is also treated as a \"Blue-Eyes\" monster while face-up on the field.\nThis card gains 500 ATK for each \"HERO\" monster and \"Blue-Eyes\" monster in your GY.\nOnce per turn, when your opponent activates a card or effect (Quick Effect): You can shuffle 1 \"HERO\" monster or 1 \"Blue-Eyes\" monster from your GY into the Deck; negate the activation, and if you do, destroy that card.\nIf this card is sent to the GY, you can Special Summon 1 \"HERO\" monster or 1 \"Blue-Eyes\" monster from your Extra Deck ignoring its Summon Condition.",
+  "strings": []
+}

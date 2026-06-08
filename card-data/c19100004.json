@@ -1,0 +1,18 @@
+{
+  "id": 19100004,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 191,
+  "type": 18,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Blessing of the Wind Charmer",
+  "desc": "Send 1 WIND monster from your Deck to the GY; until the end of the next turn, each time a WIND monster(s) you control leaves the field, your opponent must return 1 card they control to the hand. You can only activate 1 \"Blessing of the Wind Charmer\" per turn.",
+  "strings": [
+    "Send 1 WIND monster to GY to apply bounce effect"
+  ]
+}

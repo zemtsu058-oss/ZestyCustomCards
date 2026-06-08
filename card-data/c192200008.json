@@ -1,0 +1,22 @@
+{
+  "id": 192200008,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 524290,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 271777792,
+  "name": "Castle of Dreams - Fairytale",
+  "desc": "During your Main Phase: You can add 1 \"Castle of Dreams\" monster from your Deck to your hand. Each turn, when your opponent activates a card or effect that would negate the effect of another card (Quick Effect): You can negate that effect, and if you do, your opponent chooses 1 of these effects for you to apply. (1) Both players draw 1 card. (2) All monsters on the field gain 500 ATK. (3) Both players gain 1000 LP. You can only use each effect of \"Castle of Dreams - Fairytale\" once per turn.",
+  "strings": [
+    "Add 1 Castle of Dreams monster from Deck to hand",
+    "Negate opponent negate effect, then opponent chooses option",
+    "Both players draw 1 card",
+    "All monsters on the field gain 500 ATK",
+    "Both players gain 1000 LP"
+  ]
+}

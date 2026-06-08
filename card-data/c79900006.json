@@ -1,0 +1,19 @@
+{
+  "id": 79900006,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Don't Ash The Witch!",
+  "desc": "When your opponent activate a card or effect in response to your Spellcaster monster's effect or Spell Card's effect that would Special Summon a monster(s) from your Deck: Negate the activation, and if you do, destroy it and 1 random card in your opponent hand.\nDuring your Main Phase, while this card is in your GY: you can shuffle this card to the Deck, then draw 1 card.\nYou can only use 1 effect of \"Don't Ash The Witch!\" per turn, and only once that turn.",
+  "strings": [
+    "Negate response to Special Summon from Deck",
+    "Shuffle from GY to Deck to draw 1"
+  ]
+}

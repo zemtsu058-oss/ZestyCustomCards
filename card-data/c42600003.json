@@ -1,0 +1,20 @@
+{
+  "id": 42600003,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 426,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Knowledge of the White Forest",
+  "desc": "Target 1 \"White Forest\" card you control; its effects cannot be negated for the rest of this turn, then you can add 1 Spell from your GY to your hand.\nIf this card is sent to the GY to activate a monster effect: You can Set this card.\nYou can only use each effect of \"Knowledge of the White Forest\" once per turn.",
+  "strings": [
+    "[Quick] Target 1 White Forest card to protect its effects",
+    "[Quick] Add 1 Spell from GY to hand",
+    "[GY] Set this card"
+  ]
+}

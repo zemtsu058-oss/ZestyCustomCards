@@ -1,0 +1,18 @@
+{
+  "id": 90188,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 337,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Drytron Supernova",
+  "desc": "Target 1 \"Drytron\" monster or 1 Ritual monster you control; destroy it, and if you do, apply these effects in sequence, depending on what the destroyed monster was.\n● Ritual Monster: Destroy all monsters your opponent controls with ATK less than or equal to that monster's ATK on the field.\n● \"Drytron\" Monster: Special Summon as many \"Drytron\" monsters with 2000 ATK as possible from your hand, Deck, or GY, whose combined ATK is equal to or less than that monster's ATK on the field.\nIf you Ritual Summon: You can Set this card from your GY, but banish it when it leaves the field.\nYou can only use this effect of \"Drytron Supernova\" once per turn.\nYou can only activate 1 \"Drytron Supernova\" per turn.",
+  "strings": [
+    "Special Summon other monsters"
+  ]
+}

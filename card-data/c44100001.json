@@ -1,0 +1,18 @@
+{
+  "id": 44100001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 441,
+  "type": 2,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Maliss of the Fallen Game",
+  "desc": "Pay half your LP; banish all cards in your GY, then, for every 2 \"Maliss\" cards banished by this effect, randomly banish 1 card from your opponent's Extra Deck until the End Phase. Opponents' cards that are banished by this card's effect cannot activate their effects until the End Phase.\nYou can only activate 1 \"Maliss of the Fallen Game\" per turn.",
+  "strings": [
+    "Pay half your LP, banish GY, banish opponent Extra Deck"
+  ]
+}

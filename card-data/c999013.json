@@ -1,0 +1,16 @@
+{
+  "id": 999013,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 67108897,
+  "atk": 3500,
+  "def": 334,
+  "level": 5,
+  "race": 16384,
+  "attribute": 32,
+  "category": 0,
+  "name": "Triune Paradox – Axiarch of the End Code",
+  "desc": "3+ Effect Monsters, including 3 monsters with different original names and archetype.\nMust first be Link Summoned.\nIf this card is Link Summoned: You can pay half your LP; shuffle all cards from both GYs into the Deck, then banish all cards in both players' Extra Decks, face-down.\nOnce per turn, you can return 1 card in the banishment, banish 1 card in opponent's hand until the end of this turn. This is a Quick Effect if this card is co-linked.",
+  "strings": []
+}

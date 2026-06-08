@@ -33,3 +33,6 @@ __pycache__/
 
 # Plan
 plans/
+
+# Official references (dev machine only)
+docs/official-reference/

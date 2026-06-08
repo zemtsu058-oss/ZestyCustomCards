@@ -1,0 +1,18 @@
+{
+  "id": 798599,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 131074,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "The Crystal Cave: Mana Field",
+  "desc": "If a Spellcaster monster(s) would be Special Summoned from your Deck,\nyou can place this card face-up from your Deck in your Spell & Trap Zone instead.\nAll monsters on the field become Spellcaster monsters.\nEach time a Spell Card or its effect resolves, place 1 Mana Counter on this card.\nAll Spellcaster monsters you control gain 100 ATK for each Mana Counter on this card,\nand all Spellcaster monsters your opponent controls lose 100 ATK for each Mana Counter on this card.\nMonsters on the field with 0 ATK have their effects negated.",
+  "strings": [
+    "Place \"The Crystal Cave: Mana Field\" instead "
+  ]
+}

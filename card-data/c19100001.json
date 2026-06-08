@@ -1,0 +1,18 @@
+{
+  "id": 19100001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 191,
+  "type": 18,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Blessing of the Earth Charmer",
+  "desc": "Send 1 EARTH monster from your Deck to the GY; until the end of the next turn, EARTH monsters you control are unaffected by your opponent's card effects while they are in Defense Position. You can only activate 1 \"Blessing of the Earth Charmer\" per turn.",
+  "strings": [
+    "Send 1 EARTH monster to GY to apply protection"
+  ]
+}

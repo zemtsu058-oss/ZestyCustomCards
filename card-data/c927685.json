@@ -1,0 +1,22 @@
+{
+  "id": 927685,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 526631,
+  "type": 97,
+  "atk": 2500,
+  "def": 2000,
+  "level": 6,
+  "race": 1,
+  "attribute": 16,
+  "category": 0,
+  "name": "Desire Hero Geats – Boost And Magnum",
+  "desc": "Must be Special Summoned by sending 1 \"Desire Hero Geats – Entry Form\" equipped with both \"Boost Buckle\" and \"Magnum Buckle\" from your field to the GY, or by the effect of \"Desire Grand Prix Invitation\", and cannot be Special Summoned by other ways.\nIf this card is Special Summoned: You can equip up to 2 \"Buckle\" Spells from your GY to this card, and if you do, add 1 \"Desire Hero\" monster from your Deck or GY to your hand.\nYou can only use each of the following effects of \"Desire Hero Geats – Boost And Magnum\" once per turn.\n● If this card is equipped with \"Boost Buckle\" (Quick Effect): You can send that Equip Card to the GY; for the rest of this turn, your Spells/Traps cannot be destroyed by card effects.\n● If this card is equipped with \"Magnum Buckle\" (Quick Effect): You can send that Equip Card to the GY; all monsters you control gain 300 ATK for each \"Buckle\" Spell you control and in your GY, until the end of this turn.\n● If this card is equipped with both \"Boost Buckle\" and \"Magnum Buckle\" (Quick Effect): When your opponent activates a card or effect, you can send both those Equip Cards to the GY; negate the activation, and if you do, destroy that card.",
+  "strings": [
+    "Equip and Search",
+    "Send Boost",
+    "Send Magnum",
+    "Negate",
+    "Add 1 \"Desire HERO\""
+  ]
+}

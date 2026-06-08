@@ -1,0 +1,20 @@
+{
+  "id": 79900016,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 67108897,
+  "atk": 2500,
+  "def": 712,
+  "level": 4,
+  "race": 8,
+  "attribute": 4,
+  "category": 0,
+  "name": "Surtr, Sarkaz of Laevateinn",
+  "desc": "1+ FIRE monsters\nYou can only Link Summon 1 \"Surtr, Sarkaz of Laevateinn\" per turn.\nThis card cannot be destroyed, or banished by your opponent's card effects during the turn this card is Link Summoned.\n(Quick effect): You can banish any number of FIRE monsters in your GY, this card gain ATK equal to that number * 300, also this card can attack up to the number of monster card your opponent controls +1 during the Battle Phase of this turn.\nDuring the Standby Phase: Destroy this card.",
+  "strings": [
+    "Surtr, Sarkaz of Laevateinn",
+    "Banish FIRE monsters to gain ATK & extra attacks",
+    "Self-destruct during the Standby Phase"
+  ]
+}

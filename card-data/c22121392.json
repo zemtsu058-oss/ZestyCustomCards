@@ -1,0 +1,23 @@
+{
+  "id": 22121392,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 22151464,
+  "type": 2,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Verre Magic: Transformation",
+  "desc": "This card is always treated as a “Witchcrafter” and “Magistus” card.\nActivate 1 of these effects;\n● Return 1 “Rilliona” monster you control to the Deck or Extra Deck, then Special Summon 1 “Witchcrafter Madame Verre” from your hand or Deck, then you can add 1 “Witchcrafter” Spell/Trap from your Deck to your hand, or Set it.\n● Return 1 “Witchcrafter Madame Verre” you control to the Deck, then Special Summon 1 “Rilliona, the Magistus of Verre” and 1 Level 4 Spellcaster monster from your hand and/or Deck.\nYou can only activate 1 “Verre Magic: Transformation” per turn.",
+  "strings": [
+    "Search",
+    "Return \"Rilliona\"",
+    "Return \"Verre\"",
+    "Search or Set",
+    "Add to hand",
+    "Search"
+  ]
+}

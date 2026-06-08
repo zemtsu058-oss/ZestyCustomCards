@@ -1,0 +1,16 @@
+{
+  "id": 53100115,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 63,
+  "type": 8225,
+  "atk": 4500,
+  "def": 4000,
+  "level": 12,
+  "race": 8192,
+  "attribute": 16,
+  "category": 0,
+  "name": "MAJESTIC QUASAR DRAGON",
+  "desc": "​\"Majestic Dragon\" + 2+ non-Tuner Synchro monsters, including a Dragon Monster\nMust first be Synchro Summoned. This card can attack all monsters your opponent controls once each. If this card battles an opponent's monster, that opponent's monster's effects are negated until the end of this turn. When your opponent activates a card or effect (Quick Effect): You can banish this card until the End Phase; Negate the activation, and if you do, banish it, also, your opponent cannot activate cards or effects with the same name as that banished card until the end of the turn. You can only use this effect of \"Majestic Quasar Dragon\" once per turn.\n\nCard by Slackermagician",
+  "strings": []
+}

@@ -1,0 +1,21 @@
+{
+  "id": 998716,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 441,
+  "type": 131074,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "The Grand Stage of Maliss",
+  "desc": "When this card is activated, add 1 \"Maliss\" monster from your Deck to your hand or special summon it to your field if your opponent has 3 or more monsters in their banishment.\nFor the rest of this turn, you cannot Special Summon monsters from the Extra Deck, except Link Monsters.\nYour \"Maliss\" link monster gain this effect:\n● Once per turn, when opponent activate card or effect, banish 1 card on your hand (face down); negate that effect, then banish that card.\nYou can only activate 1 \"The Grand Stage of Maliss\" per turn.",
+  "strings": [
+    "Add 1 \"Maliss\" monster from Deck to hand or Special Summon it",
+    "Banish 1 card from hand face-down; negate effect, then banish that card",
+    "Cannot Special Summon from Extra Deck, except Link Monsters",
+    "Add to hand"
+  ]
+}

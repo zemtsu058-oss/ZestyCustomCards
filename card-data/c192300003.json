@@ -1,0 +1,18 @@
+{
+  "id": 192300003,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 97,
+  "atk": 2400,
+  "def": 3000,
+  "level": 8,
+  "race": 32,
+  "attribute": 16,
+  "category": 0,
+  "name": "Battle Machine - Kirin Armor",
+  "desc": "Must be Special Summoned (from your Extra Deck) by sending 1 face-up \"Battle Machine - Kirin\" you control to the GY. If you control \"Wezaemon the Tombguard\", this card's ATK is doubled and it inflicts piercing battle damage. Once per turn, during the Main Phase (Quick Effect): You can equip this card to a \"Wezaemon the Tombguard\" you control. The equipped monster gains 2400 ATK and cannot be destroyed by your opponent's card effects. You can only Special Summon \"Battle Machine - Kirin Armor\" once per turn.",
+  "strings": [
+    "Equip this card to \"Wezaemon the Tombguard\""
+  ]
+}

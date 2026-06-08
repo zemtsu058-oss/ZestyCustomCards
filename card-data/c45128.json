@@ -1,0 +1,19 @@
+{
+  "id": 45128,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 524290,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Dragonbone City Styxia",
+  "desc": "Any card that would be banished from the hand, Deck, or field is sent to the GY instead.\nEach time you lose LP: Place 1 counter on this card for every 1000 LP lost.\nOnce per turn: You can target 1 monster in your GY; Special Summon it, then you lose LP equal to half its ATK.\nYou can remove all counters from this card (min. 4); Special Summon 1 \"Pollux, Netherwing Husk, Ferry of Souls\" from your Extra Deck, and if you do, its original ATK/DEF become the number of counters removed x1000. This effect cannot be negated.\nYou can only use this effect of \"Dragonbone City Styxia\" once per turn.",
+  "strings": [
+    "Special Summon from GY",
+    "Summon Pollux"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": 79900004,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 18,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Waking Nightmare",
+  "desc": "At the start of your Main Phase 1: Until the End Phase of the next turn, neither player can activate the effect of monster Special Summoned from the GY, nor using them as material for Fusion, Synchro, Xyz, Link, or Ritual Summon.",
+  "strings": [
+    "Lock Special Summoned from GY monsters"
+  ]
+}

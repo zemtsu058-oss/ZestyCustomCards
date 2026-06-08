@@ -1,0 +1,19 @@
+{
+  "id": 192200003,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 33,
+  "atk": 1800,
+  "def": 1600,
+  "level": 4,
+  "race": 33554432,
+  "attribute": 1,
+  "category": 67109376,
+  "name": "Wolff, Servant of the Castle of Dreams",
+  "desc": "(Quick Effect): You can Tribute this card; Special Summon 1 \"Castle of Dreams\" monster from your hand or Deck. If a Field Spell card you control would be destroyed, you can banish this card from your GY instead. You can only use each effect of \"Wolff, Servant of the Castle of Dreams\" once per turn.",
+  "strings": [
+    "Tribute this card to SS 1 Castle of Dreams monster from hand or Deck",
+    "Banish from GY to protect Field Spell from destruction"
+  ]
+}

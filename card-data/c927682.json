@@ -1,0 +1,16 @@
+{
+  "id": 927682,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 789,
+  "type": 262146,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Boost Buckle",
+  "desc": "The equipped monster gains 300 ATK.\nIf this card is sent to the GY from the hand, or by the effect of an equipped \"Desire Hero\" monster: You can target 1 face-up \"Desire Hero\" monster you control; negate its effects, and if you do, add it to your hand.\nYou can only use this effect of \"Boost Buckle\" once per turn.",
+  "strings": []
+}

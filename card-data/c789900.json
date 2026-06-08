@@ -1,0 +1,16 @@
+{
+  "id": 789900,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 33,
+  "atk": 0,
+  "def": 0,
+  "level": 1,
+  "race": 128,
+  "attribute": 4,
+  "category": 0,
+  "name": "Champion, Artemis of harmony",
+  "desc": "You can discard this card (Quick Effect); Fusion Summon 1 Fusion Monster\nfrom your Extra Deck by shuffling monsters from your GY and/or that are banished\ninto the Deck as Fusion Materials, then draw cards equal to the number of\nmaterials shuffled.\n\nA monster Fusion Summoned by this effect cannot declare an attack during the\nturn it is Summoned, and if it is Fusion Summoned by this effect: you take\ndamage equal to that monster’s ATK.\n\nDuring your opponent’s End Phase: return \"Champion, Artemis of Harmony\"\nto the hand.\n\nYou can only use this effect of \"Champion, Artemis of Harmony\" once per turn.",
+  "strings": []
+}
