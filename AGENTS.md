@@ -38,6 +38,40 @@ $env:PYTHONIOENCODING="utf-8"; python .\script-test\manage_db.py query <passcode
 
 ---
 
+## Quy chuẩn Comment & Commit (BẮT BUỘC)
+
+### 1. Quy cách Comment trong Script Lua
+* **Header Block (Đầu file):** Bắt buộc ở đầu mỗi script:
+  ```lua
+  -- ============================================================
+  -- Card Name: <Tên Card>
+  -- Passcode  : <9 chữ số>
+  -- Type      : <Loại card, ví dụ: Monster / Effect, Spell / Field>
+  -- Archetype : <Tên Archetype> (<Hex Code>)
+  -- ============================================================
+  -- Effect 1  : <Tóm tắt chi tiết hiệu ứng 1>
+  -- Effect 2  : <Tóm tắt chi tiết hiệu ứng 2>
+  -- ============================================================
+  ```
+* **Section Separators:** Phân chia các khối bằng dòng kẻ `-- =====` (ví dụ: `Effect 1 — GY: Banish to Special Summon`).
+* **Inline Comments:** Ghi chú ngắn gọn tại các dòng logic phức tạp hoặc sửa lỗi.
+
+### 2. Quy chuẩn Git Commit
+* **Nguyên tắc gom file:** Commit 3 file cùng lúc: `card-data/c<passcode>.json`, `script/c<passcode>.lua`, `custom_cards_zesty.cdb`.
+* **Cấu trúc Commit Message:** `[<Tên_Dev>] [<Type>]: <Mô tả bằng tiếng Anh>`
+  - `<Tên_Dev>` lấy từ Git User (ví dụ: `Doanh`, `Zemtsu`).
+  - `<Type>` viết hoa chữ đầu: `Fix`, `Feature`, `Refactor`, `Chore`.
+  - *Ví dụ:* `[Doanh] [Fix]: fix interaction with Dark Law / Macro Cosmos`
+  - Nếu sửa nhiều card, ghi chi tiết ở body:
+    ```
+    [Doanh] [Fix]: update mechanics for Wezaemon/Tachikaze cards
+    
+    c192300005: replace IsCode with GetPreviousCode in leave-field check.
+    c192300006, c192300007, c192300008: change GY effects to IGNITION.
+    ```
+
+---
+
 ## Cấu trúc project
 
 ```
