@@ -287,6 +287,15 @@ def verify_card(passcode):
         json.dump(fl_data, f, ensure_ascii=False, indent=2)
         
     print(f"\nSUCCESS: Card {passcode} is now fully verified and marked as 'done'!")
+    
+    # Run automatic session log archiver (max 25 sessions)
+    print("Step 6: Running automatic session log archiver...")
+    rc, stdout, stderr = run_command(["python", "script-test/archive_progress.py"], paths["root"])
+    if rc == 0:
+        print(stdout.strip())
+    else:
+        print(f"Warning: Session log archiver failed: {stderr.strip()}", file=sys.stderr)
+        
     return True
 
 def main():
