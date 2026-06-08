@@ -70,12 +70,19 @@ function s.redirect_filter(e,c)
 	return not c:IsLocation(LOCATION_GRAVE)
 end
 
+function s.rmlimit(e,re,rp)
+	if not re then return false end
+	local code=re:GetCode()
+	return code==EFFECT_TO_GRAVE_REDIRECT or code==EFFECT_REMOVE_REDIRECT or code==EFFECT_LEAVE_FIELD_REDIRECT
+end
+
 -- ============================================================
 -- Effect 1: Operation — Register redirect + burn trigger
--- Uses EFFECT_REMOVE_REDIRECT (value=64, defined in ocgcore)
--- to redirect cards being banished to GY instead.
--- Dimension Shifter uses EFFECT_TO_GRAVE_REDIRECT to do the
--- opposite (GY → banished). This mirrors that pattern.
+-- Uses EFFECT_REMOVE_REDIRECT to redirect cards being banished
+-- to GY instead. Also registers EFFECT_CANNOT_REMOVE with a
+-- custom value function to block redirect-to-banish effects
+-- (like Masked HERO Dark Law or Macro Cosmos) so the cards
+-- go to the GY instead of being banished.
 -- ============================================================
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -90,8 +97,19 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetValue(LOCATION_GRAVE)
 	e1:SetTarget(s.redirect_filter)
 	Duel.RegisterEffect(e1,tp)
+	-- (1b) Block redirect banishment: cards that would be banished by redirect effects (except from GY)
+	--      cannot be removed/banished, so they go to GY instead.
+	local e1b=Effect.CreateEffect(c)
+	e1b:SetType(EFFECT_TYPE_FIELD)
+	e1b:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE+EFFECT_FLAG_IGNORE_IMMUNE)
+	e1b:SetCode(EFFECT_CANNOT_REMOVE)
+	e1b:SetTargetRange(0xff,0xff)
+	e1b:SetReset(RESET_PHASE+PHASE_END,2)
+	e1b:SetTarget(s.redirect_filter)
+	e1b:SetValue(s.rmlimit)
+	Duel.RegisterEffect(e1b,tp)
 	-- (2) Burn trigger: continuous field effect monitors EVENT_TO_GRAVE
-	--     Detects redirected cards via REASON_REDIRECT (0x4000000)
+	--     Detects redirected cards via REASON_REDIRECT (0x4000000) or check function
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e2:SetCode(EVENT_TO_GRAVE)
@@ -103,11 +121,27 @@ end
 
 -- ============================================================
 -- Effect 1: Burn filter — Cards arriving in GY via redirect
--- Engine adds REASON_REDIRECT (0x4000000) to card reason
--- when destination is changed by a redirect effect
+-- or saved from redirect banishment (Macro Cosmos, etc.)
 -- ============================================================
 function s.burn_filter(c)
-	return bit.band(c:GetReason(),REASON_REDIRECT)~=0
+	if bit.band(c:GetReason(),REASON_REDIRECT)~=0 then return true end
+	-- Check player-level redirects (e.g. Macro Cosmos, Dark Law)
+	local peff=Duel.IsPlayerAffectedByEffect(c:GetControler(),EFFECT_TO_GRAVE_REDIRECT)
+	if peff then
+		local val=peff:GetValue()
+		if val==LOCATION_REMOVED or (type(val)=="function" and val(peff,c)==LOCATION_REMOVED) then
+			return true
+		end
+	end
+	-- Check card-level redirects (e.g. Plaguespreader Zombie, etc.)
+	local ceff=c:IsHasEffect(EFFECT_LEAVE_FIELD_REDIRECT)
+	if ceff then
+		local val=ceff:GetValue()
+		if val==LOCATION_REMOVED or (type(val)=="function" and val(ceff,c)==LOCATION_REMOVED) then
+			return true
+		end
+	end
+	return false
 end
 
 function s.burn_condition(e,tp,eg,ep,ev,re,r,rp)
