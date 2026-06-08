@@ -4,9 +4,8 @@ Hướng dẫn cách dùng template trong thư mục này để sinh script card
 
 Tham khảo đầy đủ:
 - **API & effect types**: `docs/card-scripting-guide.md`
-- **Categories & CDB schema**: `.claude/skills/vibe-card/references/cdb-schema.md`
-- **Research sources & pattern lookup**: `AGENTS.md` mục "Khi template không đủ"
-- **Critical rules**: `AGENTS.md` mục "Critical Rules"
+- **Categories, CDB schema & Critical Rules**: `docs/agent-rules.md`
+- **Workflow & Testing Guide**: `docs/agent-workflow.md`
 
 ---
 

@@ -43,9 +43,13 @@ $env:PYTHONIOENCODING="utf-8"; python .\script-test\manage_db.py query <passcode
 script/          # Lua scripts (cXXXXXXXXX.lua) + constants.lua (chứa custom setcode)
 card-data/       # Single Source of Truth - Specs JSON cho mỗi card
 pics/            # Artwork (tên file = passcode)
-template-card/   # Templates sinh script mới (xem README.md bên trong)
 docs/            # Tài liệu hướng dẫn & Queues hàng đợi card
-script-test/     # Bộ công cụ CLI: manage_harness.py, manage_db.py, validate_scripts.ps1, lint_scripts.ps1
+script-test/     # Bộ công cụ CLI & templates:
+  ├── templates/        # Templates sinh script mới (xem README.md bên trong)
+  ├── manage_harness.py # Quản lý quy trình (Harness CLI)
+  ├── manage_db.py      # Quản lý CDB (CDB Compiler)
+  ├── validate_scripts.ps1
+  └── lint_scripts.ps1
 custom_cards_zesty.cdb  # Database SQLite nhị phân (phải được compile & commit)
 strings.conf     # Tên archetype/counter
 ```

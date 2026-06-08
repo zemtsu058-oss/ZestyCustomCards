@@ -33,7 +33,7 @@ def get_project_paths():
         "root": project_root,
         "feature_list": project_root / "feature_list.json",
         "script_dir": project_root / "script",
-        "template_dir": project_root / "template-card",
+        "template_dir": project_root / "script-test" / "templates",
         "card_data": project_root / "card-data",
         "queues_dir": project_root / "docs" / "queues"
     }

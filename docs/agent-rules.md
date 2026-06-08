@@ -17,7 +17,7 @@ Các quy tắc lập trình bắt buộc để đảm bảo script tương thíc
 7. **ALWAYS** sử dụng hàm helper toàn cục `Card.GetRelatedHandler(c, e)` thay cho việc gọi trực tiếp handler `c` trong các hàm operation khi xử lý các card trigger/continuous (tránh lỗi card rời sân trước khi effect resolve).
 8. **ALWAYS** kiểm tra quan hệ hiệu ứng bằng `tc:IsRelateToEffect(e)` trong hàm operation trước khi áp dụng hiệu ứng lên card mục tiêu (hoặc handler).
 9. **NEVER** quên `c:RegisterEffect(e1)` sau khi tạo effect và thiết lập phạm vi hoạt động bằng `SetRange` cho các hiệu ứng không phải là SINGLE.
-10. **CRITICAL — NEVER** tham chiếu hay sao chép code trực tiếp từ các file trong thư mục `script/`. Hầu hết code cũ chứa lỗi timing/logic nghiêm trọng. Chỉ sử dụng các tệp trong `template-card/` làm khung cơ sở hoặc tải card official làm tham khảo.
+10. **CRITICAL — NEVER** tham chiếu hay sao chép code trực tiếp từ các file trong thư mục `script/`. Hầu hết code cũ chứa lỗi timing/logic nghiêm trọng. Chỉ sử dụng các tệp trong `script-test/templates/` làm khung cơ sở hoặc tải card official làm tham khảo.
 
 ---
 

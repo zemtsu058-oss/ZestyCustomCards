@@ -65,9 +65,11 @@ Hiện tại project có **121** custom cards (bao gồm cả fan-made original 
 ```
 script/          — Lua script cho mỗi card (tên file = passcode)
 pics/            — Artwork (tên file = passcode)
-template-card/   — Template để tạo script mới
 docs/            — Tài liệu nội bộ
-script-test/     — Công cụ validate và quản lý database
+script-test/     — Công cụ CLI, linter và templates:
+  ├── templates/        — Templates để tạo script mới
+  ├── manage_harness.py — Quản lý quy trình (Harness CLI)
+  └── manage_db.py      — Quản lý CDB (CDB Compiler)
 custom_cards_zesty.cdb  — Database SQLite
 strings.conf     — Tên archetype hiển thị trong game
 ```
