@@ -22,6 +22,7 @@
   - Sửa lỗi tương tác của card `79900015` ("Retfihs Noisnemid") với "Masked HERO Dark Law" (Dark Law) và các hiệu ứng redirect banish tương tự.
 - **Đã hoàn thành:**
   - Sửa lỗi trong [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua): Đăng ký thêm hiệu ứng `EFFECT_CANNOT_REMOVE` với target `s.redirect_filter` và value `s.rmlimit` để ngăn các redirect-to-banish (như `EFFECT_TO_GRAVE_REDIRECT` của Dark Law hay Macro Cosmos, và `EFFECT_LEAVE_FIELD_REDIRECT` của Plaguespreader Zombie) banish các lá bài mà đáng lẽ phải được đưa vào GY theo `79900015`.
+  - Khắc phục lỗi crash/khóa kích hoạt các hiệu ứng trục xuất của Effect Monsters (như Genni, và các card khác): Bổ sung kiểm tra kiểu dữ liệu `type(re)=="userdata"` và `type(re.GetCode)=="function"` trong `s.rmlimit`. Khi EDOPro chạy kiểm tra capability (`IsAbleToRemove`), engine có thể truyền biến `re` dưới dạng số (player ID) hoặc `nil`, gây ra lỗi runtime khi cố gọi `:GetCode()`, khiến toàn bộ hiệu ứng trục xuất của quái thú bị khóa kích hoạt.
   - Cập nhật hàm lọc burn `s.burn_filter` trong [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua) để phát hiện và gây damage đối với các lá bài được cứu khỏi các redirect-to-banish đó (vì các lá bài này nay đã được chuyển về GY thành công và không mang flag `REASON_REDIRECT` trong engine).
   - Chạy verify thành công qua CLI và cập nhật trạng thái card thành "done".
 - **Xác minh đã chạy:**

@@ -71,7 +71,7 @@ function s.redirect_filter(e,c)
 end
 
 function s.rmlimit(e,re,rp)
-	if not re then return false end
+	if not re or type(re)~="userdata" or type(re.GetCode)~="function" then return false end
 	local code=re:GetCode()
 	return code==EFFECT_TO_GRAVE_REDIRECT or code==EFFECT_REMOVE_REDIRECT or code==EFFECT_LEAVE_FIELD_REDIRECT
 end
