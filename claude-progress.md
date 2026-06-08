@@ -29,6 +29,7 @@
   - Tích hợp Step 6 tự động chạy script này vào cuối pipeline `verify` của [manage_harness.py](file:///d:/TTF/TTFCustomCards/script-test/manage_harness.py).
   - Di chuyển thư mục `template-card/` ở root vào trong [script-test/templates/](file:///d:/TTF/TTFCustomCards/script-test/templates/) để gom toàn bộ "Developer Tooling" về một mối và làm sạch root directory.
   - Cập nhật đường dẫn `"template_dir"` trong [manage_harness.py](file:///d:/TTF/TTFCustomCards/script-test/manage_harness.py) và đồng bộ hóa cấu trúc mới vào các file tài liệu [AGENTS.md](file:///d:/TTF/TTFCustomCards/AGENTS.md), [README.md](file:///d:/TTF/TTFCustomCards/README.md), [docs/agent-rules.md](file:///d:/TTF/TTFCustomCards/docs/agent-rules.md) và [script-test/templates/README.md](file:///d:/TTF/TTFCustomCards/script-test/templates/README.md).
+  - Tách quy tắc tham chiếu code Lua cũ thành 2 phần riêng biệt trong `docs/agent-rules.md` và `AGENTS.md` (Cấm bắt chước tệp custom cũ trong `script/`; Yêu cầu dùng templates trong `script-test/templates/` làm khung và scripts official làm tài liệu tham khảo) để tránh AI hiểu nhầm.
 - **Xác minh đã chạy:**
   - `python .\script-test\manage_db.py check-sync` -> **100% OK**.
   - `.\script-test\validate_scripts.ps1 -Quiet` -> **122 OK, 0 FAIL** (hoạt động tốt với file txt hằng số).
