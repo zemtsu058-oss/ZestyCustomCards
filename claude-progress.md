@@ -16,6 +16,18 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 057 — 2026-06-09
+
+- **Mục tiêu:**
+  - Sửa lỗi effect 4 của [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua) ("Wezaemon the Tombguard"): Ngăn không cho đối thủ kích hoạt hiệu ứng của Wezaemon khi người chơi sở hữu Wezaemon thực hiện hành động Set bài.
+- **Đã hoàn thành:**
+  - Sửa lỗi trong [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua): Cập nhật hàm `s.setcon_set` kiểm tra thêm điều kiện người chơi thực hiện hành động Set phải là controler của card (`rp == tp`) và quân bài được Set nằm trên sân của người chơi đó (`c:IsControler(tp)`).
+  - Cải tiến: Thay thế mã passcode cứng `192300001` bằng biến cục bộ `id` trong `s.mentionfilter` và `s.setcfilter`.
+- **Xác minh đã chạy:**
+  - `python .\script-test\manage_harness.py verify 192300001` -> Chạy pipeline harness thành công (compiling, validating, linting, sync checks, and auto-archiver).
+  - `.\script-test\validate_scripts.ps1 -Quiet` -> Kết quả 122 OK, 0 WARN, 0 FAIL.
+- **Files/artifacts đã cập nhật:** [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua), `custom_cards_zesty.cdb`, `claude-progress.md`
+
 ### Phiên 056 — 2026-06-08
 
 - **Mục tiêu:**

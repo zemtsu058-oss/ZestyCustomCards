@@ -110,7 +110,7 @@ end
 -- Effect 4: Filter — Spell/Trap that lists this card's name
 -- ============================================================
 function s.mentionfilter(c)
-    return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:ListsCode(192300001)
+    return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:ListsCode(id)
 end
 
 -- ============================================================
@@ -127,10 +127,10 @@ end
 -- Effect 4b: Condition — Player set a Spell/Trap mentioning this card
 -- ============================================================
 function s.setcon_set(e,tp,eg,ep,ev,re,r,rp)
-    return eg:IsExists(s.setcfilter,1,nil)
+    return rp==tp and eg:IsExists(s.setcfilter,1,nil,tp)
 end
-function s.setcfilter(c)
-    return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:ListsCode(192300001)
+function s.setcfilter(c,tp)
+    return c:IsControler(tp) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:ListsCode(id)
 end
 
 -- ============================================================
