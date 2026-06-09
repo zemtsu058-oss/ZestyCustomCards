@@ -117,17 +117,16 @@ end
 -- Effect 4a: Condition — Player activated a Spell/Trap mentioning this card
 -- ============================================================
 function s.setcon_chain(e,tp,eg,ep,ev,re,r,rp)
-    if ep~=tp then return false end
     local rc=re:GetHandler()
     if not rc then return false end
-    return rc:IsType(TYPE_SPELL+TYPE_TRAP) and rc:ListsCode(id)
+    return (rp==tp or ep==tp) and rc:IsControler(tp) and rc:IsType(TYPE_SPELL+TYPE_TRAP) and rc:ListsCode(id)
 end
 
 -- ============================================================
 -- Effect 4b: Condition — Player set a Spell/Trap mentioning this card
 -- ============================================================
 function s.setcon_set(e,tp,eg,ep,ev,re,r,rp)
-    return rp==tp and eg:IsExists(s.setcfilter,1,nil,tp)
+    return (rp==tp or ep==tp) and eg:IsExists(s.setcfilter,1,nil,tp)
 end
 function s.setcfilter(c,tp)
     return c:IsControler(tp) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:ListsCode(id)

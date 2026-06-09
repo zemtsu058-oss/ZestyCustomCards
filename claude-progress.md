@@ -19,12 +19,13 @@
 ### Phiên 057 — 2026-06-09
 
 - **Mục tiêu:**
-  - Sửa lỗi effect 4 của [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua) ("Wezaemon the Tombguard"): Ngăn không cho đối thủ kích hoạt hiệu ứng của Wezaemon khi người chơi sở hữu Wezaemon thực hiện hành động Set bài.
+  - Sửa lỗi effect 4 của [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua) ("Wezaemon the Tombguard"): Ngăn không cho đối thủ kích hoạt hiệu ứng của Wezaemon khi người chơi sở hữu Wezaemon thực hiện hành động Set bài hoặc kích hoạt Spell/Trap liên quan.
 - **Đã hoàn thành:**
-  - Sửa lỗi trong [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua): Cập nhật hàm `s.setcon_set` kiểm tra thêm điều kiện người chơi thực hiện hành động Set phải là controler của card (`rp == tp`) và quân bài được Set nằm trên sân của người chơi đó (`c:IsControler(tp)`).
-  - Cải tiến: Thay thế mã passcode cứng `192300001` bằng biến cục bộ `id` trong `s.mentionfilter` và `s.setcfilter`.
+  - Sửa lỗi trong [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua):
+    - Cập nhật hàm `s.setcon_chain` (cho `EVENT_CHAINING`) và `s.setcon_set` (cho `EVENT_SSET`) kiểm tra đồng thời điều kiện người chơi thực hiện hành động phải là controller của card (`rp == tp or ep == tp`) và quân bài liên quan phải do chính người chơi đó kiểm soát (`rc:IsControler(tp)` / `c:IsControler(tp)`).
+    - Cải tiến: Thay thế mã passcode cứng `192300001` bằng biến cục bộ `id` trong các hàm filter.
 - **Xác minh đã chạy:**
-  - `python .\script-test\manage_harness.py verify 192300001` -> Chạy pipeline harness thành công (compiling, validating, linting, sync checks, and auto-archiver).
+  - `python .\script-test\manage_harness.py verify 192300001` -> Chạy pipeline harness thành công.
   - `.\script-test\validate_scripts.ps1 -Quiet` -> Kết quả 122 OK, 0 WARN, 0 FAIL.
 - **Files/artifacts đã cập nhật:** [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua), `custom_cards_zesty.cdb`, `claude-progress.md`
 
