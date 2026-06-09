@@ -16,6 +16,18 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 060 — 2026-06-09
+
+- **Mục tiêu:**
+  - Sửa lỗi effect 2 của [c192300005.lua](file:///d:/TTF/TTFCustomCards/script/c192300005.lua) ("The End of Greatest Warrior") không kích hoạt khi Wezaemon bị đánh bại (destroyed by battle) hoặc dùng làm nguyên liệu (used as material).
+- **Đã hoàn thành:**
+  - Bổ sung `EFFECT_FLAG_DAMAGE_STEP` và `EFFECT_FLAG_DELAY` vào effect property của e2 (`EVENT_LEAVE_FIELD`).
+    - `EFFECT_FLAG_DAMAGE_STEP`: Cho phép kích hoạt trong Damage Step (khi quái thú bị tiêu diệt bằng chiến đấu).
+    - `EFFECT_FLAG_DELAY`: Ngăn chặn việc lỡ thời điểm (miss the timing) khi quái thú được dùng làm nguyên liệu Triệu hồi đặc biệt (Fusion/Synchro/Link).
+- **Xác minh đã chạy:**
+  - Chạy `python .\script-test\manage_harness.py verify 192300005` thành công, pipeline harness và check-sync 100% OK.
+- **Files/artifacts đã cập nhật:** [c192300005.lua](file:///d:/TTF/TTFCustomCards/script/c192300005.lua), `claude-progress.md`
+
 ### Phiên 059 — 2026-06-09
 
 - **Mục tiêu:**
