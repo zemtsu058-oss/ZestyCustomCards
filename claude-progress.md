@@ -16,6 +16,21 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 058 — 2026-06-09
+
+- **Mục tiêu:**
+  - Sửa lỗi mirror match của [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua) ("Wezaemon the Tombguard"): Khi cả 2 người chơi đều control Wezaemon, nếu 1 bên set/activate Spell/Trap mentioning Wezaemon thì bên còn lại cũng kích hoạt được Effect 4.
+- **Đã hoàn thành:**
+  - Viết lại hoàn toàn condition cho Effect 4a (`setcon_chain`) và Effect 4b (`setcon_set`) trong [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua):
+    - Loại bỏ cách tiếp cận `e:GetHandler():GetControler()` + `(rp==hc or ep==hc)` (logic OR dư thừa với 2 biến có thể gây edge-case).
+    - Áp dụng **pattern chuẩn official** (Altergeist Multifaker, Tragoedia): sử dụng trực tiếp tham số `tp` (controller của effect) để so sánh.
+    - Effect 4a (EVENT_CHAINING): `rp~=tp then return false` — chỉ trigger khi **chính** người chơi sở hữu Wezaemon (`tp`) activate chain (`rp`).
+    - Effect 4b (EVENT_SSET): `ep~=tp then return false` — chỉ trigger khi **chính** người chơi sở hữu Wezaemon (`tp`) thực hiện set (`ep`).
+    - Đơn giản hóa filter trong `setcon_set`: tái sử dụng `s.mentionfilter` thay vì closure cục bộ kiểm tra `IsControler`.
+- **Xác minh đã chạy:**
+  - `python .\script-test\manage_harness.py verify 192300001` → Pipeline thành công, sync 100% OK.
+- **Files/artifacts đã cập nhật:** [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua), `custom_cards_zesty.cdb`, `claude-progress.md`
+
 ### Phiên 057 — 2026-06-09
 
 - **Mục tiêu:**

@@ -117,20 +117,19 @@ end
 -- Effect 4a: Condition — Player activated a Spell/Trap mentioning this card
 -- ============================================================
 function s.setcon_chain(e,tp,eg,ep,ev,re,r,rp)
-    local hc=e:GetHandler():GetControler()
+    -- tp = controller of this Wezaemon; rp = player who activated the chain
+    if rp~=tp then return false end
     local rc=re:GetHandler()
-    return (rp==hc or ep==hc) and rc and rc:IsControler(hc) and rc:IsType(TYPE_SPELL+TYPE_TRAP) and rc:ListsCode(id)
+    return rc and rc:IsType(TYPE_SPELL+TYPE_TRAP) and rc:ListsCode(id)
 end
 
 -- ============================================================
 -- Effect 4b: Condition — Player set a Spell/Trap mentioning this card
 -- ============================================================
 function s.setcon_set(e,tp,eg,ep,ev,re,r,rp)
-    local hc=e:GetHandler():GetControler()
-    local f=function(c)
-        return c:IsControler(hc) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:ListsCode(id)
-    end
-    return (rp==hc or ep==hc) and eg:IsExists(f,1,nil)
+    -- tp = controller of this Wezaemon; ep = player who performed the set
+    if ep~=tp then return false end
+    return eg:IsExists(s.mentionfilter,1,nil)
 end
 
 -- ============================================================
