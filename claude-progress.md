@@ -16,6 +16,16 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 059 — 2026-06-09
+
+- **Mục tiêu:**
+  - Sửa lỗi runtime error khi quái thú "Wezaemon the Tombguard" rời sân trên card [c192300005.lua](file:///d:/TTF/TTFCustomCards/script/c192300005.lua) ("The End of Greatest Warrior").
+- **Đã hoàn thành:**
+  - Sửa lỗi gọi hàm không tồn tại `c:GetPreviousCode()` thành hàm EDOPro chuẩn `c:GetPreviousCodeOnField()` trong function `s.leavfilter`.
+- **Xác minh đã chạy:**
+  - `python .\script-test\manage_harness.py verify 192300005` → Pipeline chạy thành công, database biên dịch chuẩn, sync check 100% OK.
+- **Files/artifacts đã cập nhật:** [c192300005.lua](file:///d:/TTF/TTFCustomCards/script/c192300005.lua), `custom_cards_zesty.cdb`, `claude-progress.md`
+
 ### Phiên 058 — 2026-06-09
 
 - **Mục tiêu:**
