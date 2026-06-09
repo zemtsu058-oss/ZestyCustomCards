@@ -117,18 +117,20 @@ end
 -- Effect 4a: Condition — Player activated a Spell/Trap mentioning this card
 -- ============================================================
 function s.setcon_chain(e,tp,eg,ep,ev,re,r,rp)
+    local hc=e:GetHandler():GetControler()
     local rc=re:GetHandler()
-    return (rp==tp or ep==tp) and rc and rc:IsControler(tp) and rc:IsType(TYPE_SPELL+TYPE_TRAP) and rc:ListsCode(id)
+    return (rp==hc or ep==hc) and rc and rc:IsControler(hc) and rc:IsType(TYPE_SPELL+TYPE_TRAP) and rc:ListsCode(id)
 end
 
 -- ============================================================
 -- Effect 4b: Condition — Player set a Spell/Trap mentioning this card
 -- ============================================================
 function s.setcon_set(e,tp,eg,ep,ev,re,r,rp)
+    local hc=e:GetHandler():GetControler()
     local f=function(c)
-        return c:IsControler(tp) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:ListsCode(id)
+        return c:IsControler(hc) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:ListsCode(id)
     end
-    return (rp==tp or ep==tp) and eg:IsExists(f,1,nil)
+    return (rp==hc or ep==hc) and eg:IsExists(f,1,nil)
 end
 
 -- ============================================================

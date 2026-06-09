@@ -22,13 +22,13 @@
   - Sửa lỗi effect 4 của [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua) ("Wezaemon the Tombguard"): Ngăn không cho đối thủ kích hoạt hiệu ứng của Wezaemon khi người chơi sở hữu Wezaemon thực hiện hành động Set bài hoặc kích hoạt Spell/Trap liên quan.
 - **Đã hoàn thành:**
   - Sửa lỗi trong [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua):
-    - Sử dụng đồng thời việc kiểm tra người chơi kích hoạt (`rp == tp or ep == tp`) và quyền kiểm soát của thẻ bài (`rc:IsControler(tp)` cho việc kích hoạt Spell/Trap).
-    - Ở sự kiện Set bài (`EVENT_SSET`), sử dụng một **Lua function closure** cục bộ `f` truyền vào `eg:IsExists(f, 1, nil)` để tránh hoàn toàn việc truyền tham số bổ sung `tp` qua `IsExists`, khắc phục triệt để lỗi bỏ qua tham số của một số engine cũ/custom dẫn đến việc đối thủ cũng kích hoạt được hiệu ứng.
+    - Thay thế hoàn toàn việc sử dụng tham số `tp` nhận từ hàm trigger (vốn có thể bị sai lệch hoặc không nhất quán trong các engine simulator khi xử lý sự kiện phức tạp) bằng cách gọi trực tiếp `e:GetHandler():GetControler()` để lấy chính xác controller `hc` của quái thú Wezaemon đang kích hoạt hiệu ứng.
+    - So sánh trực tiếp `rp == hc or ep == hc` để xác thực người chơi thực hiện hành động Set/Kích hoạt Spell/Trap.
+    - Sử dụng Lua function closure cục bộ `f` truyền vào `eg:IsExists` để so sánh chính xác `c:IsControler(hc)` và loại bỏ lỗi truyền tham số `tp` tùy chọn trong API C++.
 - **Xác minh đã chạy:**
   - `python .\script-test\manage_harness.py verify 192300001` -> Chạy pipeline harness thành công.
   - `.\script-test\validate_scripts.ps1 -Quiet` -> Kết quả 122 OK, 0 WARN, 0 FAIL.
 - **Files/artifacts đã cập nhật:** [c192300001.lua](file:///d:/TTF/TTFCustomCards/script/c192300001.lua), `custom_cards_zesty.cdb`, `claude-progress.md`
-
 
 ### Phiên 056 — 2026-06-08
 
