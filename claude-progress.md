@@ -16,6 +16,18 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 067 — 2026-06-10
+
+- **Mục tiêu:**
+  - Sửa lỗi card "Possessed Bond" (79900018) bị thiếu archetype "Possessed" và gặp lỗi runtime `attempt to call a nil value (method 'IsBanishableAsCost')` ở GY effect.
+- **Đã hoàn thành:**
+  - Cập nhật specs JSON [c79900018.json](file:///d:/TTF/TTFCustomCards/card-data/c79900018.json): Thay đổi thuộc tính `"setcode"` từ `0` thành `192` (tương đương `0xc0` - setcode chính thức của archetype "Possessed").
+  - Sửa lỗi runtime trong [c79900018.lua](file:///d:/TTF/TTFCustomCards/script/c79900018.lua): Thay thế phương thức không tồn tại `c:IsBanishableAsCost()` bằng phương thức chuẩn `c:IsAbleToRemoveAsCost()`.
+  - Định dạng lại code để bẻ dòng dài, vượt linter style check (< 120 ký tự).
+- **Xác minh đã chạy:**
+  - Chạy `python .\script-test\manage_harness.py verify 79900018` -> Thành công hoàn toàn, linter sạch lỗi, hệ thống đồng bộ 100% OK.
+- **Files/artifacts đã cập nhật:** [c79900018.json](file:///d:/TTF/TTFCustomCards/card-data/c79900018.json), [c79900018.lua](file:///d:/TTF/TTFCustomCards/script/c79900018.lua), `claude-progress.md`
+
 ### Phiên 066 — 2026-06-10
 
 - **Mục tiêu:**

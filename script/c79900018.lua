@@ -2,7 +2,7 @@
 -- Card Name: Possessed Bond
 -- Passcode  : 79900018
 -- Type      : Spell / Normal
--- Archetype : None
+-- Archetype : Possessed (0xc0)
 -- ============================================================
 -- Effect 1  : Reveal 1 Level 5 "Possessed" monster from hand/Deck:
 --             Add 1 "Charmer" or "Familiar-Possessed" and 1 Spellcaster with same Attribute from Deck,
@@ -103,7 +103,8 @@ function s.check_pairs(hg,e,tp)
     for c1 in aux.Next(hg) do
         for c2 in aux.Next(hg) do
             if c1~=c2 and c1:GetAttribute()==c2:GetAttribute()
-                and (c1:IsCanBeSpecialSummoned(e,0,tp,false,false) or c2:IsCanBeSpecialSummoned(e,0,tp,false,false)) then
+                and (c1:IsCanBeSpecialSummoned(e,0,tp,false,false)
+                or c2:IsCanBeSpecialSummoned(e,0,tp,false,false)) then
                 return true
             end
         end
@@ -116,14 +117,16 @@ function s.rev_filter1(c,hg,e,tp)
 end
 
 function s.rev_filter2(c,attr,tc1,e,tp)
-    return c:GetAttribute()==attr and (c:IsCanBeSpecialSummoned(e,0,tp,false,false) or tc1:IsCanBeSpecialSummoned(e,0,tp,false,false))
+    return c:GetAttribute()==attr
+        and (c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+        or tc1:IsCanBeSpecialSummoned(e,0,tp,false,false))
 end
 
 function s.gycost(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
     local hg=Duel.GetMatchingGroup(Card.IsMonster,tp,LOCATION_HAND,0,nil)
     if chk==0 then
-        return c:IsBanishableAsCost() and s.check_pairs(hg,e,tp)
+        return c:IsAbleToRemoveAsCost() and s.check_pairs(hg,e,tp)
     end
     Duel.Remove(c,POS_FACEUP,REASON_COST)
     
