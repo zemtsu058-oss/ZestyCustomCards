@@ -181,13 +181,15 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
                 Duel.XyzSummon(tp,xc,nil)
                 -- immune to card effects this turn
                 local e1=Effect.CreateEffect(e:GetHandler())
-                e1:SetType(EFFECT_TYPE_SINGLE)
-                e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE)
-                e1:SetRange(LOCATION_MZONE)
+                e1:SetType(EFFECT_TYPE_FIELD)
+                e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
                 e1:SetCode(EFFECT_IMMUNE_EFFECT)
-                e1:SetValue(function(e,te) return te:GetOwner()~=xc end)
-                e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-                xc:RegisterEffect(e1)
+                e1:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+                e1:SetTarget(function(e,c) return c==e:GetLabelObject() end)
+                e1:SetLabelObject(xc)
+                e1:SetValue(function(e,te) return te:GetOwner()~=e:GetLabelObject() end)
+                e1:SetReset(RESET_PHASE+PHASE_END)
+                Duel.RegisterEffect(e1,tp)
             end
         end
     end
