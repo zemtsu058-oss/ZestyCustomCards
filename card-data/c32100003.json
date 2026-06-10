@@ -1,0 +1,19 @@
+{
+  "id": 32100003,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 321,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 514,
+  "name": "Rikka Blizzard",
+  "desc": "If you have a \"Rikka\" monster in your Deck, hand, or GY: Reveal 5 \"Rikka\" monsters from your Deck, hand, and/or GY; Tribute all monsters in your opponent's field and hand. You can instead reveal 10 \"Rikka\" cards (monsters, Spells, and/or Traps) from your Deck, hand, and/or GY; Tribute all cards in your opponent's field and hand, then Special Summon to your field up to that many \"Rikka\" monsters you revealed. You can only activate 1 \"Rikka Blizzard\" per turn.",
+  "strings": [
+    "Reveal 5 Rikka monsters: Tribute opponent's monsters",
+    "Reveal 10 Rikka cards: Tribute all opponent's cards and SS"
+  ]
+}

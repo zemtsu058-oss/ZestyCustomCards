@@ -1,0 +1,19 @@
+{
+  "id": 32100004,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 321,
+  "type": 1048580,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 268435970,
+  "name": "Rikka Fleurness",
+  "desc": "When your opponent activates a card or effect: Negate that effect, then Tribute that card. If you Tributed that card, you can Set 1 \"Rikka\" Normal Trap from your Deck, and it can be activated this turn. You can also activate this card from your hand, but for the rest of this duel, you can only Special Summon while you control a Plant monster or have a Plant monster in your hand.",
+  "strings": [
+    "Set 1 Rikka Normal Trap from Deck",
+    "Only Special Summon when Plant monster is on field/hand"
+  ]
+}
