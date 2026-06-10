@@ -160,10 +160,6 @@ function s.xyzfilter(c)
     return c:IsSetCard(0x141) and c:IsType(TYPE_XYZ) and c:IsXyzSummonable(nil)
 end
 
-function s.immval(e,te)
-    return te:GetOwner()~=e:GetHandler()
-end
-
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
     local tc=Duel.GetFirstTarget()
     if not tc or not tc:IsRelateToEffect(e) or tc:IsFacedown() then return end
@@ -186,9 +182,10 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
                 -- immune to card effects this turn
                 local e1=Effect.CreateEffect(e:GetHandler())
                 e1:SetType(EFFECT_TYPE_SINGLE)
+                e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE)
+                e1:SetRange(LOCATION_MZONE)
                 e1:SetCode(EFFECT_IMMUNE_EFFECT)
-                e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-                e1:SetValue(s.immval)
+                e1:SetValue(function(e,te) return te:GetOwner()~=xc end)
                 e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
                 xc:RegisterEffect(e1)
             end
