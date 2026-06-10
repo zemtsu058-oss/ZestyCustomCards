@@ -16,7 +16,19 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 065 — 2026-06-10
+
+- **Mục tiêu:**
+  - Sửa lỗi runtime error: `attempt to call a nil value (field 'GetRelatedHandler')` trên card `192200015` ("Wandering Fairy in the Castle of Dreams").
+- **Đã hoàn thành:**
+  - Nhận diện lỗi do file `constants.lua` (nơi định nghĩa `Card.GetRelatedHandler`) chưa được load vào môi trường EDOPro khi chạy trận đấu.
+  - Thêm `Duel.LoadScript("constants.lua")` vào đầu file script [c192200015.lua](file:///d:/TTF/TTFCustomCards/script/c192200015.lua) để load toàn bộ custom constants và helper utilities.
+- **Xác minh đã chạy:**
+  - `python .\script-test\manage_harness.py verify 192200015` -> Thành công (Script validation checked out, DB compiled & synced successfully).
+- **Files/artifacts đã cập nhật:** [c192200015.lua](file:///d:/TTF/TTFCustomCards/script/c192200015.lua), `claude-progress.md`
+
 ### Phiên 064 — 2026-06-10
+
 
 - **Mục tiêu:**
   - Sửa lỗi Link markers (ô link) chỉ sai vị trí trên card `192200015` ("Wandering Fairy in the Castle of Dreams").
