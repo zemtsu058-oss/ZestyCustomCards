@@ -4,12 +4,12 @@
 -- Type      : Monster / Xyz / Effect
 -- Archetype : Rikka (0x141)
 -- ============================================================
--- Xyz Summon: 2+ Level 8 monsters
--- Alternative: You can also Xyz Summon this card by using "Kanzashi the Rikka Queen" you control.
--- Effect 1  : Return 3 Rikka monsters from GY to Deck; draw 2 cards (HOPT).
--- Effect 2  : Detach 2: Negate opponent activation, Tribute 1 random card in opponent hand.
+-- Xyz Summon: 2+ level 8 monster
+-- Alternative: You can also xyz summon this card by using your kanzashi the rikka queen.
+-- Effect 1  : Return 3 Rikka monster in GY, draw 2 card.
+-- Effect 2  : Detach 2: Negate opponent card effect, Tribute 1 random card in opponent hand.
 --             (treated as Quick Effect if this card has a Plant material).
--- Effect 3  : Detach 1: Search 1 Rikka card from Deck (HOPT).
+-- Effect 3  : Detach 1: Search 1 Rikka card from Deck.
 -- ============================================================
 
 local s,id=GetID()
@@ -27,7 +27,6 @@ function s.initial_effect(c)
     e1:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
     e1:SetType(EFFECT_TYPE_IGNITION)
     e1:SetRange(LOCATION_MZONE)
-    e1:SetCountLimit(1,id)
     e1:SetTarget(s.drtg)
     e1:SetOperation(s.drop)
     c:RegisterEffect(e1)
@@ -37,7 +36,7 @@ function s.initial_effect(c)
     -- ============================================================
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,2))
-    e2:SetCategory(CATEGORY_NEGATE+CATEGORY_RELEASE)
+    e2:SetCategory(CATEGORY_DISABLE+CATEGORY_RELEASE)
     e2:SetType(EFFECT_TYPE_QUICK_O)
     e2:SetCode(EVENT_CHAINING)
     e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
@@ -56,7 +55,6 @@ function s.initial_effect(c)
     e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
     e3:SetType(EFFECT_TYPE_IGNITION)
     e3:SetRange(LOCATION_MZONE)
-    e3:SetCountLimit(1,id+100)
     e3:SetCost(s.detach1cost)
     e3:SetTarget(s.thtg)
     e3:SetOperation(s.thop)
@@ -111,17 +109,17 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     local has_plant=c:GetOverlayGroup():IsExists(Card.IsRace,1,nil,RACE_PLANT)
     if not has_plant and Duel.GetTurnPlayer()~=tp then return false end
-    return Duel.IsChainNegatable(ev) and rp~=tp
+    return Duel.IsChainDisablable(ev) and rp~=tp
 end
 
 function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end
-    Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
+    Duel.SetOperationInfo(0,CATEGORY_DISABLE,eg,1,0,0)
     Duel.SetOperationInfo(0,CATEGORY_RELEASE,nil,1,1-tp,LOCATION_HAND)
 end
 
 function s.negop(e,tp,eg,ep,ev,re,r,rp)
-    if Duel.NegateActivation(ev) then
+    if Duel.NegateEffect(ev) then
         local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
         if #g>0 then
             local sg=g:RandomSelect(tp,1)
