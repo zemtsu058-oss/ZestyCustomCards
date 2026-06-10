@@ -16,7 +16,7 @@ local s,id=GetID()
 
 function s.initial_effect(c)
     -- Xyz Summon Procedure
-    Xyz.AddProcedure(c,nil,8,2,99,s.ovfilter,aux.Stringid(id,0),3,s.xyzop)
+    Xyz.AddProcedure(c,nil,8,2,s.ovfilter,aux.Stringid(id,0),2,s.xyzop)
     c:EnableReviveLimit()
 
     -- ============================================================

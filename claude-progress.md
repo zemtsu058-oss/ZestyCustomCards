@@ -16,6 +16,16 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 068 — 2026-06-10
+
+- **Mục tiêu:**
+  - Sửa lỗi runtime `Parameter 2 should be "Int" but is "Function"` trong `proc_xyz.lua` khi triệu hồi Xyz card `32100002` ("Kanzashi the Rikka Flower").
+- **Đã hoàn thành:**
+  - Sửa đổi [c32100002.lua](file:///d:/TTF/TTFCustomCards/script/c32100002.lua): Loại bỏ đối số `99` bị thừa/sai vị trí trong `Xyz.AddProcedure`. Điều này giúp đưa các tham số còn lại (`s.ovfilter`, `aux.Stringid(id,0)`, `2`, `s.xyzop`) về đúng vị trí và tránh lỗi engine hiểu nhầm filter function là description ID.
+- **Xác minh đã chạy:**
+  - Chạy `python .\script-test\manage_harness.py verify 32100002` -> Thành công hoàn toàn, database biên dịch khớp, script validation & linter 100% OK.
+- **Files/artifacts đã cập nhật:** [c32100002.lua](file:///d:/TTF/TTFCustomCards/script/c32100002.lua), `claude-progress.md`
+
 ### Phiên 067 — 2026-06-10
 
 - **Mục tiêu:**
