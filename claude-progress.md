@@ -16,6 +16,22 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 066 — 2026-06-10
+
+- **Mục tiêu:**
+  - Rà soát toàn bộ 9 custom cards mới của Phiên 062 và khắc phục triệt để các lỗi logic, runtime hoặc thiếu sót kỹ thuật.
+- **Đã hoàn thành:**
+  - Khắc phục lỗi gọi hàm ảo `Cost.DetachFromSelf(X)` bằng cách thay thế bằng cost functions chuẩn trong [c32100001.lua](file:///d:/TTF/TTFCustomCards/script/c32100001.lua) và [c32100002.lua](file:///d:/TTF/TTFCustomCards/script/c32100002.lua).
+  - Sửa đổi cost kích hoạt của Continuous Spell trong [c32100005.lua](file:///d:/TTF/TTFCustomCards/script/c32100005.lua) sử dụng `SendtoGrave` thay vì `Release` (vì Spells không thể bị Tribute trong engine).
+  - Cải tiến hiệu ứng gửi xuống GY của Ghost Ogre & Rabbit Spirit ([c79900017.lua](file:///d:/TTF/TTFCustomCards/script/c79900017.lua)) thành player-affecting để bỏ qua kháng hiệu ứng của quái thú đối thủ.
+  - Bổ sung các lệnh `Duel.ShuffleDeck(tp)` bị thiếu sau khi thực hiện tìm kiếm từ Deck trong [c32100002.lua](file:///d:/TTF/TTFCustomCards/script/c32100002.lua), [c32100005.lua](file:///d:/TTF/TTFCustomCards/script/c32100005.lua), và [c79900018.lua](file:///d:/TTF/TTFCustomCards/script/c79900018.lua).
+  - Cập nhật target validation cho hiệu ứng 3 của [c192200015.lua](file:///d:/TTF/TTFCustomCards/script/c192200015.lua) tránh trường hợp tự trỏ target sai đối tượng.
+- **Xác minh đã chạy:**
+  - Chạy verify thành công cho cả 6 card thông qua Harness CLI.
+  - Cú pháp và đồng bộ database khớp 100% OK (`131 OK, 0 FAIL` trong validate script và `check-sync` 100% OK).
+- **Files/artifacts đã cập nhật:** `script/c32100001.lua`, `script/c32100002.lua`, `script/c32100005.lua`, `script/c79900017.lua`, `script/c79900018.lua`, `script/c192200015.lua`, `claude-progress.md`
+- **Artifacts quy trình:** [implementation_plan.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/235737bc-59a6-451f-aac5-2a5407a72b59/implementation_plan.md), [task.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/235737bc-59a6-451f-aac5-2a5407a72b59/task.md), [walkthrough.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/235737bc-59a6-451f-aac5-2a5407a72b59/walkthrough.md)
+
 ### Phiên 065 — 2026-06-10
 
 - **Mục tiêu:**
