@@ -247,8 +247,8 @@ end
 -- Effect 3: Target — GY return self and target to hand
 -- ============================================================
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-    if chkc then return chkc:IsLocation(LOCATION_ONFIELD+LOCATION_GRAVE) and chkc:IsAbleToHand() end
     local c=e:GetHandler()
+    if chkc then return chkc~=c and chkc:IsLocation(LOCATION_ONFIELD+LOCATION_GRAVE) and chkc:IsAbleToHand() end
     if chk==0 then
         return c:IsAbleToHand()
             and Duel.IsExistingTarget(Card.IsAbleToHand,tp,LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,1,c)

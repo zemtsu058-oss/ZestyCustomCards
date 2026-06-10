@@ -89,6 +89,7 @@ function s.op1(e,tp,eg,ep,ev,re,r,rp)
     local sg=Group.FromCards(tc1,tc2)
     if Duel.SendtoHand(sg,nil,REASON_EFFECT)==2 then
         Duel.ConfirmCards(1-tp,sg)
+        Duel.ShuffleDeck(tp)
         Duel.ShuffleHand(tp)
         Duel.BreakEffect()
         Duel.DiscardHand(tp,nil,1,1,REASON_EFFECT+REASON_DISCARD)

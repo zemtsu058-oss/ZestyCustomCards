@@ -64,7 +64,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
         -- Attempt to destroy the monster
         if Duel.Destroy(tc,REASON_EFFECT)==0 then
             -- If not destroyed, opponent must send it to the GY (player-affecting bypasses immunity)
-            Duel.SendtoGrave(tc,REASON_RULE)
+            Duel.SendtoGrave(tc,REASON_RULE,PLAYER_NONE,1-tp)
         end
     end
 end

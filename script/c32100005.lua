@@ -83,8 +83,14 @@ function s.actop(e,tp,eg,ep,ev,re,r,rp)
     if #g>0 and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
         local sg=g:Select(tp,1,1,nil)
-        Duel.SendtoHand(sg,nil,REASON_EFFECT)
-        Duel.ConfirmCards(1-tp,sg)
+        local sc=sg:GetFirst()
+        if sc then
+            local in_deck=sc:IsLocation(LOCATION_DECK)
+            if Duel.SendtoHand(sc,nil,REASON_EFFECT)>0 and sc:IsLocation(LOCATION_HAND) then
+                Duel.ConfirmCards(1-tp,sc)
+                if in_deck then Duel.ShuffleDeck(tp) end
+            end
+        end
     end
 end
 
@@ -125,8 +131,8 @@ end
 -- ============================================================
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
-    if chk==0 then return c:IsReleasable() end
-    Duel.Release(c,REASON_COST)
+    if chk==0 then return c:IsAbleToGraveAsCost() end
+    Duel.SendtoGrave(c,REASON_COST)
 end
 
 function s.filter(c,e,tp)

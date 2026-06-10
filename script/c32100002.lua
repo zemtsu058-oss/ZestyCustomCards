@@ -43,7 +43,7 @@ function s.initial_effect(c)
     e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
     e2:SetRange(LOCATION_MZONE)
     e2:SetCondition(s.negcon)
-    e2:SetCost(Cost.DetachFromSelf(2))
+    e2:SetCost(s.detach2cost)
     e2:SetTarget(s.negtg)
     e2:SetOperation(s.negop)
     c:RegisterEffect(e2)
@@ -57,7 +57,7 @@ function s.initial_effect(c)
     e3:SetType(EFFECT_TYPE_IGNITION)
     e3:SetRange(LOCATION_MZONE)
     e3:SetCountLimit(1,id+100)
-    e3:SetCost(Cost.DetachFromSelf(1))
+    e3:SetCost(s.detach1cost)
     e3:SetTarget(s.thtg)
     e3:SetOperation(s.thop)
     c:RegisterEffect(e3)
@@ -148,5 +148,20 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
     if #g>0 then
         Duel.SendtoHand(g,nil,REASON_EFFECT)
         Duel.ConfirmCards(1-tp,g)
+        Duel.ShuffleDeck(tp)
     end
 end
+
+-- ============================================================
+-- Cost Functions
+-- ============================================================
+function s.detach1cost(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
+    e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
+end
+
+function s.detach2cost(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,2,REASON_COST) end
+    e:GetHandler():RemoveOverlayCard(tp,2,2,REASON_COST)
+end
+
