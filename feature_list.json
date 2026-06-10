@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-06",
+  "last_updated": "2026-06-10",
   "note": "Trạng thái: pending(p) | working(w) | review(r) | done(d) | skipped(x). Phản ánh prefix trong docs/queues/<archetype>/",
   "archetypes": {
     "Labrynth": {
@@ -266,6 +266,20 @@
           "passcode": "192200011",
           "status": "done",
           "script": "script/c192200011.lua"
+        },
+        {
+          "name": "Wandering Fairy in the Castle of Dreams",
+          "passcode": "192200015",
+          "status": "done",
+          "queue_file": "docs/queues/Common/d_Wandering_Fairy_in_the_Castle_of_Dreams.jpg",
+          "script": "script/c192200015.lua"
+        },
+        {
+          "name": "Iris Wand - Dream Magical",
+          "passcode": "192200016",
+          "status": "done",
+          "queue_file": "docs/queues/Common/d_Iris_Wand_Dream_Magical.jpeg",
+          "script": "script/c192200016.lua"
         }
       ]
     },
@@ -279,6 +293,34 @@
           "status": "done",
           "script": "script/c32100001.lua",
           "queue_file": "docs/queues/Rikka/d_Teardrop_the_Rikka_Fairy.jpg"
+        },
+        {
+          "name": "Kanzashi the Rikka Flower",
+          "passcode": "32100002",
+          "status": "done",
+          "queue_file": "docs/queues/Rikka/d_Kanzashi_The_Rikka_Flower.jpg",
+          "script": "script/c32100002.lua"
+        },
+        {
+          "name": "Rikka Blizzard",
+          "passcode": "32100003",
+          "status": "done",
+          "queue_file": "docs/queues/Rikka/d_Rikka_Blizzard.jpg",
+          "script": "script/c32100003.lua"
+        },
+        {
+          "name": "Rikka Fleurness",
+          "passcode": "32100004",
+          "status": "done",
+          "queue_file": "docs/queues/Rikka/d_Rikka_Fleurness.jpg",
+          "script": "script/c32100004.lua"
+        },
+        {
+          "name": "Rikka Foliage",
+          "passcode": "32100005",
+          "status": "done",
+          "queue_file": "docs/queues/Rikka/d_Rikka_Foliage.jpg",
+          "script": "script/c32100005.lua"
         }
       ]
     },
@@ -804,6 +846,27 @@
           "passcode": "756340000",
           "status": "done",
           "script": "script/c756340000.lua"
+        },
+        {
+          "name": "Ghost Ogre & Rabbit Spirit",
+          "passcode": "79900017",
+          "status": "done",
+          "queue_file": "docs/queues/Common/d_Ghost_Ogre_Rabbit_Spirit.jpg",
+          "script": "script/c79900017.lua"
+        },
+        {
+          "name": "Possessed Bond",
+          "passcode": "79900018",
+          "status": "done",
+          "queue_file": "docs/queues/Common/d_Possessed_Bond.jpg",
+          "script": "script/c79900018.lua"
+        },
+        {
+          "name": "The Journeying Three Magi",
+          "passcode": "79900019",
+          "status": "done",
+          "queue_file": "docs/queues/Common/d_The_Journeying_Three_Magi.jpg",
+          "script": "script/c79900019.lua"
         }
       ]
     },

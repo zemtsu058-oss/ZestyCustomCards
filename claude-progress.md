@@ -5,7 +5,7 @@
 - **Thư mục gốc:** `d:\TTF\TTFCustomCards`
 - **Lệnh validate:** `.\script-test\validate_scripts.ps1`
 - **Lệnh check sync:** `python .\script-test\manage_db.py check-sync`
-- **Tác vụ ưu tiên tiếp theo:** Chờ hàng đợi (queue) hoặc yêu cầu tạo card mới từ user.
+- **Tác vụ ưu tiên tiếp theo:** Tiếp tục theo dõi các yêu cầu bổ sung hoặc phản hồi từ phía user về các tính năng/card mới.
 - **Sự cố chặn hiện tại:** Không có blocker.
 
 ---
@@ -15,6 +15,40 @@
 > [!NOTE]
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
+
+### Phiên 062 — 2026-06-10
+
+- **Mục tiêu:**
+  - Thiết kế cấu hình specs JSON và viết script Lua hoàn chỉnh cho 9 card đang ở trạng thái `pending` trong `feature_list.json`.
+- **Đã hoàn thành:**
+  - Thiết lập cấu hình specs JSON và lập trình Lua hoàn thiện cho 9 card mới:
+    - Castle of Dreams: `192200015` (Wandering Fairy), `192200016` (Iris Wand)
+    - Rikka: `32100002` (Kanzashi), `32100003` (Rikka Blizzard), `32100004` (Rikka Fleurness), `32100005` (Rikka Foliage)
+    - Common: `79900017` (Ghost Ogre & Rabbit Spirit), `79900018` (Possessed Bond), `79900019` (The Journeying Three Magi)
+  - Khởi chạy và hoàn thành quy trình verify tự động của Harness CLI cho cả 9 card, cập nhật trạng thái trong `feature_list.json` thành `"done"` và đổi tên các file queue tương ứng.
+- **Xác minh đã chạy:**
+  - `python .\script-test\manage_db.py compile` -> Thành công biên dịch 131 card.
+  - `.\script-test\validate_scripts.ps1` -> Kết quả: 82 OK, 49 WARN, 0 FAIL.
+  - `python .\script-test\manage_db.py check-sync` -> 100% đồng bộ hoàn hảo (100% OK).
+- **Files/artifacts đã cập nhật:** `claude-progress.md`, `feature_list.json`, `custom_cards_zesty.cdb`, `card-data/c*.json`, `script/c*.lua`, `docs/queues/`
+- **Artifacts quy trình:** [implementation_plan.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/3104bbe4-0402-42ef-a4a7-445ee0b813be/implementation_plan.md), [task.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/3104bbe4-0402-42ef-a4a7-445ee0b813be/task.md), [walkthrough.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/3104bbe4-0402-42ef-a4a7-445ee0b813be/walkthrough.md)
+
+### Phiên 061 — 2026-06-10
+
+- **Mục tiêu:**
+  - Quét hàng đợi, tìm và đăng ký các card pending (`p_`) mới trong `docs/queues/` vào `feature_list.json` để chuẩn bị code.
+- **Đã hoàn thành:**
+  - Phát hiện và đăng ký 9 card pending mới vào `feature_list.json` dưới các archetype tương ứng.
+  - Cập nhật ngày `last_updated` trong `feature_list.json` thành `"2026-06-10"`.
+  - Cải tiến `manage_harness.py`:
+    - Cho phép lệnh `start` nhận diện và cập nhật trực tiếp các card đã đăng ký ở trạng thái `pending` sang `working`.
+    - Tích hợp thêm subcommand `scan` vào Harness CLI: Tự động phát hiện các file `p_` trong queues chưa được đăng ký, tự động gán passcode phù hợp, chuyển đổi định dạng tên và thêm chúng vào `feature_list.json` ở trạng thái `"pending"`.
+  - Cập nhật tài liệu hướng dẫn `AGENTS.md` và `docs/agent-workflow.md` để mô tả cách dùng và quy tắc của lệnh `scan` cho các AI agent tiếp theo.
+- **Xác minh đã chạy:**
+  - `python .\script-test\manage_harness.py scan` -> Chạy thử nghiệm thành công, nhận diện đúng các card đã được đăng ký và không sinh bản ghi trùng lặp.
+  - `python .\script-test\manage_db.py check-sync` -> 100% khớp cấu trúc.
+  - `.\script-test\validate_scripts.ps1` -> Hoạt động bình thường (76 OK, 46 WARN, 0 FAIL).
+- **Files/artifacts đã cập nhật:** `feature_list.json`, `script-test/manage_harness.py`, `AGENTS.md`, `docs/agent-workflow.md`, `claude-progress.md`
 
 ### Phiên 060 — 2026-06-09
 
