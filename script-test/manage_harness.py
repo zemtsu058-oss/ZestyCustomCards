@@ -84,14 +84,24 @@ def start_card(passcode, card_name, template_type):
         fl_data = json.load(f)
         
     # Check if passcode is already registered
+    existing_card = None
+    existing_archetype = None
     for arch_name, arch_info in fl_data.get("archetypes", {}).items():
         for card in arch_info.get("cards", []):
             if card.get("passcode") == str(passcode):
-                print(f"Error: Passcode {passcode} is already registered under '{arch_name}' (Card: '{card['name']}').", file=sys.stderr)
-                return
+                if card.get("status") != "pending":
+                    print(f"Error: Passcode {passcode} is already registered under '{arch_name}' (Card: '{card['name']}') with status '{card.get('status')}'.", file=sys.stderr)
+                    return
+                else:
+                    existing_card = card
+                    existing_archetype = arch_name
 
     # Find or guess archetype
-    archetype, arch_info = find_archetype_by_passcode(fl_data, passcode)
+    if existing_archetype:
+        archetype = existing_archetype
+        arch_info = fl_data["archetypes"][archetype]
+    else:
+        archetype, arch_info = find_archetype_by_passcode(fl_data, passcode)
     print(f"Assigning card to Archetype: {archetype}")
 
     # Parse setcode
@@ -102,7 +112,15 @@ def start_card(passcode, card_name, template_type):
         setcode_val = 0
 
     # 2. Locate queue file
-    queue_file = locate_queue_image(paths["queues_dir"], card_name, archetype)
+    queue_file = None
+    if existing_card and existing_card.get("queue_file"):
+        potential_path = paths["root"] / existing_card["queue_file"]
+        if potential_path.exists():
+            queue_file = potential_path
+            
+    if not queue_file:
+        queue_file = locate_queue_image(paths["queues_dir"], card_name, archetype)
+        
     new_queue_file_path = None
     if queue_file:
         # Rename from p_ to w_ (working)
@@ -172,24 +190,31 @@ def start_card(passcode, card_name, template_type):
         print(f"Error creating Lua script: {e}", file=sys.stderr)
         return
 
-    # 5. Append to feature_list.json
-    new_card_entry = {
-        "name": card_name,
-        "passcode": str(passcode),
-        "status": "working",
-        "script": f"script/c{passcode}.lua"
-    }
-    if new_queue_file_path:
-        new_card_entry["queue_file"] = new_queue_file_path
+    # 5. Append or update in feature_list.json
+    if existing_card:
+        existing_card["status"] = "working"
+        existing_card["script"] = f"script/c{passcode}.lua"
+        if new_queue_file_path:
+            existing_card["queue_file"] = new_queue_file_path
+        print(f"Updated existing pending card {passcode} to 'working' status.")
+    else:
+        new_card_entry = {
+            "name": card_name,
+            "passcode": str(passcode),
+            "status": "working",
+            "script": f"script/c{passcode}.lua"
+        }
+        if new_queue_file_path:
+            new_card_entry["queue_file"] = new_queue_file_path
 
-    if archetype not in fl_data["archetypes"]:
-        fl_data["archetypes"][archetype] = {"cards": []}
-        
-    fl_data["archetypes"][archetype]["cards"].append(new_card_entry)
+        if archetype not in fl_data["archetypes"]:
+            fl_data["archetypes"][archetype] = {"cards": []}
+            
+        fl_data["archetypes"][archetype]["cards"].append(new_card_entry)
     
     with open(paths["feature_list"], "w", encoding="utf-8") as f:
         json.dump(fl_data, f, ensure_ascii=False, indent=2)
-    print(f"Added card to feature_list.json under '{archetype}'.")
+    print(f"Added/updated card in feature_list.json under '{archetype}'.")
     print(f"Status set to 'working'. Happy coding!")
 
 def run_command(args, cwd):
@@ -298,6 +323,135 @@ def verify_card(passcode):
         
     return True
 
+def scan_pending_cards():
+    from datetime import datetime
+    paths = get_project_paths()
+    if not paths["feature_list"].exists():
+        print(f"Error: feature_list.json not found.", file=sys.stderr)
+        return
+
+    with open(paths["feature_list"], "r", encoding="utf-8") as f:
+        fl_data = json.load(f)
+
+    # Gather all registered stems and passcodes to prevent duplicates
+    registered_stems = set()
+    registered_passcodes = set()
+    for arch_name, arch_info in fl_data.get("archetypes", {}).items():
+        for card in arch_info.get("cards", []):
+            if "queue_file" in card:
+                stem = Path(card["queue_file"]).stem
+                # strip prefixes: p_, w_, d_
+                if stem.startswith("p_") or stem.startswith("w_") or stem.startswith("d_"):
+                    stem = stem[2:]
+                registered_stems.add(stem.lower())
+            if "passcode" in card:
+                registered_passcodes.add(card["passcode"])
+
+    # Locate all p_ files in queues
+    queues_dir = paths["queues_dir"]
+    extensions = ["*.jpg", "*.jpeg", "*.png", "*.gif"]
+    found_pending = []
+    
+    for ext in extensions:
+        for p in queues_dir.rglob(ext):
+            if p.name.startswith("p_"):
+                stem = p.stem
+                if stem.startswith("p_"):
+                    stem = stem[2:]
+                if stem.lower() not in registered_stems:
+                    found_pending.append(p)
+
+    if not found_pending:
+        print("No new pending cards found in the queue directory.")
+        return
+
+    print(f"Found {len(found_pending)} new pending queue files. Registering...")
+
+    # For each found pending file:
+    added_count = 0
+    for p_path in found_pending:
+        # Determine archetype from parent folder name
+        # If parent folder is queues_dir, default to Common
+        arch_dir = p_path.parent
+        if arch_dir == queues_dir:
+            archetype = "Common"
+        else:
+            archetype = arch_dir.name
+            
+        # Normalize/Clean archetype name to match feature_list.json keys
+        actual_arch_name = "Common"
+        for name in fl_data.get("archetypes", {}).keys():
+            if name.lower().replace("_", "") == archetype.lower().replace("_", ""):
+                actual_arch_name = name
+                break
+
+        if actual_arch_name not in fl_data["archetypes"]:
+            actual_arch_name = "Common"
+
+        arch_info = fl_data["archetypes"][actual_arch_name]
+
+        # Generate name from filename
+        stem = p_path.stem
+        if stem.startswith("p_"):
+            stem = stem[2:]
+        words = stem.split("_")
+        formatted_words = []
+        for word in words:
+            if word.lower() == "and":
+                formatted_words.append("&")
+            elif word.lower() == "the" and formatted_words:
+                formatted_words.append("the")
+            elif word.lower() in ("in", "of", "to", "for", "with", "by", "at", "from"):
+                formatted_words.append(word.lower())
+            else:
+                formatted_words.append(word.capitalize())
+        card_name = " ".join(formatted_words)
+
+        # Generate passcode
+        passcode = None
+        pr = arch_info.get("passcode_range")
+        if pr:
+            try:
+                start_range, end_range = map(int, pr.split("-"))
+                candidate = start_range
+                while str(candidate) in registered_passcodes:
+                    candidate += 1
+                if candidate <= end_range:
+                    passcode = str(candidate)
+            except Exception as e:
+                print(f"Error calculating passcode range for {actual_arch_name}: {e}")
+                
+        if not passcode:
+            common_candidates = [int(code) for code in registered_passcodes if code.startswith("799000")]
+            if common_candidates:
+                passcode = str(max(common_candidates) + 1)
+            else:
+                passcode = "79900001"
+                while passcode in registered_passcodes:
+                    passcode = str(int(passcode) + 1)
+
+        registered_passcodes.add(passcode)
+
+        # Build card entry
+        rel_path = str(p_path.relative_to(paths["root"]).as_posix())
+        new_card_entry = {
+            "name": card_name,
+            "passcode": passcode,
+            "status": "pending",
+            "queue_file": rel_path
+        }
+
+        arch_info["cards"].append(new_card_entry)
+        print(f"  [+] Registered: {card_name} (Passcode: {passcode}) under '{actual_arch_name}'")
+        added_count += 1
+
+    fl_data["last_updated"] = datetime.now().strftime("%Y-%m-%d")
+
+    with open(paths["feature_list"], "w", encoding="utf-8") as f:
+        json.dump(fl_data, f, ensure_ascii=False, indent=2)
+        
+    print(f"Successfully registered {added_count} new pending cards in feature_list.json!")
+
 def main():
     parser = argparse.ArgumentParser(description="TTF Custom Cards Harness Management CLI Tool")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -312,12 +466,17 @@ def main():
     verify_parser = subparsers.add_parser("verify", help="Run full check-sync & syntax tests and mark card as done")
     verify_parser.add_argument("passcode", type=int, help="Card passcode to verify")
 
+    # Subcommand: scan
+    subparsers.add_parser("scan", help="Scan queues directory for new pending cards and register them in feature_list.json")
+
     args = parser.parse_args()
 
     if args.command == "start":
         start_card(args.passcode, args.name, args.template)
     elif args.command == "verify":
         verify_card(args.passcode)
+    elif args.command == "scan":
+        scan_pending_cards()
 
 if __name__ == "__main__":
     main()

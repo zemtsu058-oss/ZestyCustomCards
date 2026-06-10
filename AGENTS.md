@@ -10,6 +10,9 @@ Dữ liệu sử dụng **Specs JSON** (thư mục `card-data/`) làm Single Sou
 Mọi hoạt động vòng đời của card (tạo mới, xác thực, đổi trạng thái) được tự động hóa qua `manage_harness.py`:
 
 ```powershell
+# 0. Quét hàng đợi phát hiện card pending mới (tiền tố p_) và tự động đăng ký vào feature_list.json
+python .\script-test\manage_harness.py scan
+
 # 1. Khởi tạo một card mới (tự động copy template, tạo spec JSON, cập nhật feature_list và queue status)
 python .\script-test\manage_harness.py start <passcode> "<tên_card>" <loại_template>
 
@@ -26,10 +29,10 @@ $env:PYTHONIOENCODING="utf-8"; python .\script-test\manage_db.py query <passcode
 
 ## Ràng buộc cứng (BẮT BUỘC — TUYỆT ĐỐI KHÔNG VI PHẠM)
 
-1. **LUÔN LUÔN sử dụng Harness CLI (`manage_harness.py`)** để tạo mới (`start`) hoặc hoàn thành (`verify`) card. Tuyệt đối không tự ý copy file, đổi tên file ảnh queue hay chỉnh sửa `feature_list.json` thủ công.
+1. **LUÔN LUÔN sử dụng Harness CLI (`manage_harness.py`)** để quét hàng đợi (`scan`), tạo mới (`start`) hoặc hoàn thành (`verify`) card. Tuyệt đối không tự ý copy file, đổi tên file ảnh queue hay chỉnh sửa `feature_list.json` thủ công.
 2. **LUÔN LUÔN commit cả file CDB nhị phân (`custom_cards_zesty.cdb`)** cùng với các file specs JSON (`card-data/`) và script Lua tương ứng trong một commit duy nhất (không tách biệt). Tệp CDB nhị phân phải được biên dịch mới nhất bằng lệnh `compile` (hoặc tự động qua `verify`) trước khi commit.
 3. **NEVER** copy, tham chiếu hoặc bắt chước code trực tiếp từ các tệp custom cũ trong `script/` (ngoại trừ các file hệ thống như `constants.lua`) vì phần lớn code cũ có lỗi timing/logic nghiêm trọng.
-4. **ALWAYS** dùng các tệp mẫu trong `script-test/templates/` làm base (khung cơ sở) bắt buộc khi viết card mới. Nếu cần tham khảo logic chạy thực tế, chỉ sử dụng các script card official làm mẫu (tải qua `fetch_official.ps1` lưu tại `docs/official-reference/`).
+4. **ALWAYS** trước khi sinh (gen) card hoặc viết code, phải tìm kiếm và tham khảo các card official có hiệu ứng tương tự để đối chiếu/sao chép logic cho chắc chắn. Dùng các tệp mẫu trong `script-test/templates/` làm base (khung cơ sở) bắt buộc khi viết card mới (kết hợp tham chiếu code official tải qua `fetch_official.ps1` lưu tại `docs/official-reference/`).
 5. **ALWAYS** `local s,id=GetID()` ở đầu mỗi script Lua mới.
 6. **ALWAYS** dùng `Card.GetRelatedHandler(c, e)` thay cho việc gọi trực tiếp `c` trong các hàm operation khi xử lý các card trigger/continuous (xem chi tiết tại [`docs/agent-rules.md`](docs/agent-rules.md)).
 7. **ALWAYS** đặt cột `ot` = 32 khi cấu hình card trong specs JSON.
