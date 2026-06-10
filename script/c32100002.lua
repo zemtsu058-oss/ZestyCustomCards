@@ -8,7 +8,7 @@
 -- Alternative: You can also xyz summon this card by using your kanzashi the rikka queen.
 -- Effect 1  : Return 3 Rikka monster in GY, draw 2 card.
 -- Effect 2  : Detach 2: Negate opponent card effect, Tribute 1 random card in opponent hand.
---             (treated as Quick Effect if this card has a Plant material).
+--             This is a quick effect if this card has a plant monster as material.
 -- Effect 3  : Detach 1: Search 1 Rikka card from Deck.
 -- ============================================================
 
