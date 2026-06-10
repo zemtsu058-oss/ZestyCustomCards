@@ -278,7 +278,7 @@
           "name": "Iris Wand - Dream Magical",
           "passcode": "192200016",
           "status": "done",
-          "queue_file": "docs/queues/Common/d_Iris_Wand_Dream_Magical.jpeg",
+          "queue_file": "docs/queues/Common/d_Iris_Wand_Dream_Magical.jpg",
           "script": "script/c192200016.lua"
         }
       ]
