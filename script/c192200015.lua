@@ -11,6 +11,8 @@
 -- ============================================================
 
 local s,id=GetID()
+Duel.LoadScript("constants.lua")
+
 
 function s.initial_effect(c)
     c:EnableReviveLimit()
