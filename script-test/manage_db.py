@@ -704,17 +704,23 @@ def check_sync(db_path: Path):
         except Exception as e:
             print(f"Error parsing feature_list.json: {e}", file=sys.stderr)
 
-    # 4. Scan SQLite Database (CDB) if it exists
+    # 4. Scan SQLite Database (CDB) if it exists — lấy đủ cột để so nội dung
     db_passcodes = set()
     db_names = {}
+    db_datas = {}
+    db_texts = {}
     if db_path.exists():
         try:
             conn = sqlite3.connect(str(db_path))
             cursor = conn.cursor()
-            cursor.execute("SELECT id FROM datas")
-            db_passcodes = {row[0] for row in cursor.fetchall()}
-            cursor.execute("SELECT id, name FROM texts")
-            db_names = {row[0]: row[1] for row in cursor.fetchall()}
+            cursor.execute("SELECT id, ot, alias, setcode, type, atk, def, level, race, attribute, category FROM datas")
+            db_datas = {row[0]: row for row in cursor.fetchall()}
+            db_passcodes = set(db_datas)
+            cursor.execute("""SELECT id, name, desc,
+                str1, str2, str3, str4, str5, str6, str7, str8,
+                str9, str10, str11, str12, str13, str14, str15, str16 FROM texts""")
+            db_texts = {row[0]: row for row in cursor.fetchall()}
+            db_names = {cid: row[1] for cid, row in db_texts.items()}
             conn.close()
         except Exception as e:
             print(f"Warning: Failed to query database: {e}", file=sys.stderr)
@@ -741,6 +747,28 @@ def check_sync(db_path: Path):
         # Check if local compiled DB matches the source of truth JSON
         if in_json != in_cdb:
             cdb_out_of_sync = True
+
+    # 5. So sánh NỘI DUNG: CDB có thể chứa đủ id nhưng dữ liệu cũ (specs JSON
+    #    đã sửa mà chưa compile). Normalize lại từng spec và đối chiếu từng cột.
+    stale = []
+    for code in sorted(json_passcodes & db_passcodes):
+        cols, card_data, errs, _warns = load_and_validate(json_dir / f"c{code}.json")
+        if errs:
+            stale.append((code, "spec JSON đang lỗi validate (chạy 'validate' xem chi tiết)"))
+            continue
+        expected_datas = (cols["id"], cols["ot"], cols["alias"], cols["setcode"], cols["type"],
+                          cols["atk"], cols["def"], cols["level"], cols["race"],
+                          cols["attribute"], cols["category"])
+        if db_datas.get(code) != expected_datas:
+            stale.append((code, "cột datas trong CDB khác specs JSON"))
+            continue
+        strings = card_data.get("strings", [])
+        padded = tuple(strings[i] if i < len(strings) else None for i in range(16))
+        expected_texts = (code, card_data.get("name", ""), card_data.get("desc", ""), *padded)
+        if db_texts.get(code) != expected_texts:
+            stale.append((code, "name/desc/strings trong CDB khác specs JSON"))
+    if stale:
+        cdb_out_of_sync = True
 
     # Retrieve card name helper
     def get_card_name(code):
@@ -769,6 +797,14 @@ def check_sync(db_path: Path):
         for code, issue in mismatches:
             name = get_card_name(code)
             print(f"  - {code:<10} ({name[:20]:<20}) : {issue}")
+
+    if stale:
+        print("-" * 40)
+        print(f"WARNING: {len(stale)} card có nội dung trong CDB lệch so với specs JSON (CDB stale):")
+        for code, why in stale[:10]:
+            print(f"  - {code:<10}: {why}")
+        if len(stale) > 10:
+            print(f"  ... và {len(stale) - 10} card khác")
 
     if cdb_out_of_sync:
         print("-" * 40)

@@ -16,6 +16,23 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 072 — 2026-06-11
+
+- **Mục tiêu:**
+  - Cải tiến luồng Harness CLI để tránh lỗi khi gen card mới và hoạt động hiệu quả hơn.
+- **Đã hoàn thành:**
+  - [manage_harness.py](file:///d:/TTF/TTFCustomCards/script-test/manage_harness.py) — `start`: pre-flight đầy đủ **trước khi mutate** (template tồn tại, không ghi đè JSON/Lua đã có), rollback JSON nếu tạo Lua fail, đổi tên ảnh queue chỉ sau khi tạo file thành công; skeleton JSON dùng field thân thiện theo template (`setcodes[]`, `linkmarkers[]` cho Link, `lscale`/`rscale` cho Pendulum); in checklist field bắt buộc phải điền sau khi start.
+  - `verify`: thêm **Step 0 pre-flight** chặn sớm — thiếu file JSON/Lua, `desc` còn placeholder `"Mô tả hiệu ứng..."`, Lua còn `<<PLACEHOLDER>>`/`XXXXXXXXX`, artwork đuôi `.jpeg` (lỗi Phiên 063), cảnh báo thiếu artwork. Step 2 chỉ validate file của card đang verify (thay vì quét cả 131 script) và dùng exit code thật của validator; vá điểm mù cũ: script không tồn tại/không match dòng nào vẫn pass.
+  - Sửa lỗi exit code: `start`/`verify` fail giờ trả **exit code 1** (trước đây luôn 0); `run_command` dùng `sys.executable`, bỏ `shell=True`, thêm `errors='replace'` chống crash decode.
+  - [manage_db.py](file:///d:/TTF/TTFCustomCards/script-test/manage_db.py) — `check-sync` so sánh **nội dung** từng card giữa CDB và specs JSON (normalize lại 11 cột datas + name/desc/strings) để phát hiện CDB stale, không chỉ so id; harness verify Step 4 chặn nếu CDB stale sau compile.
+  - Cập nhật tài liệu: [AGENTS.md](file:///d:/TTF/TTFCustomCards/AGENTS.md) (mục hành vi an toàn Harness CLI) và [docs/agent-workflow.md](file:///d:/TTF/TTFCustomCards/docs/agent-workflow.md) (Bước 2/Bước 4 mô tả pipeline mới).
+- **Xác minh đã chạy:**
+  - `validate` + `check-sync`: 131/131 specs hợp lệ, 100% OK, không stale.
+  - Test stale detection: sửa tạm desc của `90177` → check-sync báo đúng 1 card stale, revert sạch.
+  - Test guard: `start` đè card đã có → từ chối không mutate; `start` card mới link_monster → skeleton + checklist đúng; `verify` card còn placeholder → fail Step 0 với exit 1; dọn card test sạch.
+  - `manage_harness.py verify 998705` end-to-end → SUCCESS, exit 0, CDB không đổi byte (compile deterministic).
+- **Files/artifacts đã cập nhật:** `script-test/manage_harness.py`, `script-test/manage_db.py`, `AGENTS.md`, `docs/agent-workflow.md`, `claude-progress.md`
+
 ### Phiên 071 — 2026-06-11
 
 - **Mục tiêu:**

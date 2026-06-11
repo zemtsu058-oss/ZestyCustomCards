@@ -28,6 +28,12 @@ python .\script-test\manage_db.py validate
 
 *Lưu ý:* Lệnh `compile` (và bước 1 của `verify`) **tự validate toàn bộ specs theo chuẩn Datacorn** trước khi biên dịch — nếu có lỗi (ot ≠ 32, link marker sai, multi-bit race/attribute, scale > 13...), CDB cũ được giữ nguyên và lệnh trả về exit code 1. Xem chi tiết quy tắc và các field thân thiện (`setcodes`, `lscale`/`rscale`, `linkmarkers`, ATK/DEF `"?"`) tại [`docs/agent-rules.md`](docs/agent-rules.md) mục 3.
 
+*Hành vi an toàn của Harness CLI:*
+- `start` **không ghi đè** file đã tồn tại, kiểm tra template trước khi tạo bất kỳ file nào, và in checklist các field bắt buộc phải điền (skeleton JSON dùng field thân thiện: `setcodes`, `linkmarkers`, `lscale`/`rscale` theo loại template).
+- `verify` có **Step 0 pre-flight**: chặn ngay nếu thiếu file JSON/Lua, `desc` còn placeholder, Lua còn `<<PLACEHOLDER>>`/`XXXXXXXXX`, hoặc artwork dùng đuôi `.jpeg` (cảnh báo nếu chưa có `pics/<passcode>.jpg|.png`).
+- `check-sync` so sánh **cả nội dung** CDB với specs JSON (không chỉ id) — phát hiện CDB stale khi sửa spec mà quên compile.
+- `start`/`verify` trả về **exit code 1 khi fail** — luôn kiểm tra exit code, không chỉ đọc output.
+
 *Trước khi bắt đầu:* Luôn đọc [`claude-progress.md`](claude-progress.md) để biết trạng thái phiên trước.
 
 ---

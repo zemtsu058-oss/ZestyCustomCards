@@ -48,7 +48,9 @@ Chạy lệnh sau để CLI tự động thiết lập khung dự án cho card m
 ```powershell
 python .\script-test\manage_harness.py start <passcode> "<tên_card>" <tên_template>
 ```
-*Tác vụ tự động:* Tạo `script/c<passcode>.lua`, tạo `card-data/c<passcode>.json`, đổi tên ảnh queue sang làm việc `w_`, và đăng ký `"working"` trong `feature_list.json`.
+*Tác vụ tự động:* Tạo `script/c<passcode>.lua`, tạo `card-data/c<passcode>.json` (skeleton dùng field thân thiện `setcodes`/`linkmarkers`/`lscale`/`rscale` theo template), đổi tên ảnh queue sang làm việc `w_`, đăng ký `"working"` trong `feature_list.json`, và **in checklist các field bắt buộc phải điền**.
+
+*An toàn:* `start` từ chối ghi đè file đã tồn tại và kiểm tra template hợp lệ trước khi tạo bất kỳ file nào. Lệnh trả về exit code 1 khi fail.
 
 ### Bước 3: Hoàn thiện logic & điền Specs JSON
 1. **Specs JSON (`card-data/c<passcode>.json`):** Mở file specs JSON vừa tạo và điền các thuộc tính thực tế (ATK, DEF, Level, Race, Attribute, Type, Category). *Tra cứu bitmask thập phân tại [docs/agent-rules.md](agent-rules.md).*
@@ -59,8 +61,15 @@ Khi viết xong code, chạy lệnh verify để chạy đường ống kiểm t
 ```powershell
 python .\script-test\manage_harness.py verify <passcode>
 ```
-*Tác vụ tự động:* Biên dịch CDB, validate cú pháp/cấu trúc Lua, kiểm tra linter style, check-sync toàn project.
-Nếu verify đạt `SUCCESS`, trạng thái card tự động đổi sang `done` và ảnh queue đổi sang `d_`.
+*Các bước tự động của pipeline:*
+- **Step 0 — Pre-flight:** chặn ngay nếu thiếu file JSON/Lua, `desc` còn placeholder `"Mô tả hiệu ứng..."`, Lua còn `<<PLACEHOLDER>>`/`XXXXXXXXX`, hoặc artwork mang đuôi `.jpeg` (EDOPro không load); cảnh báo nếu chưa có `pics/<passcode>.jpg|.png`.
+- **Step 1:** Validate toàn bộ specs theo chuẩn Datacorn rồi biên dịch CDB (atomic).
+- **Step 2:** Validate cú pháp/cấu trúc Lua của riêng card này.
+- **Step 3:** Kiểm tra linter style.
+- **Step 4:** Check-sync toàn project (bao gồm so sánh nội dung CDB với specs để phát hiện CDB stale).
+- **Step 5-6:** Đổi trạng thái `done`, đổi ảnh queue sang `d_`, archive nhật ký phiên.
+
+Nếu verify đạt `SUCCESS` thì exit code = 0; mọi bước fail đều trả exit code 1 — bắt buộc sửa cho đến khi `SUCCESS`.
 
 ---
 
