@@ -16,6 +16,17 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 070 — 2026-06-11
+
+- **Mục tiêu:**
+  - Sửa lỗi "Bug kích được trên tay mà không cần set" trên card `32100004` (Rikka Fleurness).
+- **Đã hoàn thành:**
+  - Sửa đổi [c32100004.lua](file:///d:/TTF/TTFCustomCards/script/c32100004.lua): Thay thế kiểm tra hand activation không chính xác `IsPreviousLocation(LOCATION_HAND)` bằng kiểm tra engine chuẩn `IsStatus(STATUS_ACT_FROM_HAND)`.
+  - Sửa đổi tương tự trên [c44700001.lua](file:///d:/TTF/TTFCustomCards/script/c44700001.lua) ("Power of the Dominators") để khắc phục triệt để lỗi logic tương tự.
+- **Xác minh đã chạy:**
+  - Chạy `python .\script-test\manage_harness.py verify 32100004` và `python .\script-test\manage_harness.py verify 44700001` thành công, linter sạch lỗi và database đồng bộ khớp 100% OK.
+- **Files/artifacts đã cập nhật:** [c32100004.lua](file:///d:/TTF/TTFCustomCards/script/c32100004.lua), [c44700001.lua](file:///d:/TTF/TTFCustomCards/script/c44700001.lua), `claude-progress.md`
+
 ### Phiên 069 — 2026-06-10
 
 - **Mục tiêu:**
