@@ -16,6 +16,17 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 075 — 2026-06-11
+
+- **Mục tiêu:**
+  - Sửa lỗi runtime error crash game của card "Blue Eye Ultimammoth Arrow Dragon" (`22100003`) liên quan đến tham số `fc, sumtype, tp` trong method `IsType`.
+- **Đã hoàn thành:**
+  - Sửa đổi [c22100003.lua](file:///d:/TTF/TTFCustomCards/script/c22100003.lua): Đơn giản hóa `s.matfilter2` sử dụng `c:IsType(TYPE_FUSION)` không chứa các tham số phụ để tránh lỗi `nil` khi gọi thủ công từ `s.valpair` trong Special Summon procedure.
+  - Chạy verify thành công (`verify 22100003`) để cập nhật database nhị phân `custom_cards_zesty.cdb`.
+- **Xác minh đã chạy:**
+  - Chạy validator & check-sync qua Harness CLI: Kết quả 100% đồng bộ hoàn hảo (OK) và linter sạch lỗi.
+- **Files/artifacts đã cập nhật:** `script/c22100003.lua`, `custom_cards_zesty.cdb`, `claude-progress.md`
+
 ### Phiên 074 — 2026-06-11
 
 - **Mục tiêu:**

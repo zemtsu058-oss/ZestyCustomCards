@@ -108,7 +108,7 @@ function s.matfilter1(c,fc,sumtype,tp)
 end
 
 function s.matfilter2(c,fc,sumtype,tp)
-    return c:IsType(TYPE_FUSION,fc,sumtype,tp)
+    return c:IsType(TYPE_FUSION)
 end
 
 -- ============================================================
