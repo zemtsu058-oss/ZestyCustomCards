@@ -16,6 +16,20 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 071 — 2026-06-11
+
+- **Mục tiêu:**
+  - Phân tích lại luồng code DB toolchain, nghiên cứu source Datacorn (`docs/resources/Datacorn/`) và tích hợp các chuẩn của nó vào compiler để code DB chuẩn hơn, luồng hoạt động khoa học/hiệu quả hơn.
+- **Đã hoàn thành:**
+  - Nâng cấp [manage_db.py](file:///d:/TTF/TTFCustomCards/script-test/manage_db.py) theo chuẩn Datacorn: bảng bitfield đầy đủ (type/race/attribute/scope/category/link marker), engine validation chạy trước mọi lần compile (ot=32, đúng 1 bit khung Monster/Spell/Trap, race/attribute đơn bit, link marker hợp lệ trong cột `def`, scale/level ≤ 13, strings ≤ 16, id khớp tên file...), compile **atomic** (ghi file tạm, chỉ thay CDB khi 0 lỗi, exit code 1 khi fail), lệnh mới `validate`, xác minh schema kiểu Datacorn (PRAGMA table_info), `PRAGMA page_size=4096`, thứ tự insert ổn định theo id.
+  - Hỗ trợ field thân thiện trong specs JSON: `setcodes[]` (tự đóng gói 4×16-bit), `lscale`/`rscale` (tự đóng gói vào level), `linkmarkers[]` (tên marker → bitfield def), ATK/DEF `"?"` (→ -2).
+  - [manage_harness.py](file:///d:/TTF/TTFCustomCards/script-test/manage_harness.py): bước 1 của `verify` hiển thị đầy đủ lỗi/warning validation.
+  - **Validator mới phát hiện và đã sửa 4 lỗi dữ liệu thật trong CDB:** `79900016` (def chứa bit marker 0x200 không hợp lệ → 45), `29600003` (Link-2 không có marker → 130 Top/Bottom), `998705` (race 0xC Fairy|Fiend → 0x2 Spellcaster), `92047` (atk/def `"?"` bị lưu dạng TEXT trong cột INTEGER → giờ compile thành -2 chuẩn EDOPro).
+  - Cập nhật tài liệu: [agent-rules.md](file:///d:/TTF/TTFCustomCards/docs/agent-rules.md) mục 3 (schema packing, field thân thiện, validation) và [AGENTS.md](file:///d:/TTF/TTFCustomCards/AGENTS.md) (lệnh `validate`, ghi chú compile atomic).
+- **Xác minh đã chạy:**
+  - `validate` + `compile` + `check-sync`: 131/131 specs hợp lệ, sync 100% OK; test chặn spec hỏng (exit 1, CDB cũ nguyên vẹn, không để file tạm); chạy `manage_harness.py verify 998705` end-to-end thành công, linter sạch.
+- **Files/artifacts đã cập nhật:** `script-test/manage_db.py`, `script-test/manage_harness.py`, `AGENTS.md`, `docs/agent-rules.md`, 3 specs JSON + `script/c998705.lua` + `custom_cards_zesty.cdb` (commit `dab6c30`, `86d044b`).
+
 ### Phiên 070 — 2026-06-11
 
 - **Mục tiêu:**
