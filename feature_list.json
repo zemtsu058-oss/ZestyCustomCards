@@ -1,7 +1,27 @@
 {
-  "last_updated": "2026-06-10",
+  "last_updated": "2026-06-11",
   "note": "Trạng thái: pending(p) | working(w) | review(r) | done(d) | skipped(x). Phản ánh prefix trong docs/queues/<archetype>/",
   "archetypes": {
+    "Blue_Eye": {
+      "setcode": "0xdd",
+      "passcode_range": "22100001-22199999",
+      "cards": [
+        {
+          "name": "Blue Eye Flute of Summoning Dragon",
+          "passcode": "22100001",
+          "status": "done",
+          "queue_file": "docs/queues/Blue_Eye/d_Blue_Eye_Flute_Of_Summoning_Dragon.jpg",
+          "script": "script/c22100001.lua"
+        },
+        {
+          "name": "Purple Eyes Ultra Max Dragon",
+          "passcode": "22100002",
+          "status": "done",
+          "queue_file": "docs/queues/Blue_Eye/d_Purple_Eyes_Ultra_Max_Dragon.jpg",
+          "script": "script/c22100002.lua"
+        }
+      ]
+    },
     "Labrynth": {
       "setcode": "0x17f",
       "passcode_range": "38300001-38399999",

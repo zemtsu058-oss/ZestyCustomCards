@@ -16,6 +16,22 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 073 — 2026-06-11
+
+- **Mục tiêu:**
+  - Thiết kế và lập trình 2 card custom mới: "Blue Eye Flute of Summoning Dragon" (`22100001`) và "Purple Eyes Ultra Max Dragon" (`22100002`) từ hàng đợi.
+- **Đã hoàn thành:**
+  - Đăng ký archetype mới `Blue_Eye` trong [feature_list.json](file:///d:/TTF/TTFCustomCards/feature_list.json) với setcode `0xdd` và passcode range `22100001-22199999`.
+  - Quét hàng đợi qua Harness CLI (`scan`) và khởi tạo (`start`) cả 2 card mới thành công.
+  - Viết specs JSON ([c22100001.json](file:///d:/TTF/TTFCustomCards/card-data/c22100001.json), [c22100002.json](file:///d:/TTF/TTFCustomCards/card-data/c22100002.json)) và kịch bản Lua ([c22100001.lua](file:///d:/TTF/TTFCustomCards/script/c22100001.lua), [c22100002.lua](file:///d:/TTF/TTFCustomCards/script/c22100002.lua)) hoàn chỉnh.
+  - Sao chép tệp artwork từ hàng đợi vào thư mục `pics/` dưới dạng `<passcode>.jpg` đúng quy chuẩn.
+  - Chạy verify thành công cho cả 2 card (`verify 22100001`, `verify 22100002`), tự động biên dịch vào database nhị phân `custom_cards_zesty.cdb` và chuyển trạng thái hàng đợi sang `done` (`d_`).
+- **Xác minh đã chạy:**
+  - Chạy validation toàn bộ specs: 133/133 specs hợp lệ (0 lỗi, 0 cảnh báo).
+  - Chạy validator kịch bản: `[ ] OK c22100001.lua` và `[ ] OK c22100002.lua`.
+  - Chạy check-sync hệ thống: Đồng bộ hoàn hảo 100% giữa Database, Specs, Script và Feature list.
+- **Files/artifacts đã cập nhật:** `feature_list.json`, `card-data/c22100001.json`, `card-data/c22100002.json`, `script/c22100001.lua`, `script/c22100002.lua`, `pics/22100001.jpg`, `pics/22100002.jpg`, `custom_cards_zesty.cdb`, `claude-progress.md`
+
 ### Phiên 072 — 2026-06-11
 
 - **Mục tiêu:**
