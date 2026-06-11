@@ -16,6 +16,17 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 076 — 2026-06-11
+
+- **Mục tiêu:**
+  - Sửa lỗi card "Purple Eyes Ultra Max Dragon" (`22100002`) không được coi là card liên quan đến "Blue-Eyes White Dragon" và "Red-Eyes Black Dragon".
+- **Đã hoàn thành:**
+  - Sửa đổi [c22100002.lua](file:///d:/TTF/TTFCustomCards/script/c22100002.lua): Bổ sung hằng số `s.listed_names = { 89631139, 74677422 }` để khai báo rõ ràng card này đề cập đến "Blue-Eyes White Dragon" (89631139) và "Red-Eyes Black Dragon" (74677422). Nhờ đó, các card hỗ trợ như `c22100001` có thể xác thực và áp dụng chính xác các hiệu ứng liên đới.
+  - Chạy verify thành công (`verify 22100002`).
+- **Xác minh đã chạy:**
+  - Chạy validator & check-sync qua Harness CLI: Kết quả 100% đồng bộ hoàn hảo (OK) và linter sạch lỗi.
+- **Files/artifacts đã cập nhật:** `script/c22100002.lua`, `claude-progress.md`
+
 ### Phiên 075 — 2026-06-11
 
 - **Mục tiêu:**
