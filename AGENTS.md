@@ -21,7 +21,12 @@ python .\script-test\manage_harness.py verify <passcode>
 
 # 3. Tra cứu nhanh thông tin card trong database
 $env:PYTHONIOENCODING="utf-8"; python .\script-test\manage_db.py query <passcode_hoặc_tên>
+
+# 4. Validate nhanh toàn bộ specs JSON theo quy tắc Datacorn (không ghi CDB - dùng khi đang sửa spec)
+python .\script-test\manage_db.py validate
 ```
+
+*Lưu ý:* Lệnh `compile` (và bước 1 của `verify`) **tự validate toàn bộ specs theo chuẩn Datacorn** trước khi biên dịch — nếu có lỗi (ot ≠ 32, link marker sai, multi-bit race/attribute, scale > 13...), CDB cũ được giữ nguyên và lệnh trả về exit code 1. Xem chi tiết quy tắc và các field thân thiện (`setcodes`, `lscale`/`rscale`, `linkmarkers`, ATK/DEF `"?"`) tại [`docs/agent-rules.md`](docs/agent-rules.md) mục 3.
 
 *Trước khi bắt đầu:* Luôn đọc [`claude-progress.md`](claude-progress.md) để biết trạng thái phiên trước.
 

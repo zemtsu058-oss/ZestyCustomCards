@@ -1,4 +1,17 @@
 #!/usr/bin/env python3
+"""TTF Card Database CLI Manager.
+
+Compiler/validator cho custom_cards_zesty.cdb, mô phỏng theo chuẩn của
+Datacorn (docs/resources/Datacorn) - trình editor CDB chính thức của
+ProjectIgnis - về schema, bitfield và cách đóng gói dữ liệu:
+  - Schema datas/texts + PRAGMA page_size=4096 giống Datacorn tạo DB mới.
+  - setcode: tối đa 4 setcode 16-bit đóng gói trong 1 số 64-bit.
+  - level: (level & 0x800000FF) | (lscale << 24) | (rscale << 16).
+  - Link monster: cột def chứa bitfield link marker, không phải DEF.
+  - ATK/DEF "?" được lưu là -2 (QMARK_ATK_DEF).
+Mọi spec JSON đều được validate trước khi ghi; compile là atomic
+(ghi ra file tạm, chỉ thay thế CDB cũ khi toàn bộ spec hợp lệ).
+"""
 import sqlite3
 import argparse
 import sys
@@ -8,20 +21,28 @@ if hasattr(sys.stderr, 'reconfigure'):
     sys.stderr.reconfigure(encoding='utf-8')
 import re
 import json
+import os
 from pathlib import Path
 
-# Common constants mapping for display
+# ============================================================
+# Bitfield tables (theo Datacorn: src/gui/database_editor_widget.cpp)
+# ============================================================
+
 TYPES = {
     0x1: "Monster", 0x2: "Spell", 0x4: "Trap", 0x10: "Normal", 0x20: "Effect",
-    0x40: "Fusion", 0x80: "Ritual", 0x200: "Spirit", 0x400: "Union",
-    0x800: "Dual (Gemini)", 0x1000: "Tuner", 0x2000: "Synchro", 0x4000: "Token",
+    0x40: "Fusion", 0x80: "Ritual", 0x100: "Trap Monster", 0x200: "Spirit",
+    0x400: "Union", 0x800: "Dual (Gemini)", 0x1000: "Tuner", 0x2000: "Synchro",
+    0x4000: "Token", 0x8000: "Maximum (Rush)",
     0x10000: "Quick-Play", 0x20000: "Continuous", 0x40000: "Equip", 0x80000: "Field",
     0x100000: "Counter", 0x200000: "Flip", 0x400000: "Toon", 0x800000: "Xyz",
-    0x1000000: "Pendulum", 0x2000000: "Special Summon", 0x4000000: "Link"
+    0x1000000: "Pendulum", 0x2000000: "Special Summon", 0x4000000: "Link",
+    0x8000000: "Skill", 0x10000000: "Action", 0x20000000: "Plus (Rush)",
+    0x40000000: "Minus (Rush)", 0x80000000: "Armor (Rush)",
 }
 
 ATTRIBUTES = {
-    0x1: "EARTH", 0x2: "WATER", 0x4: "FIRE", 0x8: "WIND", 0x10: "LIGHT", 0x20: "DARK", 0x40: "DIVINE"
+    0x1: "EARTH", 0x2: "WATER", 0x4: "FIRE", 0x8: "WIND", 0x10: "LIGHT",
+    0x20: "DARK", 0x40: "DIVINE",
 }
 
 RACES = {
@@ -31,8 +52,91 @@ RACES = {
     0x4000: "Beast", 0x8000: "Beast-Warrior", 0x10000: "Dinosaur", 0x20000: "Fish",
     0x40000: "Sea Serpent", 0x80000: "Reptile", 0x100000: "Psychic",
     0x200000: "Divine-Beast", 0x400000: "Creator God", 0x800000: "Wyrm",
-    0x1000000: "Cyberse", 0x2000000: "Illusion"
+    0x1000000: "Cyberse", 0x2000000: "Illusion", 0x4000000: "Cyborg (Rush)",
+    0x8000000: "Magical Knight (Rush)", 0x10000000: "High Dragon (Rush)",
+    0x20000000: "Omega Psychic (Rush)", 0x40000000: "Celestial Warrior (Rush)",
+    0x80000000: "Galaxy (Rush)",
 }
+
+SCOPES = {
+    0x1: "OCG", 0x2: "TCG", 0x4: "Anime", 0x8: "Illegal", 0x10: "Video Game",
+    0x20: "Custom", 0x40: "Speed", 0x100: "Pre-Release", 0x200: "Rush",
+    0x400: "Legend", 0x1000: "Hidden",
+}
+
+CATEGORIES = {
+    0x1: "Destroy Monster", 0x2: "Destroy S/T", 0x4: "Destroy Deck",
+    0x8: "Destroy Hand", 0x10: "Send to GY", 0x20: "Send to Hand",
+    0x40: "Send to Deck", 0x80: "Banish", 0x100: "Draw", 0x200: "Search",
+    0x400: "Change ATK/DEF", 0x800: "Change Level/Rank", 0x1000: "Position",
+    0x2000: "Piercing", 0x4000: "Direct Attack", 0x8000: "Multi Attack",
+    0x10000: "Negate Activation", 0x20000: "Negate Effect", 0x40000: "Damage LP",
+    0x80000: "Recover LP", 0x100000: "Special Summon", 0x200000: "Non-effect-related",
+    0x400000: "Token-related", 0x800000: "Fusion-related", 0x1000000: "Ritual-related",
+    0x2000000: "Synchro-related", 0x4000000: "Xyz-related", 0x8000000: "Link-related",
+    0x10000000: "Counter-related", 0x20000000: "Gamble", 0x40000000: "Control",
+    0x80000000: "Move Zones",
+}
+
+LINK_MARKERS = {
+    0x1: "Bottom-Left", 0x2: "Bottom", 0x4: "Bottom-Right", 0x8: "Left",
+    0x20: "Right", 0x40: "Top-Left", 0x80: "Top", 0x100: "Top-Right",
+}
+LINK_MARKER_NAMES = {v.lower(): k for k, v in LINK_MARKERS.items()}
+
+TYPE_VALID_MASK = sum(TYPES)
+RACE_VALID_MASK = sum(RACES)
+ATTRIBUTE_VALID_MASK = sum(ATTRIBUTES)
+SCOPE_VALID_MASK = sum(SCOPES)
+CATEGORY_VALID_MASK = sum(CATEGORIES)
+LINK_MARKER_MASK = sum(LINK_MARKERS)
+
+TYPE_MONSTER = 0x1
+TYPE_SPELL = 0x2
+TYPE_TRAP = 0x4
+TYPE_XYZ = 0x800000
+TYPE_PENDULUM = 0x1000000
+TYPE_LINK = 0x4000000
+QMARK_ATK_DEF = -2          # Datacorn: constexpr qint32 QMARK_ATK_DEF = -2
+OT_CUSTOM = 0x20            # Quy tắc project: ot luôn = 32 (Custom)
+MAX_SETCODES = 4            # Giới hạn schema: 4 x 16-bit trong 1 INTEGER 64-bit
+LEVEL_BASE_MASK = 0x800000FF  # Datacorn: dbLevel & 0x800000FF
+
+# Schema chuẩn (giống Datacorn: src/gui/main_window.cpp)
+SQL_CREATE_DATAS = """
+    CREATE TABLE "datas" (
+        "id"        INTEGER,
+        "ot"        INTEGER,
+        "alias"     INTEGER,
+        "setcode"   INTEGER,
+        "type"      INTEGER,
+        "atk"       INTEGER,
+        "def"       INTEGER,
+        "level"     INTEGER,
+        "race"      INTEGER,
+        "attribute" INTEGER,
+        "category"  INTEGER,
+        PRIMARY KEY("id")
+    )
+"""
+SQL_CREATE_TEXTS = """
+    CREATE TABLE "texts" (
+        "id"    INTEGER,
+        "name"  TEXT,
+        "desc"  TEXT,
+        "str1"  TEXT, "str2"  TEXT, "str3"  TEXT, "str4"  TEXT,
+        "str5"  TEXT, "str6"  TEXT, "str7"  TEXT, "str8"  TEXT,
+        "str9"  TEXT, "str10" TEXT, "str11" TEXT, "str12" TEXT,
+        "str13" TEXT, "str14" TEXT, "str15" TEXT, "str16" TEXT,
+        PRIMARY KEY("id")
+    )
+"""
+
+# Datacorn xác minh DB mở ra đúng format bằng PRAGMA table_info (name+pk)
+DATAS_TABLE_FIELDS = "alias0,atk0,attribute0,category0,def0,id1,level0,ot0,race0,setcode0,type0"
+TEXTS_TABLE_FIELDS = ("desc0,id1,name0,str10,str100,str110,str120,str130,str140,str150,"
+                      "str160,str20,str30,str40,str50,str60,str70,str80,str90")
+
 
 def get_db_path() -> Path:
     script_dir = Path(__file__).resolve().parent
@@ -43,32 +147,274 @@ def get_db_path() -> Path:
     # Default fallback
     return script_dir.parent / "custom_cards_zesty.cdb"
 
-def format_type(type_val: int) -> str:
-    parts = []
-    for k, v in TYPES.items():
-        if type_val & k:
-            parts.append(v)
-    return " / ".join(parts) if parts else f"Unknown ({hex(type_val)})"
 
-def format_atk_def(val: int) -> str:
-    return "?" if val == -2 else str(val)
+def verify_schema(conn) -> bool:
+    """Kiểm tra DB có đúng format YGOPro (logic giống Datacorn openDatabaseWithFile)."""
+    def table_fields(table):
+        rows = conn.execute(f"PRAGMA table_info('{table}')").fetchall()
+        cols = sorted(f"{r[1]}{r[5]}" for r in rows)  # name + pk flag
+        return ",".join(cols).lower()
+    return (table_fields("datas") == DATAS_TABLE_FIELDS
+            and table_fields("texts") == TEXTS_TABLE_FIELDS)
+
+
+# ============================================================
+# Normalization & Validation (spec JSON -> giá trị cột CDB)
+# ============================================================
+
+def _to_int(value, field, errors, allow_qmark=False):
+    """Chấp nhận int, chuỗi hex '0x..', chuỗi số, hoặc '?' (ATK/DEF) -> int."""
+    if value is None:
+        return 0
+    if isinstance(value, bool):
+        errors.append(f"'{field}' không được là boolean")
+        return 0
+    if isinstance(value, int):
+        return value
+    if isinstance(value, str):
+        v = value.strip()
+        if allow_qmark and v == "?":
+            return QMARK_ATK_DEF
+        try:
+            return int(v, 0)  # hỗ trợ "0x128" lẫn "296"
+        except ValueError:
+            errors.append(f"'{field}' không phải số hợp lệ: {value!r}")
+            return 0
+    errors.append(f"'{field}' có kiểu không hợp lệ: {type(value).__name__}")
+    return 0
+
+
+def _pack_setcodes(setcodes, errors):
+    """Đóng gói tối đa 4 setcode 16-bit thành 1 số 64-bit (theo Datacorn)."""
+    if len(setcodes) > MAX_SETCODES:
+        errors.append(f"'setcodes' chỉ chứa tối đa {MAX_SETCODES} setcode (schema 64-bit), nhận {len(setcodes)}")
+        setcodes = setcodes[:MAX_SETCODES]
+    packed = 0
+    for i, sc in enumerate(setcodes):
+        if not (0 < sc <= 0xFFFF):
+            errors.append(f"setcode thứ {i+1} phải trong khoảng 0x1-0xFFFF, nhận {hex(sc) if sc >= 0 else sc}")
+            continue
+        packed |= (sc & 0xFFFF) << (i * 16)
+    return packed
+
+
+def unpack_setcodes(packed):
+    """Tách số 64-bit thành danh sách setcode 16-bit khác 0."""
+    return [(packed >> (i * 16)) & 0xFFFF for i in range(MAX_SETCODES)
+            if (packed >> (i * 16)) & 0xFFFF]
+
+
+def normalize_card(card_data, errors):
+    """Chuyển spec JSON (hỗ trợ cả field thân thiện) thành dict cột CDB.
+
+    Field thân thiện (tùy chọn, ưu tiên hơn giá trị thô):
+      - "setcodes": [0x128, ...]        -> đóng gói vào cột setcode
+      - "lscale"/"rscale": 0-13         -> đóng gói vào cột level
+      - "linkmarkers": ["Top","Bottom"] -> bitfield ghi vào cột def (Link)
+      - "atk"/"def": "?"                -> -2
+    """
+    cols = {}
+    cols["id"] = _to_int(card_data.get("id"), "id", errors)
+    cols["ot"] = _to_int(card_data.get("ot", OT_CUSTOM), "ot", errors)
+    cols["alias"] = _to_int(card_data.get("alias", 0), "alias", errors)
+    cols["type"] = _to_int(card_data.get("type", 0), "type", errors)
+    cols["atk"] = _to_int(card_data.get("atk", 0), "atk", errors, allow_qmark=True)
+    cols["def"] = _to_int(card_data.get("def", 0), "def", errors, allow_qmark=True)
+    cols["level"] = _to_int(card_data.get("level", 0), "level", errors)
+    cols["race"] = _to_int(card_data.get("race", 0), "race", errors)
+    cols["attribute"] = _to_int(card_data.get("attribute", 0), "attribute", errors)
+    cols["category"] = _to_int(card_data.get("category", 0), "category", errors)
+
+    # --- setcodes: danh sách -> đóng gói 64-bit ---
+    raw_setcode = _to_int(card_data.get("setcode", 0), "setcode", errors)
+    if "setcodes" in card_data:
+        lst = card_data["setcodes"]
+        if not isinstance(lst, list):
+            errors.append("'setcodes' phải là danh sách")
+            lst = []
+        packed = _pack_setcodes([_to_int(s, "setcodes[]", errors) for s in lst], errors)
+        if raw_setcode and raw_setcode != packed:
+            errors.append(f"'setcode' ({hex(raw_setcode)}) mâu thuẫn với 'setcodes' ({hex(packed)}); chỉ dùng một trong hai")
+        cols["setcode"] = packed
+    else:
+        cols["setcode"] = raw_setcode
+
+    # --- lscale/rscale: đóng gói vào level theo công thức Datacorn ---
+    if "lscale" in card_data or "rscale" in card_data:
+        ls = _to_int(card_data.get("lscale", card_data.get("rscale", 0)), "lscale", errors)
+        rs = _to_int(card_data.get("rscale", card_data.get("lscale", 0)), "rscale", errors)
+        packed_lvl = (cols["level"] & LEVEL_BASE_MASK) | ((ls & 0xFF) << 24) | ((rs & 0xFF) << 16)
+        if cols["level"] & ~LEVEL_BASE_MASK and cols["level"] != packed_lvl:
+            errors.append("'level' đã chứa scale đóng gói nhưng mâu thuẫn với 'lscale'/'rscale'")
+        cols["level"] = packed_lvl
+
+    # --- linkmarkers: danh sách tên/bit -> cột def (chỉ Link monster) ---
+    if "linkmarkers" in card_data:
+        if not cols["type"] & TYPE_LINK:
+            errors.append("'linkmarkers' chỉ dùng cho Link monster (type thiếu bit 0x4000000)")
+        lst = card_data["linkmarkers"]
+        if not isinstance(lst, list):
+            errors.append("'linkmarkers' phải là danh sách")
+            lst = []
+        markers = 0
+        for m in lst:
+            if isinstance(m, str) and m.strip().lower() in LINK_MARKER_NAMES:
+                markers |= LINK_MARKER_NAMES[m.strip().lower()]
+            else:
+                bit = _to_int(m, "linkmarkers[]", errors)
+                if bit in LINK_MARKERS:
+                    markers |= bit
+                else:
+                    errors.append(f"link marker không hợp lệ: {m!r} (dùng tên: {', '.join(LINK_MARKERS.values())})")
+        raw_def = cols["def"]
+        if raw_def and raw_def != markers:
+            errors.append(f"'def' ({raw_def}) mâu thuẫn với 'linkmarkers' ({markers}); chỉ dùng một trong hai")
+        cols["def"] = markers
+
+    return cols
+
+
+def validate_card(cols, card_data, errors, warnings):
+    """Validate giá trị cột theo các ràng buộc Datacorn + quy tắc project."""
+    t = cols["type"]
+
+    if cols["id"] <= 0:
+        errors.append("'id' (passcode) phải là số nguyên dương")
+    if cols["ot"] != OT_CUSTOM:
+        errors.append(f"'ot' phải = 32 (Custom) theo quy tắc project, nhận {cols['ot']}")
+    if t & ~TYPE_VALID_MASK:
+        errors.append(f"'type' chứa bit không hợp lệ: {hex(t & ~TYPE_VALID_MASK)}")
+    frame_bits = bin(t & (TYPE_MONSTER | TYPE_SPELL | TYPE_TRAP)).count("1")
+    if frame_bits != 1:
+        errors.append("'type' phải có đúng 1 trong các bit Monster (0x1) / Spell (0x2) / Trap (0x4)")
+    if cols["category"] & ~CATEGORY_VALID_MASK:
+        errors.append(f"'category' chứa bit không hợp lệ: {hex(cols['category'] & ~CATEGORY_VALID_MASK)}")
+    if cols["setcode"] >= 1 << 64:
+        errors.append("'setcode' vượt quá 64-bit")
+    if cols["atk"] < QMARK_ATK_DEF:
+        errors.append(f"'atk' nhỏ nhất là -2 (ATK '?'), nhận {cols['atk']}")
+    if cols["alias"] < 0:
+        errors.append("'alias' phải >= 0")
+
+    if t & TYPE_MONSTER:
+        race, attr = cols["race"], cols["attribute"]
+        if race & ~RACE_VALID_MASK:
+            errors.append(f"'race' chứa bit không hợp lệ: {hex(race & ~RACE_VALID_MASK)}")
+        elif race == 0:
+            errors.append("Monster phải có 'race' (Tộc) khác 0")
+        elif bin(race).count("1") > 1:
+            errors.append(f"'race' chỉ được có 1 bit, nhận {hex(race)} ({format_bitfield(race, RACES)})")
+        if attr & ~ATTRIBUTE_VALID_MASK:
+            errors.append(f"'attribute' chứa bit không hợp lệ: {hex(attr & ~ATTRIBUTE_VALID_MASK)}")
+        elif attr == 0:
+            errors.append("Monster phải có 'attribute' (Hệ) khác 0")
+        elif bin(attr).count("1") > 1:
+            errors.append(f"'attribute' chỉ được có 1 bit, nhận {hex(attr)} ({format_bitfield(attr, ATTRIBUTES)})")
+
+        base_level = cols["level"] & 0xFF
+        lscale = (cols["level"] >> 24) & 0xFF
+        rscale = (cols["level"] >> 16) & 0xFF
+        if base_level > 13:
+            errors.append(f"Level/Rank/Link rating tối đa 13, nhận {base_level}")
+        if t & TYPE_PENDULUM:
+            if lscale > 13 or rscale > 13:
+                errors.append(f"Pendulum Scale tối đa 13, nhận {lscale}/{rscale}")
+            if lscale != rscale:
+                warnings.append(f"Pendulum Scale trái/phải lệch nhau ({lscale}/{rscale}) — mọi card thực đều có 2 scale bằng nhau")
+        elif cols["level"] & ~LEVEL_BASE_MASK:
+            errors.append(f"'level' chứa scale đóng gói ({hex(cols['level'])}) nhưng card không phải Pendulum")
+
+        if t & TYPE_LINK:
+            d = cols["def"]
+            if t & TYPE_PENDULUM:
+                errors.append("Card không thể vừa Link vừa Pendulum")
+            if d & ~LINK_MARKER_MASK:
+                errors.append(f"Link monster: 'def' là bitfield link marker, chứa bit không hợp lệ {hex(d & ~LINK_MARKER_MASK)} "
+                              f"(bit hợp lệ: {', '.join(hex(b) for b in LINK_MARKERS)})")
+            elif d == 0:
+                errors.append("Link monster phải có ít nhất 1 link marker trong cột 'def'")
+            elif bin(d).count("1") != base_level:
+                warnings.append(f"Số link marker ({bin(d).count('1')}) khác Link rating ({base_level})")
+        else:
+            if cols["def"] < QMARK_ATK_DEF:
+                errors.append(f"'def' nhỏ nhất là -2 (DEF '?'), nhận {cols['def']}")
+            if t & TYPE_XYZ and t & TYPE_PENDULUM:
+                pass  # Xyz Pendulum hợp lệ (vd: Odd-Eyes Rebellion)
+    else:
+        # Spell/Trap: các cột chỉ-số phải bằng 0
+        for field in ("atk", "def", "level", "race", "attribute"):
+            if cols[field] != 0:
+                errors.append(f"Spell/Trap phải có '{field}' = 0, nhận {cols[field]}")
+
+    name = card_data.get("name", "")
+    if not isinstance(name, str) or not name.strip():
+        errors.append("'name' không được rỗng")
+    if not isinstance(card_data.get("desc", ""), str):
+        errors.append("'desc' phải là chuỗi")
+    strings = card_data.get("strings", [])
+    if not isinstance(strings, list):
+        errors.append("'strings' phải là danh sách")
+    else:
+        if len(strings) > 16:
+            errors.append(f"'strings' tối đa 16 phần tử (str1-str16), nhận {len(strings)}")
+        for i, s in enumerate(strings):
+            if not isinstance(s, str):
+                errors.append(f"strings[{i}] phải là chuỗi")
+
+
+def load_and_validate(json_file):
+    """Đọc 1 spec JSON, trả về (cols, card_data, errors, warnings)."""
+    errors, warnings = [], []
+    try:
+        with open(json_file, "r", encoding="utf-8") as f:
+            card_data = json.load(f)
+    except Exception as e:
+        return None, None, [f"JSON không đọc được: {e}"], []
+    cols = normalize_card(card_data, errors)
+    validate_card(cols, card_data, errors, warnings)
+    m = re.match(r"c(\d+)$", json_file.stem)
+    if m and cols["id"] != int(m.group(1)):
+        errors.append(f"'id' ({cols['id']}) không khớp tên file {json_file.name}")
+    return cols, card_data, errors, warnings
+
+
+# ============================================================
+# Display helpers
+# ============================================================
+
+def format_bitfield(value, table):
+    parts = [name for bit, name in table.items() if value & bit]
+    return " / ".join(parts) if parts else f"Unknown ({hex(value)})"
+
+
+def format_type(type_val: int) -> str:
+    return format_bitfield(type_val, TYPES)
+
+
+def format_atk_def(val) -> str:
+    return "?" if val == QMARK_ATK_DEF else str(val)
+
 
 def format_level(level_val: int, type_val: int) -> str:
-    # Scale is stored in upper bits (bits 16-23: scale, bits 24-31: scale)
-    lscale = (level_val >> 24) & 0xff
-    rscale = (level_val >> 16) & 0xff
-    level = level_val & 0xffff
-    
+    lscale = (level_val >> 24) & 0xFF
+    rscale = (level_val >> 16) & 0xFF
+    level = level_val & 0xFF
+
     label = "Level"
-    if type_val & 0x800000: # Xyz
+    if type_val & TYPE_XYZ:
         label = "Rank"
-    elif type_val & 0x4000000: # Link
+    elif type_val & TYPE_LINK:
         label = "Link"
-        
+
     parts = [f"{label} {level}"]
-    if type_val & 0x1000000: # Pendulum
+    if type_val & TYPE_PENDULUM:
         parts.append(f"Scale {lscale}/{rscale}")
     return ", ".join(parts)
+
+
+# ============================================================
+# Commands
+# ============================================================
 
 def query_card(db_path: Path, search: str):
     if not db_path.exists():
@@ -76,19 +422,21 @@ def query_card(db_path: Path, search: str):
         return
 
     conn = sqlite3.connect(str(db_path))
+    if not verify_schema(conn):
+        print("Warning: CDB schema không khớp format YGOPro chuẩn (datas/texts).", file=sys.stderr)
     cursor = conn.cursor()
 
     # Determine if searching by ID or name
     if search.isdigit():
         cursor.execute("""
-            SELECT d.id, t.name, d.type, d.atk, d.def, d.level, d.race, d.attribute, t.desc, d.ot
+            SELECT d.id, t.name, d.type, d.atk, d.def, d.level, d.race, d.attribute, t.desc, d.ot, d.setcode, d.category, d.alias
             FROM datas d
             LEFT JOIN texts t ON d.id = t.id
             WHERE d.id = ?
         """, (int(search),))
     else:
         cursor.execute("""
-            SELECT d.id, t.name, d.type, d.atk, d.def, d.level, d.race, d.attribute, t.desc, d.ot
+            SELECT d.id, t.name, d.type, d.atk, d.def, d.level, d.race, d.attribute, t.desc, d.ot, d.setcode, d.category, d.alias
             FROM datas d
             JOIN texts t ON d.id = t.id
             WHERE t.name LIKE ?
@@ -102,26 +450,38 @@ def query_card(db_path: Path, search: str):
         return
 
     for row in rows:
-        cid, name, ctype, atk, cdef, level, race, attribute, desc, ot = row
+        cid, name, ctype, atk, cdef, level, race, attribute, desc, ot, setcode, category, alias = row
         print("=" * 60)
         print(f"Card Name : {name or 'N/A'}")
         print(f"Passcode  : {cid}")
-        print(f"Format (ot): {ot} (Custom = 32)")
+        print(f"Format (ot): {ot} ({format_bitfield(ot, SCOPES)})")
+        if alias:
+            print(f"Alias     : {alias}")
         print(f"Card Type : {format_type(ctype)}")
-        
+        if setcode:
+            chunks = ", ".join(hex(s) for s in unpack_setcodes(setcode))
+            print(f"Setcode   : {setcode} ({chunks})")
+
         # Only show stats if it's a Monster card
-        if ctype & 0x1:
+        if ctype & TYPE_MONSTER:
             attr_str = ATTRIBUTES.get(attribute, f"Unknown ({hex(attribute)})")
             race_str = RACES.get(race, f"Unknown ({hex(race)})")
             print(f"Attribute : {attr_str} | Race: {race_str}")
             print(f"Level/Rank: {format_level(level, ctype)}")
-            print(f"ATK / DEF : {format_atk_def(atk)} / {format_atk_def(cdef)}")
-            
+            if ctype & TYPE_LINK:
+                print(f"ATK       : {format_atk_def(atk)}")
+                print(f"Markers   : {format_bitfield(cdef, LINK_MARKERS)}")
+            else:
+                print(f"ATK / DEF : {format_atk_def(atk)} / {format_atk_def(cdef)}")
+
+        if category:
+            print(f"Category  : {format_bitfield(category, CATEGORIES)}")
         print("-" * 60)
         print("Effect Description:")
         print(desc or "No description available.")
         print("=" * 60)
         print()
+
 
 def dump_db(db_path: Path):
     project_root = db_path.parent
@@ -133,6 +493,8 @@ def dump_db(db_path: Path):
         return
 
     conn = sqlite3.connect(str(db_path))
+    if not verify_schema(conn):
+        print("Warning: CDB schema không khớp format YGOPro chuẩn (datas/texts).", file=sys.stderr)
     cursor = conn.cursor()
 
     # Get list of columns for datas
@@ -155,12 +517,12 @@ def dump_db(db_path: Path):
         cid = row[0]
         name = row[1]
         desc = row[2]
-        
+
         # Get strings (str1 to str16)
         strings = []
         for val in row[3:]:
             strings.append(val or "")
-        
+
         # Trim trailing empty strings
         while strings and strings[-1] == "":
             strings.pop()
@@ -168,7 +530,6 @@ def dump_db(db_path: Path):
         card_data = {}
         # Merge datas statistics if exists
         if cid in datas_map:
-            # Remove id from datas map to avoid duplication if needed, but keeping it is fine
             card_data.update(datas_map[cid])
         else:
             # Fallback default values
@@ -188,82 +549,89 @@ def dump_db(db_path: Path):
 
     print(f"Successfully dumped card specs to {json_dir}/")
 
-def compile_db(db_path: Path):
-    project_root = db_path.parent
-    json_dir = project_root / "card-data"
-    
+
+def collect_specs(json_dir: Path):
+    """Đọc + validate toàn bộ spec, trả về (cards, total_errors, total_warnings).
+
+    cards: list[(cols, card_data)] sắp xếp theo id để output CDB ổn định.
+    """
+    cards = []
+    total_errors = total_warnings = 0
+    for json_file in sorted(json_dir.glob("c*.json"),
+                            key=lambda p: int(re.match(r"c(\d+)", p.stem).group(1)) if re.match(r"c(\d+)", p.stem) else 0):
+        cols, card_data, errors, warnings = load_and_validate(json_file)
+        name = (card_data or {}).get("name", "?")
+        for w in warnings:
+            print(f"  [WARN ] {json_file.name} ({name}): {w}")
+            total_warnings += 1
+        if errors:
+            for e in errors:
+                print(f"  [ERROR] {json_file.name} ({name}): {e}", file=sys.stderr)
+            total_errors += len(errors)
+            continue
+        cards.append((cols, card_data))
+    return cards, total_errors, total_warnings
+
+
+def validate_specs(db_path: Path) -> bool:
+    """Validate toàn bộ card-data/*.json mà không ghi CDB. Trả về True nếu sạch."""
+    json_dir = db_path.parent / "card-data"
     if not json_dir.is_dir():
         print(f"Error: card-data directory not found at {json_dir}", file=sys.stderr)
-        return
+        return False
+    print(f"Validating specs in {json_dir}/ ...")
+    cards, n_err, n_warn = collect_specs(json_dir)
+    print("-" * 40)
+    print(f"Specs hợp lệ : {len(cards)}")
+    print(f"Errors       : {n_err}")
+    print(f"Warnings     : {n_warn}")
+    if n_err:
+        print("FAILED: Sửa toàn bộ lỗi trên rồi chạy lại.", file=sys.stderr)
+        return False
+    print("OK: Toàn bộ spec đạt chuẩn Datacorn/YGOPro.")
+    return True
 
-    # Create/recreate the CDB file
-    if db_path.exists():
-        try:
-            db_path.unlink()
-        except Exception as e:
-            print(f"Error removing old CDB: {e}", file=sys.stderr)
-            return
 
-    conn = sqlite3.connect(str(db_path))
-    cursor = conn.cursor()
+def compile_db(db_path: Path) -> bool:
+    """Biên dịch card-data/*.json -> CDB. Atomic: chỉ thay CDB cũ khi mọi spec hợp lệ."""
+    project_root = db_path.parent
+    json_dir = project_root / "card-data"
 
-    # Create tables
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS datas (
-            id INTEGER PRIMARY KEY,
-            ot INTEGER,
-            alias INTEGER,
-            setcode INTEGER,
-            type INTEGER,
-            atk INTEGER,
-            def INTEGER,
-            level INTEGER,
-            race INTEGER,
-            attribute INTEGER,
-            category INTEGER
-        )
-    """)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS texts (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            desc TEXT,
-            str1 TEXT, str2 TEXT, str3 TEXT, str4 TEXT,
-            str5 TEXT, str6 TEXT, str7 TEXT, str8 TEXT,
-            str9 TEXT, str10 TEXT, str11 TEXT, str12 TEXT,
-            str13 TEXT, str14 TEXT, str15 TEXT, str16 TEXT
-        )
-    """)
+    if not json_dir.is_dir():
+        print(f"Error: card-data directory not found at {json_dir}", file=sys.stderr)
+        return False
 
-    count = 0
-    for json_file in json_dir.glob("c*.json"):
-        try:
-            with open(json_file, "r", encoding="utf-8") as f:
-                card_data = json.load(f)
-            
-            cid = int(card_data.get("id"))
-            
-            # Insert into datas
+    print("Step 1/2: Validating specs...")
+    cards, n_err, n_warn = collect_specs(json_dir)
+    if n_err:
+        print(f"Error: {n_err} lỗi validation. CDB cũ được giữ nguyên, không biên dịch.", file=sys.stderr)
+        return False
+    if n_warn:
+        print(f"({n_warn} warning — nên xử lý nhưng không chặn biên dịch)")
+
+    print("Step 2/2: Compiling to SQLite...")
+    tmp_path = db_path.with_suffix(".cdb.tmp")
+    if tmp_path.exists():
+        tmp_path.unlink()
+
+    conn = sqlite3.connect(str(tmp_path))
+    try:
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA page_size = 4096")  # giống Datacorn setupCleanDatabase
+        cursor.execute(SQL_CREATE_DATAS)
+        cursor.execute(SQL_CREATE_TEXTS)
+
+        for cols, card_data in cards:
             cursor.execute("""
                 INSERT INTO datas (id, ot, alias, setcode, type, atk, def, level, race, attribute, category)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
-                cid,
-                card_data.get("ot", 32),
-                card_data.get("alias", 0),
-                card_data.get("setcode", 0),
-                card_data.get("type", 0),
-                card_data.get("atk", 0),
-                card_data.get("def", 0),
-                card_data.get("level", 0),
-                card_data.get("race", 0),
-                card_data.get("attribute", 0),
-                card_data.get("category", 0)
+                cols["id"], cols["ot"], cols["alias"], cols["setcode"], cols["type"],
+                cols["atk"], cols["def"], cols["level"], cols["race"], cols["attribute"],
+                cols["category"],
             ))
 
-            # Insert into texts
             strings = card_data.get("strings", [])
-            # Pad strings to length 16
             padded_strings = [None] * 16
             for i in range(min(len(strings), 16)):
                 padded_strings[i] = strings[i]
@@ -274,25 +642,30 @@ def compile_db(db_path: Path):
                     str9, str10, str11, str12, str13, str14, str15, str16)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
-                cid,
+                cols["id"],
                 card_data.get("name", ""),
                 card_data.get("desc", ""),
                 *padded_strings
             ))
-            count += 1
-        except Exception as e:
-            print(f"Error compiling {json_file.name}: {e}", file=sys.stderr)
-
-    conn.commit()
+        conn.commit()
+    except Exception as e:
+        conn.close()
+        tmp_path.unlink(missing_ok=True)
+        print(f"Error: Biên dịch thất bại, CDB cũ được giữ nguyên: {e}", file=sys.stderr)
+        return False
     conn.close()
-    print(f"Successfully compiled {count} card specs into database {db_path.name}")
+
+    os.replace(str(tmp_path), str(db_path))  # atomic swap
+    print(f"Successfully compiled {len(cards)} card specs into database {db_path.name}")
+    return True
+
 
 def check_sync(db_path: Path):
     project_root = db_path.parent
     script_dir = project_root / "script"
     json_dir = project_root / "card-data"
     fl_file = project_root / "feature_list.json"
-    
+
     if not script_dir.is_dir():
         print(f"Error: Script folder not found at {script_dir}", file=sys.stderr)
         return
@@ -347,16 +720,16 @@ def check_sync(db_path: Path):
             print(f"Warning: Failed to query database: {e}", file=sys.stderr)
 
     all_passcodes = script_passcodes.union(json_passcodes).union(fl_passcodes).union(db_passcodes)
-    
+
     mismatches = []
     cdb_out_of_sync = False
-    
+
     for code in sorted(all_passcodes):
         in_script = code in script_passcodes
         in_json = code in json_passcodes
         in_fl = code in fl_passcodes
         in_cdb = code in db_passcodes
-        
+
         # Check source of truth sync (script, JSON, feature_list)
         if not (in_script and in_json and in_fl):
             status = []
@@ -364,7 +737,7 @@ def check_sync(db_path: Path):
             if not in_json: status.append("Missing Card Spec JSON")
             if not in_fl: status.append("Missing from feature_list.json")
             mismatches.append((code, ", ".join(status)))
-            
+
         # Check if local compiled DB matches the source of truth JSON
         if in_json != in_cdb:
             cdb_out_of_sync = True
@@ -388,7 +761,7 @@ def check_sync(db_path: Path):
     print(f"Total in feature_list.json : {len(fl_passcodes)}")
     print(f"Total compiled DB rows     : {len(db_passcodes)}")
     print("-" * 40)
-    
+
     if not mismatches:
         print("All local card scripts, spec JSON files, and feature_list are in perfect sync! (100% OK)")
     else:
@@ -396,25 +769,26 @@ def check_sync(db_path: Path):
         for code, issue in mismatches:
             name = get_card_name(code)
             print(f"  - {code:<10} ({name[:20]:<20}) : {issue}")
-            
+
     if cdb_out_of_sync:
         print("-" * 40)
         print("WARNING: Compiled database (CDB) is out of sync with card-data/ JSON files.")
         print("Please run: python .\\script-test\\manage_db.py compile")
     print()
 
+
 def update_text(db_path: Path, passcode: int, name: str = None, desc: str = None):
     # Update JSON file first as it is the Single Source of Truth
     project_root = db_path.parent
     json_file = project_root / "card-data" / f"c{passcode}.json"
-    
+
     if not json_file.exists():
         print(f"Error: Card spec JSON not found at {json_file}", file=sys.stderr)
         return
-        
+
     with open(json_file, "r", encoding="utf-8") as f:
         card_data = json.load(f)
-        
+
     if name:
         card_data["name"] = name
         print(f"Updated Name for card {passcode} to: '{name}'")
@@ -422,11 +796,12 @@ def update_text(db_path: Path, passcode: int, name: str = None, desc: str = None
         clean_desc = desc.replace("\\n", "\n")
         card_data["desc"] = clean_desc
         print(f"Updated Description for card {passcode}.")
-        
+
     with open(json_file, "w", encoding="utf-8") as f:
         json.dump(card_data, f, ensure_ascii=False, indent=2)
-        
+
     print("Plaintext JSON spec updated. Compilation required to update CDB.")
+
 
 def main():
     parser = argparse.ArgumentParser(description="TTF Card Database CLI Manager Utility")
@@ -439,11 +814,14 @@ def main():
     # Subcommand: check-sync
     subparsers.add_parser("check-sync", help="Check synchronization status between Lua scripts, JSON specs, and feature_list")
 
+    # Subcommand: validate
+    subparsers.add_parser("validate", help="Validate all card-data/*.json specs (Datacorn rules) without writing the CDB")
+
     # Subcommand: dump
     subparsers.add_parser("dump", help="Dump card data from CDB SQLite to card-data/*.json specs")
 
     # Subcommand: compile
-    subparsers.add_parser("compile", help="Compile card-data/*.json specs into CDB SQLite database")
+    subparsers.add_parser("compile", help="Validate then compile card-data/*.json specs into CDB SQLite database (atomic)")
 
     # Subcommand: update-text
     update_parser = subparsers.add_parser("update-text", help="Update card name or description")
@@ -458,10 +836,12 @@ def main():
         query_card(db_path, args.search)
     elif args.command == "check-sync":
         check_sync(db_path)
+    elif args.command == "validate":
+        sys.exit(0 if validate_specs(db_path) else 1)
     elif args.command == "dump":
         dump_db(db_path)
     elif args.command == "compile":
-        compile_db(db_path)
+        sys.exit(0 if compile_db(db_path) else 1)
     elif args.command == "update-text":
         update_text(db_path, args.passcode, args.name, args.desc)
 

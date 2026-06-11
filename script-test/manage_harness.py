@@ -227,14 +227,21 @@ def verify_card(passcode):
     paths = get_project_paths()
     print(f"Starting verification pipeline for Card passcode: {passcode}...")
 
-    # 1. Compile Database Specs
-    print("Step 1: Compiling JSON specs to database...")
+    # 1. Validate + Compile Database Specs (atomic, theo chuẩn Datacorn)
+    print("Step 1: Validating & compiling JSON specs to database...")
     rc, stdout, stderr = run_command(["python", "script-test/manage_db.py", "compile"], paths["root"])
     if rc != 0:
-        print("Error: DB Compilation failed!", file=sys.stderr)
-        print(stderr, file=sys.stderr)
+        print("Error: DB Validation/Compilation failed! CDB cũ được giữ nguyên.", file=sys.stderr)
+        if stdout and stdout.strip():
+            print(stdout.strip(), file=sys.stderr)
+        if stderr and stderr.strip():
+            print(stderr.strip(), file=sys.stderr)
         return False
-    print("Database compiled successfully.")
+    # Hiển thị warning validation (không chặn nhưng nên xử lý)
+    for line in (stdout or "").splitlines():
+        if "[WARN" in line:
+            print(f"  {line.strip()}")
+    print("Database validated & compiled successfully.")
 
     # 2. Run validate_scripts.ps1
     print("Step 2: Validating scripts structure and syntax...")

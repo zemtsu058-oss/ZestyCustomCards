@@ -44,18 +44,39 @@ Passcode của custom card bắt buộc sử dụng **9 chữ số** (để trá
 Tệp SQLite database của dự án là `custom_cards_zesty.cdb`. Mọi thay đổi thuộc tính của card đều phải được chỉnh sửa trong tệp JSON Specs tương ứng tại `card-data/c<passcode>.json` (được xem là **Single Source of Truth**), sau đó CLI biên dịch tự động vào database.
 
 ### 3.1 Cấu trúc Bảng Database
+Schema và quy tắc đóng gói dữ liệu tuân theo **Datacorn** (trình editor CDB chính thức của ProjectIgnis, source tham khảo tại `docs/resources/Datacorn/`).
+
 * **Bảng `datas` (Metadata):** Chứa các thuộc tính số của card.
   - `id`: Passcode của card (9 chữ số).
-  - `ot`: **Luôn đặt là 32** (Custom card).
+  - `ot`: **Luôn đặt là 32** (Custom card). Compiler sẽ báo lỗi nếu khác 32.
   - `alias`: ID của card gốc nếu là Alt-art (0 = không có).
-  - `setcode`: Archetype code (dạng decimal được hệ thống tự động mã hóa Big-endian ASCII).
-  - `type`: Loại card (dạng bitmask).
+  - `setcode`: Tối đa **4 setcode 16-bit** đóng gói trong 1 số 64-bit: `setcode = sc1 | (sc2 << 16) | (sc3 << 32) | (sc4 << 48)`.
+  - `type`: Loại card (dạng bitmask). Phải có **đúng 1** trong 3 bit khung: Monster (`0x1`) / Spell (`0x2`) / Trap (`0x4`).
   - `atk`, `def`: ATK/DEF (-2 đại diện cho `?`).
-  - `level`: Cấp độ/Rank/Link rating. Với **Pendulum scale**, scale được mã hóa vào cột level theo công thức: `level = base_level + (left_scale << 24) + (right_scale << 16)`.
-  - `race`: Tộc quái vật (dạng bitmask).
-  - `attribute`: Hệ quái vật (dạng bitmask).
+  - `level`: Cấp độ/Rank/Link rating (0–13). Với **Pendulum scale**, scale được mã hóa vào cột level theo công thức Datacorn: `level = (base_level & 0x800000FF) | (left_scale << 24) | (right_scale << 16)`.
+  - `race`: Tộc quái vật (bitmask, monster phải có **đúng 1 bit**).
+  - `attribute`: Hệ quái vật (bitmask, monster phải có **đúng 1 bit**).
   - `category`: Phân loại hiệu ứng (dạng bitmask).
+  - **Link Monster:** cột `def` KHÔNG phải DEF mà là **bitfield link marker**: `0x1` Bottom-Left, `0x2` Bottom, `0x4` Bottom-Right, `0x8` Left, `0x20` Right, `0x40` Top-Left, `0x80` Top, `0x100` Top-Right (bit `0x10` không dùng). Link rating nằm trong cột `level`.
+  - **Spell/Trap:** các cột `atk`, `def`, `level`, `race`, `attribute` phải bằng 0.
 * **Bảng `texts` (Văn bản):** Chứa `name`, `desc` và `str1` đến `str16` (các option prompt khi chọn hiệu ứng).
+
+### 3.2 Field thân thiện trong Specs JSON (khuyến nghị dùng)
+Ngoài giá trị thô đã đóng gói, compiler hỗ trợ các field dễ đọc sau (ưu tiên dùng khi viết card mới — compiler tự đóng gói và validate):
+
+| Field JSON | Ý nghĩa | Ví dụ |
+|------------|---------|-------|
+| `"setcodes": [...]` | Danh sách tối đa 4 setcode (tự đóng gói vào `setcode`) | `"setcodes": [296, 4444]` |
+| `"lscale"` / `"rscale"` | Pendulum Scale trái/phải (tự đóng gói vào `level`) | `"lscale": 4, "rscale": 4` |
+| `"linkmarkers": [...]` | Tên link marker (tự đóng gói vào `def`) | `"linkmarkers": ["Top", "Bottom"]` |
+| `"atk"` / `"def"`: `"?"` | ATK/DEF `?` (tự chuyển thành -2) | `"atk": "?"` |
+
+Lưu ý: không khai báo đồng thời field thô và field thân thiện với giá trị mâu thuẫn (compiler báo lỗi).
+
+### 3.3 Validation & Compile Atomic
+* `python .\script-test\manage_db.py validate` — kiểm tra toàn bộ specs theo quy tắc Datacorn mà **không ghi CDB** (nhanh, dùng khi đang sửa spec).
+* `python .\script-test\manage_db.py compile` — validate trước, chỉ khi **0 lỗi** mới biên dịch ra file tạm rồi thay thế CDB (atomic; nếu có lỗi, CDB cũ giữ nguyên và exit code = 1).
+* Các lỗi bị chặn: `ot` ≠ 32, thiếu/thừa bit khung Monster-Spell-Trap, monster thiếu hoặc multi-bit race/attribute, link marker không hợp lệ hoặc rỗng, scale > 13, level > 13, Spell/Trap có chỉ số khác 0, `strings` > 16, `id` không khớp tên file...
 
 ---
 
