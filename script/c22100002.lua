@@ -19,6 +19,8 @@
 
 local s,id=GetID()
 
+s.listed_names={89631139,74677422}
+
 function s.initial_effect(c)
     -- Enable Fusion Summon limit
     c:EnableReviveLimit()
