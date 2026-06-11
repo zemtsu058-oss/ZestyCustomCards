@@ -1,0 +1,22 @@
+{
+  "id": 22100003,
+  "ot": 32,
+  "alias": 0,
+  "type": 97,
+  "setcodes": [
+    221
+  ],
+  "atk": 4500,
+  "def": 0,
+  "level": 10,
+  "race": 16,
+  "attribute": 16,
+  "category": 2622464,
+  "name": "Blue Eye Ultimammoth Arrow Dragon",
+  "desc": "\"Mammoth Graveyard\" + 1 Fusion monster\nYou can also Special Summon this card from your Extra Deck to your opponent's field by discarding 1 Spell Card and sending the above materials to the GY (1 from each player's side of the field). You can only Special Summon \"Blue-Eyes Ultimammoth Arrow Dragon\" once per turn. Cannot declare an attack. Monsters cannot be destroyed by battle with this card, also you take any battle damage your opponent would take from battles involving this card instead. If you take battle damage from a battle involving this card, end that Battle Phase. During each player's End Phase: this card loses 500 ATK.",
+  "strings": [
+    "Special Summon to opponent's field",
+    "End Battle Phase",
+    "Loses 500 ATK"
+  ]
+}

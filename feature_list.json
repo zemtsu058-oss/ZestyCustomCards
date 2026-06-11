@@ -19,6 +19,13 @@
           "status": "done",
           "queue_file": "docs/queues/Blue_Eye/d_Purple_Eyes_Ultra_Max_Dragon.jpg",
           "script": "script/c22100002.lua"
+        },
+        {
+          "name": "Blue Eye Ultimammoth Arrow Dragon",
+          "passcode": "22100003",
+          "status": "done",
+          "queue_file": "docs/queues/Blue_Eye/d_Blue_Eye_Ultimammoth_Arrow_Dragon.jpg",
+          "script": "script/c22100003.lua"
         }
       ]
     },
