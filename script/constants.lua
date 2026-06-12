@@ -9,11 +9,3 @@ SET_CASTLE_OF_DREAMS               = 0x782
 SET_WEZAEMON                       = 0x783
 -- Custom counter
 COUNTER_MANA                      = 0x177
-
--- Global Helper Utilities
-function Card.GetRelatedHandler(c, e)
-    if c and c:IsRelateToEffect(e) then
-        return c
-    end
-    return nil
-end
