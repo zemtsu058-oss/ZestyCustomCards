@@ -14,7 +14,7 @@
 
 > [!NOTE]
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
-> [Xem lịch sử các phiên trước đó (Phiên 001 - 053) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
+> [Xem lịch sử các phiên trước đó (Phiên 001 - 054) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
 ### Phiên 079 — 2026-06-12
 
@@ -23,13 +23,14 @@
 - **Đã hoàn thành:**
   - **Sửa lỗi cấu hình Link Markers** cho `32100006` (Cecilia the Rikka Queen): Sửa đổi tệp `c32100006.json` để giữ lại đúng 2 link markers `Bottom-Left` và `Bottom-Right` (khớp với Link-2 rating và artwork thiết kế), giải quyết triệt để cảnh báo compile CDB.
   - **Sửa lỗi logic GY Quick Effect** cho `32100008` (Rikka Siesta): Sửa đổi `c32100008.lua` để chặn kích hoạt ngoài Main Phase khi không có Plant monster trên tay, đồng thời cho phép kích hoạt ở bất kỳ chain link nào trong Main Phase của mình (bỏ check `GetCurrentChain()==0` không hợp lý).
+  - **Tối ưu hóa logic Tribute cho `32100007` (Rikka Invitation)**: Cập nhật `c32100007.lua` lọc danh sách quái thú được phép Tribute chỉ bao gồm các quái thú khi bị Tribute giải phóng đủ ít nhất 2 ô trống để gọi 2 Rikka monsters từ Deck, tránh trường hợp người chơi chọn nhầm quái thú ở Extra Monster Zone dẫn đến mất cost nhưng không triệu hồi được.
   - Biên dịch cơ sở dữ liệu `custom_cards_zesty.cdb` đồng bộ khớp 100% không lỗi.
   - Commit và push các thay đổi sửa lỗi lên Git.
 - **Xác minh đã chạy:**
   - Lệnh validate script: `84 OK, 54 WARN, 0 FAIL` (Không có lỗi).
   - Lệnh database sync: 100% đồng bộ hoàn hảo (OK).
   - Chạy `manage_db.py query 32100006` và `32100008` hiển thị chính xác thuộc tính trên console.
-- **Files/artifacts đã cập nhật:** `card-data/c32100006.json`, `script/c32100008.lua`, `custom_cards_zesty.cdb`, `claude-progress.md`
+- **Files/artifacts đã cập nhật:** `card-data/c32100006.json`, `script/c32100007.lua`, `script/c32100008.lua`, `custom_cards_zesty.cdb`, `claude-progress.md`
 
 ### Phiên 078 — 2026-06-12
 
@@ -367,26 +368,5 @@
 - **Xác minh đã chạy:**
   - `python .\script-test\manage_harness.py verify 79900015` -> Pipeline chạy thành công, linter sạch và sync 100% OK.
 - **Files/artifacts đã cập nhật:** [c79900015.lua](file:///d:/TTF/TTFCustomCards/script/c79900015.lua)
-
-### Phiên 054 — 2026-06-08
-
-- **Mục tiêu:**
-  - Tinh gọn script test và sửa lỗi Tiếng Việt.
-- **Đã hoàn thành:**
-  - Trích xuất 993 hằng số EDOPro chuẩn từ `validate_scripts.ps1` ra `script-test/edopro_constants.txt`.
-  - Tinh gọn `validate_scripts.ps1` từ 1334 dòng xuống còn 346 dòng (giảm ~75%), tải hằng số động một lần duy nhất lúc khởi tạo.
-  - Sửa lỗi mã hóa Tiếng Việt (Unicode) trên Windows console bằng cách thiết lập mã hóa UTF-8 cho toàn bộ PowerShell script (`validate_scripts.ps1`, `lint_scripts.ps1`, `fetch_official.ps1`) and Python script (`manage_db.py`, `manage_harness.py`).
-  - Cập nhật hàm `run_command` trong `manage_harness.py` sử dụng `encoding='utf-8'` khi giải mã output từ sub-process con.
-  - Xây dựng script [archive_progress.py](file:///d:/TTF/TTFCustomCards/script-test/archive_progress.py) để tự động hóa việc di chuyển các phiên cũ (chỉ giữ lại tối đa 25 phiên) từ `claude-progress.md` sang [docs/claude-progress-archive.md](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
-  - Tích hợp Step 6 tự động chạy script này vào cuối pipeline `verify` của [manage_harness.py](file:///d:/TTF/TTFCustomCards/script-test/manage_harness.py).
-  - Di chuyển thư mục `template-card/` ở root vào trong [script-test/templates/](file:///d:/TTF/TTFCustomCards/script-test/templates/) để gom toàn bộ "Developer Tooling" về một mối và làm sạch root directory.
-  - Cập nhật đường dẫn `"template_dir"` trong [manage_harness.py](file:///d:/TTF/TTFCustomCards/script-test/manage_harness.py) và đồng bộ hóa cấu trúc mới vào các file tài liệu [AGENTS.md](file:///d:/TTF/TTFCustomCards/AGENTS.md), [README.md](file:///d:/TTF/TTFCustomCards/README.md), [docs/agent-rules.md](file:///d:/TTF/TTFCustomCards/docs/agent-rules.md) và [script-test/templates/README.md](file:///d:/TTF/TTFCustomCards/script-test/templates/README.md).
-  - Tách quy tắc tham chiếu code Lua cũ thành 2 phần riêng biệt trong `docs/agent-rules.md` và `AGENTS.md` (Cấm bắt chước tệp custom cũ trong `script/`; Yêu cầu dùng templates trong `script-test/templates/` làm khung và scripts official làm tài liệu tham khảo) để tránh AI hiểu nhầm.
-- **Xác minh đã chạy:**
-  - `python .\script-test\manage_db.py check-sync` -> **100% OK**.
-  - `.\script-test\validate_scripts.ps1 -Quiet` -> **122 OK, 0 FAIL** (hoạt động tốt với file txt hằng số).
-  - `python .\script-test\manage_db.py query 79900002` -> Tiếng Việt có dấu hiển thị chuẩn xác, sắc nét trên console.
-  - `python .\script-test\manage_harness.py verify 192300010` -> Chạy pipeline harness thành công (bao gồm cả Step 6 auto archive).
-- **Files/artifacts đã cập nhật:** `validate_scripts.ps1`, `lint_scripts.ps1`, `fetch_official.ps1`, `manage_db.py`, `manage_harness.py`, `edopro_constants.txt`, `archive_progress.py`, `claude-progress.md`, `AGENTS.md`, `README.md`, `docs/agent-rules.md`, `script-test/templates/README.md`
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._

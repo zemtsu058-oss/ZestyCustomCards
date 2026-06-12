@@ -75,33 +75,27 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
         local rg=Duel.GetMatchingGroup(Card.IsReleasableByEffect,tp,LOCATION_MZONE,0,nil)
         local sp_g=Duel.GetMatchingGroup(s.rikka_spfilter,tp,LOCATION_DECK,0,nil,e,tp)
 
-        local can_tribute_and_summon = false
-        if #sp_g>=2 and #rg>0 and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then
-            local tc=rg:GetFirst()
-            while tc do
-                local zone_count = Duel.GetLocationCount(tp,LOCATION_MZONE)
-                if tc:IsLocation(LOCATION_MZONE) and tc:GetSequence()<5 then
-                    zone_count = zone_count + 1
-                end
-                if zone_count>=2 then
-                    can_tribute_and_summon = true
-                    break
-                end
-                tc=rg:GetNext()
+        local function tgfilter(c)
+            local zone_count = Duel.GetLocationCount(tp,LOCATION_MZONE)
+            if c:IsLocation(LOCATION_MZONE) and c:GetSequence()<5 then
+                zone_count = zone_count + 1
             end
+            return zone_count>=2
         end
+        local rg_valid=rg:Filter(tgfilter,nil)
+
+        local can_tribute_and_summon = #sp_g>=2 and #rg_valid>0
+            and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
 
         if can_tribute_and_summon and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
             Duel.BreakEffect()
             Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-            local sg=rg:Select(tp,1,1,nil)
+            local sg=rg_valid:Select(tp,1,1,nil)
             if #sg>0 and Duel.Release(sg,REASON_EFFECT)>0 then
-                if Duel.GetLocationCount(tp,LOCATION_MZONE)>=2 then
-                    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-                    local sg2=Duel.SelectMatchingCard(tp,s.rikka_spfilter,tp,LOCATION_DECK,0,2,2,nil,e,tp)
-                    if #sg2==2 then
-                        Duel.SpecialSummon(sg2,0,tp,tp,false,false,POS_FACEUP)
-                    end
+                Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+                local sg2=Duel.SelectMatchingCard(tp,s.rikka_spfilter,tp,LOCATION_DECK,0,2,2,nil,e,tp)
+                if #sg2==2 then
+                    Duel.SpecialSummon(sg2,0,tp,tp,false,false,POS_FACEUP)
                 end
             end
         end
