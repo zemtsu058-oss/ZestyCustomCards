@@ -117,7 +117,7 @@ end
 -- Effect 2: Operation
 -- ============================================================
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
-    local c=Card.GetRelatedHandler(e:GetHandler(),e)
+    local c=e:GetHandler()
     
     -- Opponent makes the choice
     Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_EFFECT)
@@ -154,8 +154,10 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
         
     elseif choice==1 then
         -- (2) Special Summon from GY/banishment
-        local g1=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.spfilter2),tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e,tp)
-        local g2=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.spfilter2),1-tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e,1-tp)
+        local g1=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.spfilter2),tp,
+            LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e,tp)
+        local g2=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.spfilter2),1-tp,
+            LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e,1-tp)
         
         local can_tp=Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and #g1>0
         local can_op=Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 and #g2>0
@@ -193,8 +195,10 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
         
     else
         -- (3) Set 1 Spell/Trap from Deck/GY/banishment
-        local g1=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.setfilter),tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
-        local g2=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.setfilter),1-tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
+        local g1=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.setfilter),tp,
+            LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
+        local g2=Duel.GetMatchingGroup(aux.NecroValleyFilter(s.setfilter),1-tp,
+            LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
         
         local can_tp=Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and #g1>0
         local can_op=Duel.GetLocationCount(1-tp,LOCATION_SZONE)>0 and #g2>0
@@ -251,10 +255,12 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
     if chkc then return chkc~=c and chkc:IsLocation(LOCATION_ONFIELD+LOCATION_GRAVE) and chkc:IsAbleToHand() end
     if chk==0 then
         return c:IsAbleToHand()
-            and Duel.IsExistingTarget(Card.IsAbleToHand,tp,LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,1,c)
+            and Duel.IsExistingTarget(Card.IsAbleToHand,tp,
+                LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,1,c)
     end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
-    local g=Duel.SelectTarget(tp,Card.IsAbleToHand,tp,LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,1,1,c)
+    local g=Duel.SelectTarget(tp,Card.IsAbleToHand,tp,
+        LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,1,1,c)
     g:AddCard(c)
     Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,2,0,0)
 end
@@ -263,7 +269,7 @@ end
 -- Effect 3: Operation
 -- ============================================================
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-    local c=Card.GetRelatedHandler(e:GetHandler(),e)
+    local c=e:GetHandler()
     local tc=Duel.GetFirstTarget()
     if c:IsRelateToEffect(e) and tc and tc:IsRelateToEffect(e) then
         local g=Group.FromCards(c,tc)

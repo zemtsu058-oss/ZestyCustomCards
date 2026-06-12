@@ -8,3 +8,4 @@
 #
 # Phiên 062: hàm cost bịa, không có trong EDOPro
 Cost.DetachFromSelf
+Card.GetRelatedHandler
