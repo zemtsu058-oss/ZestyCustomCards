@@ -102,7 +102,9 @@ CLI verify tự động kiểm tra cú pháp và cấu trúc, nhưng bạn bắt
 * [ ] **HOPT vs SOPT:** Đã sử dụng đúng `EFFECT_COUNT_CODE_OATH` kèm ID của card (`{id, N}`) cho Hard Once Per Turn (HOPT)?
 * [ ] **Legality check:** Target function bắt buộc phải có `if chk==0 then return ... end`.
 * [ ] **Operation Info:** Đã khai báo đúng `Duel.SetOperationInfo` trong target.
-* [ ] **Handler Safety:** Đã dùng `Card.GetRelatedHandler(c, e)` trong các operation của trigger/continuous effect.
+* [ ] **Handler Safety:** Trong operation của trigger/continuous effect đã dùng mẫu chuẩn `local c=e:GetHandler()` + kiểm tra `c:IsRelateToEffect(e)` (kèm `c:IsFaceup()` nếu cần) trước khi áp dụng hiệu ứng.
+* [ ] **constants.lua Dependency:** Nếu script dùng định danh từ `script/constants.lua` (`SET_*`, `COUNTER_*`, helper tự chế), đã có `Duel.LoadScript("constants.lua")` ở đầu file (EDOPro **không** tự load file này).
+* [ ] **API thật:** Mọi hàm API được gọi đều xuất hiện trong script official tham khảo (`docs/official-reference/`) — không gọi hàm "bịa" (xem danh sách đen `script-test/phantom_apis.txt`).
 * [ ] **Zone Safety:** Đã kiểm tra `Duel.GetLocationCount` (hoặc `GetMZoneCount`) > 0 trước khi Special Summon.
 * [ ] **Effect Description:** Đã gán đúng `aux.Stringid(id, N)` tương ứng trong `strings` của Specs JSON.
 

@@ -14,7 +14,22 @@
 
 > [!NOTE]
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
-> [Xem lịch sử các phiên trước đó (Phiên 001 - 050) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
+> [Xem lịch sử các phiên trước đó (Phiên 001 - 051) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
+
+### Phiên 077 — 2026-06-12
+
+- **Mục tiêu:**
+  - Sửa lỗi crash runtime `attempt to call a nil value (field 'GetRelatedHandler')` tại `c22100003.lua:198` và cải tiến quy trình để chặn vĩnh viễn lớp lỗi "gọi hàm không tồn tại" (đã tái diễn ở Phiên 062, 065 và phiên này).
+- **Nguyên nhân gốc:**
+  - `Card.GetRelatedHandler` là helper tự chế trong `script/constants.lua`, nhưng EDOPro **không tự load** file này — script nào dùng mà thiếu `Duel.LoadScript("constants.lua")` sẽ crash. Quy tắc #7 cũ trong `docs/agent-rules.md` bắt buộc dùng helper nhưng không nhắc điều kiện load; validator lại whitelist sẵn mọi định danh trong `constants.lua` nên không bao giờ cảnh báo.
+- **Đã hoàn thành:**
+  - Sửa [c22100003.lua](file:///d:/TTF/TTFCustomCards/script/c22100003.lua): `s.atkop` chuyển về mẫu chuẩn official `local c=e:GetHandler()` + `c:IsRelateToEffect(e)` (bỏ phụ thuộc helper, bỏ check trùng lặp).
+  - Nâng cấp [validate_scripts.ps1](file:///d:/TTF/TTFCustomCards/script-test/validate_scripts.ps1) thêm check mức FAIL (chặn pipeline `verify`): (1) script dùng định danh từ `constants.lua` mà thiếu `Duel.LoadScript("constants.lua")`; (2) script gọi "API ma" trong danh sách đen mới [phantom_apis.txt](file:///d:/TTF/TTFCustomCards/script-test/phantom_apis.txt) (seed: `Cost.DetachFromSelf` từ Phiên 062).
+  - Cập nhật quy tắc: `docs/agent-rules.md` (sửa #7, thêm #12 về LoadScript, #13 về API ma), `AGENTS.md` (ràng buộc cứng #6), `docs/agent-workflow.md` (checklist QA mục Handler Safety + 2 mục mới). Đánh dấu helper `Card.GetRelatedHandler` là DEPRECATED trong `constants.lua` (giữ cho `c192200015` cũ).
+- **Xác minh đã chạy:**
+  - `python .\script-test\manage_harness.py verify 22100003` → SUCCESS.
+  - Quét toàn bộ 134 script với validator mới → 0 FAIL; test tái hiện lỗi trên file giả → validator bắt đúng cả 3 lớp lỗi (constant thiếu load, helper thiếu load, API ma) với exit code 1; `c192200015.lua` (có LoadScript hợp lệ) không bị báo oan.
+- **Files/artifacts đã cập nhật:** `script/c22100003.lua`, `script/constants.lua`, `script-test/validate_scripts.ps1`, `script-test/phantom_apis.txt` (mới), `docs/agent-rules.md`, `docs/agent-workflow.md`, `AGENTS.md`, `custom_cards_zesty.cdb`, `claude-progress.md`
 
 ### Phiên 076 — 2026-06-11
 
@@ -366,18 +381,5 @@
   - `python .\script-test\manage_db.py check-sync` -> **100% OK** (Đồng bộ hoàn hảo giữa DB, Specs JSON và scripts).
   - `.\script-test\validate_scripts.ps1` -> **76 OK, 46 WARN, 0 FAIL** (Biên dịch thành công).
 - **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [agent-rules.md](file:///d:/TTF/TTFCustomCards/docs/agent-rules.md), [agent-workflow.md](file:///d:/TTF/TTFCustomCards/docs/agent-workflow.md), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
-
-### Phiên 051 — 2026-06-08
-
-- **Mục tiêu:**
-  - Brainstorm phương án tối ưu hóa dự án theo triết lý Harness Engineering và xử lý triệt để 2 lỗi lệch đồng bộ lâu ngày.
-- **Đã hoàn thành:**
-  - Tạo tài liệu phân tích thiết kế chi tiết tại [analysis_results.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/7e6708b6-b46b-4d23-8ebc-118e9c455d53/analysis_results.md) với 4 trụ cột chính: Tổ chức, Quản lý, Vibe, và Sửa lỗi.
-  - Giải quyết lỗi sync `78900102`: Bổ sung hoàn chỉnh script Field Spell [c78900102.lua](file:///d:/TTF/TTFCustomCards/script/c78900102.lua) cho "Ttf Holy Sanctuary".
-  - Giải quyết lỗi sync `79900002`: Đăng ký card "Ttf Cat Luna" vào SQLite database `custom_cards_zesty.cdb`.
-- **Xác minh đã chạy:**
-  - `python .\script-test\manage_db.py check-sync` -> **100% OK** (All local card scripts and database entries are in perfect sync!).
-  - `.\script-test\validate_scripts.ps1` -> **76 OK, 46 WARN, 0 FAIL** (Biên dịch thành công).
-- **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [c78900102.lua](file:///d:/TTF/TTFCustomCards/script/c78900102.lua), [analysis_results.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/7e6708b6-b46b-4d23-8ebc-118e9c455d53/analysis_results.md), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._

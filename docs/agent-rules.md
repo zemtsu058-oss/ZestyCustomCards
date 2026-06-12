@@ -14,11 +14,13 @@ Các quy tắc lập trình bắt buộc để đảm bảo script tương thíc
 4. **ALWAYS** sử dụng `if chk==0 then return ... end` trong target function để kiểm tra tính hợp lệ (legality). **NEVER** sử dụng `chk==1` để check legality.
 5. **ALWAYS** đăng ký `Duel.SetOperationInfo` trong target function nếu hiệu ứng thực hiện di chuyển card (destroy, search, summon, banish, etc.).
 6. **ALWAYS** kiểm tra số lượng ô trống trên bàn bằng `Duel.GetLocationCount` (hoặc `GetMZoneCount`) trước khi Special Summon.
-7. **ALWAYS** sử dụng hàm helper toàn cục `Card.GetRelatedHandler(c, e)` thay cho việc gọi trực tiếp handler `c` trong các hàm operation khi xử lý các card trigger/continuous (tránh lỗi card rời sân trước khi effect resolve).
+7. **ALWAYS** trong hàm operation của trigger/continuous effect, lấy handler theo mẫu chuẩn official: `local c=e:GetHandler()` rồi kiểm tra `c:IsRelateToEffect(e)` (kèm `c:IsFaceup()` nếu cần) trước khi áp dụng hiệu ứng lên chính nó. **KHÔNG** dùng helper tự chế `Card.GetRelatedHandler` cho card mới (helper này nằm trong `constants.lua`, chỉ giữ lại cho các card cũ đã load file đó).
 8. **ALWAYS** kiểm tra quan hệ hiệu ứng bằng `tc:IsRelateToEffect(e)` trong hàm operation trước khi áp dụng hiệu ứng lên card mục tiêu (hoặc handler).
 9. **NEVER** quên `c:RegisterEffect(e1)` sau khi tạo effect và thiết lập phạm vi hoạt động bằng `SetRange` cho các hiệu ứng không phải là SINGLE.
 10. **CRITICAL — NEVER** tham chiếu, bắt chước hoặc sao chép code trực tiếp từ các tệp tin custom cũ trong thư mục `script/` (ngoại trừ các file cấu hình hệ thống như `constants.lua`). Hầu hết code cũ trong thư mục này chứa nhiều lỗi nghiêm trọng về timing, logic, reset và category.
 11. **ALWAYS** sử dụng các tệp mẫu trong `script-test/templates/` làm khung cơ sở bắt buộc khi viết card mới. Nếu cần tham khảo logic chạy thực tế, chỉ sử dụng các script của card official làm mẫu (tải qua công cụ `fetch_official.ps1` lưu tại `docs/official-reference/`).
+12. **CRITICAL — EDOPro KHÔNG tự load `script/constants.lua`.** Nếu script sử dụng BẤT KỲ định danh nào định nghĩa trong file đó (`SET_*`, `COUNTER_*`, helper như `Card.GetRelatedHandler`...), bắt buộc phải có `Duel.LoadScript("constants.lua")` ngay sau `local s,id=GetID()`. Thiếu dòng này sẽ crash runtime `attempt to call/index a nil value`. Validator tự động FAIL nếu vi phạm.
+13. **NEVER** gọi hàm API không xuất hiện trong script official tham khảo hoặc tài liệu EDOPro — hàm "nghe có vẻ hợp lý" nhưng không tồn tại (ví dụ `Cost.DetachFromSelf`) sẽ crash runtime. Khi phát hiện một hàm ma mới, thêm nó vào `script-test/phantom_apis.txt` để validator chặn vĩnh viễn.
 
 ---
 
