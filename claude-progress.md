@@ -16,6 +16,21 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 053) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 079 — 2026-06-12
+
+- **Mục tiêu:**
+  - Rà soát, kiểm tra chất lượng (double check) 4 card Rikka custom vừa làm ở Phiên 078: `32100006`, `32100007`, `32100008`, `32100009`.
+- **Đã hoàn thành:**
+  - **Sửa lỗi cấu hình Link Markers** cho `32100006` (Cecilia the Rikka Queen): Sửa đổi tệp `c32100006.json` để giữ lại đúng 2 link markers `Bottom-Left` và `Bottom-Right` (khớp với Link-2 rating và artwork thiết kế), giải quyết triệt để cảnh báo compile CDB.
+  - **Sửa lỗi logic GY Quick Effect** cho `32100008` (Rikka Siesta): Sửa đổi `c32100008.lua` để chặn kích hoạt ngoài Main Phase khi không có Plant monster trên tay, đồng thời cho phép kích hoạt ở bất kỳ chain link nào trong Main Phase của mình (bỏ check `GetCurrentChain()==0` không hợp lý).
+  - Biên dịch cơ sở dữ liệu `custom_cards_zesty.cdb` đồng bộ khớp 100% không lỗi.
+  - Commit và push các thay đổi sửa lỗi lên Git.
+- **Xác minh đã chạy:**
+  - Lệnh validate script: `84 OK, 54 WARN, 0 FAIL` (Không có lỗi).
+  - Lệnh database sync: 100% đồng bộ hoàn hảo (OK).
+  - Chạy `manage_db.py query 32100006` và `32100008` hiển thị chính xác thuộc tính trên console.
+- **Files/artifacts đã cập nhật:** `card-data/c32100006.json`, `script/c32100008.lua`, `custom_cards_zesty.cdb`, `claude-progress.md`
+
 ### Phiên 078 — 2026-06-12
 
 - **Mục tiêu:**
