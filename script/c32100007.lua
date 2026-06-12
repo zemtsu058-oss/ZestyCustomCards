@@ -87,7 +87,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
         local can_tribute_and_summon = #sp_g>=2 and #rg_valid>0
             and not Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT)
 
-        if can_tribute_and_summon and Duel.SelectYesNo(tp,aux.Stringid(id,0)) then
+        if can_tribute_and_summon and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
             Duel.BreakEffect()
             Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
             local sg=rg_valid:Select(tp,1,1,nil)

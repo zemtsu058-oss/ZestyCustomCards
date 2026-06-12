@@ -16,6 +16,7 @@
   "desc": "If you control no monsters: Special Summon 1 \"Rikka\" monster from your Deck, then you can Tribute 1 monster on your field, and if you do, Special Summon 2 \"Rikka\" monsters from your Deck, also you cannot Special Summon monsters for the rest of this turn, except Plant monsters.\nIf a Plant monster you control would be destroyed, you can banish this card from your GY instead.\nYou can only activate 1 \"Rikka Invitation\" per turn.",
   "strings": [
     "Special Summon 1 \"Rikka\" monster",
+    "Tribute 1 monster to Special Summon 2 \"Rikka\" monsters",
     "Banish from GY to prevent destruction"
   ]
 }
