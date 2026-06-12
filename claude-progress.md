@@ -16,6 +16,27 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 052) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 078 — 2026-06-12
+
+- **Mục tiêu:**
+  - Thiết kế specs JSON, lập trình Lua, và tích hợp 4 card Rikka custom mới từ hàng đợi: `32100006` (Cecilia the Rikka Queen), `32100007` (Rikka Invitation), `32100008` (Rikka Siesta), và `32100009` (Rikka Vow).
+- **Đã hoàn thành:**
+  - Chạy Harness CLI `scan` phát hiện 4 card pending mới.
+  - Khởi tạo thành công 4 card mới qua Harness CLI `start` (`link_monster` cho Cecilia, `normal_spell` cho 3 card còn lại).
+  - Viết specs JSON và code Lua đầy đủ cho cả 4 card:
+    - **Cecilia the Rikka Queen** (`32100006`): Link-2 Plant, hỗ trợ hồi sinh khi Link Summon dùng Rikka monster làm nguyên liệu; tribute từ Deck/field để attach 2 nguyên liệu từ GY/banished cho Rikka Xyz và tăng ATK.
+    - **Rikka Invitation** (`32100007`): SS 1 Rikka từ Deck (nếu không có quái thú), cho phép tribute 1 monster trên field để SS tiếp 2 Rikka từ Deck (khóa tộc Plant); banish từ GY để bảo kê Plant monster khỏi bị hủy.
+    - **Rikka Siesta** (`32100008`): Khi activate card/effect Rikka thì reveal từ Deck/GY để add lên tay; hồi 1000 LP + lấy 1 Rikka Spell/1 Plant monster từ Banish (1 lên tay, 1 đáy Deck); banish úp từ GY để hồi 8000 LP (phải có quái thú Plant trên tay để dùng Quick Effect ngoài Main Phase).
+    - **Rikka Vow** (`32100009`): Hồi lên tay từ Deck khi có 6 Rikka monsters; phá hủy 6 Rikka monsters để gây 100,000 damage cho cả 2 người chơi (suicide OTK).
+  - Copy artwork files vào `pics/` và rename queue files sang trạng thái `d_` (done).
+  - Chạy verify thành công cả 4 card, tự động compile SQLite database nhị phân `custom_cards_zesty.cdb` và chuyển trạng thái sang `done`.
+  - Commit và push đầy đủ specs JSON, Lua scripts, pics, queue state và CDB lên remote repository.
+- **Xác minh đã chạy:**
+  - Validator scripts dự án: `84 OK, 54 WARN, 0 FAIL` (0 lỗi).
+  - Linter: 100% sạch lỗi style.
+  - Check-sync: 100% đồng bộ hoàn hảo (OK).
+- **Files/artifacts đã cập nhật:** `card-data/c32100006.json`, `c32100007.json`, `c32100008.json`, `c32100009.json`, `script/c32100006.lua`, `c32100007.lua`, `c32100008.lua`, `c32100009.lua`, `pics/*.jpg`, `docs/queues/Rikka/d_*.jpg`, `custom_cards_zesty.cdb`, `feature_list.json`, `claude-progress.md`
+
 ### Phiên 077 — 2026-06-12
 
 - **Mục tiêu:**
