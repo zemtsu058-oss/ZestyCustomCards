@@ -16,6 +16,16 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 054) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 080 — 2026-06-12
+
+- **Mục tiêu:**
+  - Sửa lỗi runtime error "3 Parameters are needed" của card `32100008` (Rikka Siesta) tại dòng 129 trong effect 2.
+- **Đã hoàn thành:**
+  - Cập nhật `script/c32100008.lua` để thêm đối số `nil` còn thiếu cho cuộc gọi `Filter` (yêu cầu 3 tham số từ engine C++).
+  - Xác nhận linter, pipeline validation và database sync đều đạt 100% OK.
+  - Commit thay đổi lên Git.
+- **Files/artifacts đã cập nhật:** `script/c32100008.lua`, `claude-progress.md`
+
 ### Phiên 079 — 2026-06-12
 
 - **Mục tiêu:**
