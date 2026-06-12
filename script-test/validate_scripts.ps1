@@ -204,6 +204,37 @@ function Test-LuaConstants {
     return $warnings | Select-Object -Unique
 }
 
+function Test-ConstantsDependency {
+    param([string]$Content, [string]$FileName)
+    $errors = @()
+    if ($FileName -eq "constants.lua") { return $errors }
+
+    # Clean comments and strings to avoid false positives
+    $clean = $Content
+    $clean = [regex]::Replace($clean, '(?s)--\[\[.*?\]\]', '')
+    $clean = [regex]::Replace($clean, '--.*', '')
+    $clean = [regex]::Replace($clean, '"(?:[^"\\]|\\.)*"', '""')
+    $clean = [regex]::Replace($clean, "'(?:[^'\\]|\\.)*'", "''")
+
+    # EDOPro KHONG tu load script/constants.lua — script nao dung dinh danh
+    # tu file do bat buoc phai co Duel.LoadScript("constants.lua") o dau file,
+    # neu khong se crash runtime: attempt to call/index a nil value.
+    $hasLoad = $Content -match 'Duel\.LoadScript\(\s*"constants\.lua"\s*\)'
+    foreach ($ident in $Global:CustomIdentifiers) {
+        if (-not $hasLoad -and $clean -match "\b$([regex]::Escape($ident))\b") {
+            $errors += "Uses '$ident' (defined in script/constants.lua) without Duel.LoadScript(`"constants.lua`") - crashes at runtime with 'attempt to call a nil value'"
+        }
+    }
+
+    # Cac "API ma" (ham khong ton tai trong EDOPro) tung gay crash truoc day
+    foreach ($api in $Global:PhantomApis) {
+        if ($clean -match [regex]::Escape($api)) {
+            $errors += "Phantom API '$api' does not exist in EDOPro - crashes at runtime (see script-test/phantom_apis.txt)"
+        }
+    }
+    return $errors
+}
+
 function Test-ScriptFile {
     param([string]$FilePath)
     $fileName = Split-Path $FilePath -Leaf
@@ -243,12 +274,28 @@ if (Test-Path $ConstantsFile) {
 # Add custom constants from constants.lua if exists
 $RootPath = Split-Path $PSScriptRoot
 $CustomPath = Join-Path $RootPath "script\constants.lua"
+$Global:CustomIdentifiers = [System.Collections.Generic.List[string]]::new()
 if (Test-Path $CustomPath) {
     $constContent = Get-Content $CustomPath -Raw
     $customMatches = [regex]::Matches($constContent, '\b[A-Z_][A-Z0-9_]+\b')
     foreach ($m in $customMatches) {
         [void]$Global:ValidConstants.Add($m.Value)
     }
+    # Thu thap dinh danh ma constants.lua dinh nghia: hang so (SET_X = ...)
+    # va helper function (function Card.X / Duel.X ...) — dung cho dependency check
+    foreach ($m in [regex]::Matches($constContent, '(?m)^\s*([A-Z][A-Z0-9_]+)\s*=')) {
+        [void]$Global:CustomIdentifiers.Add($m.Groups[1].Value)
+    }
+    foreach ($m in [regex]::Matches($constContent, 'function\s+\w+\.(\w+)\s*\(')) {
+        [void]$Global:CustomIdentifiers.Add($m.Groups[1].Value)
+    }
+}
+
+# Load known phantom APIs blacklist (cac ham khong ton tai tung gay crash)
+$PhantomFile = Join-Path $PSScriptRoot "phantom_apis.txt"
+$Global:PhantomApis = @()
+if (Test-Path $PhantomFile) {
+    $Global:PhantomApis = @(Get-Content $PhantomFile | Where-Object { $_.Trim() -and $_ -notmatch '^\s*#' } | ForEach-Object { $_.Trim() })
 }
 
 Write-Host ""
@@ -320,6 +367,10 @@ foreach ($file in $files) {
         # 5. Constants check
         $constWarnings = Test-LuaConstants -Content $content
         foreach ($w in $constWarnings) { $allMessages += "CONST: $w"; $hasWarning = $true }
+
+        # 6. constants.lua dependency + phantom API check (FAIL — gay crash runtime)
+        $depErrors = Test-ConstantsDependency -Content $content -FileName $fileName
+        foreach ($e in $depErrors) { $allMessages += "DEPEND: $e"; $hasError = $true }
     }
 
     if ($hasError) {
