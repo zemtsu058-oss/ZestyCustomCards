@@ -762,6 +762,19 @@
   - `python .\script-test\manage_db.py check-sync` -> **100% OK** (All local card scripts and database entries are in perfect sync!).
   - `.\script-test\validate_scripts.ps1` -> **76 OK, 46 WARN, 0 FAIL** (Biên dịch thành công).
 - **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [c78900102.lua](file:///d:/TTF/TTFCustomCards/script/c78900102.lua), [analysis_results.md](file:///C:/Users/dinhd/.gemini/antigravity-ide/brain/7e6708b6-b46b-4d23-8ebc-118e9c455d53/analysis_results.md), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+### Phiên 052 — 2026-06-08
+
+- **Mục tiêu:**
+  - Thiết lập Git và quy trình để tiếp tục duy trì, theo dõi file database nhị phân `custom_cards_zesty.cdb` theo yêu cầu của user.
+- **Đã hoàn thành:**
+  - Cập nhật quy định trong [agent-rules.md](file:///d:/TTF/TTFCustomCards/docs/agent-rules.md) yêu cầu commit file CDB nhị phân chung với specs JSON và Lua script.
+  - Cập nhật tài liệu quy trình [agent-workflow.md](file:///d:/TTF/TTFCustomCards/docs/agent-workflow.md) làm rõ việc luôn phải chạy lệnh compile để đồng bộ dữ liệu vào CDB trước khi commit.
+  - Chạy biên dịch SQLite database từ specs JSON để cập nhật file `custom_cards_zesty.cdb`.
+- **Xác minh đã chạy:**
+  - `python .\script-test\manage_db.py compile` -> Biên dịch thành công 122 card specs.
+  - `python .\script-test\manage_db.py check-sync` -> **100% OK** (Đồng bộ hoàn hảo giữa DB, Specs JSON và scripts).
+  - `.\script-test\validate_scripts.ps1` -> **76 OK, 46 WARN, 0 FAIL** (Biên dịch thành công).
+- **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [agent-rules.md](file:///d:/TTF/TTFCustomCards/docs/agent-rules.md), [agent-workflow.md](file:///d:/TTF/TTFCustomCards/docs/agent-workflow.md), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._
 

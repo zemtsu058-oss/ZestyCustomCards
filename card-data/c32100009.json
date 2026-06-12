@@ -1,0 +1,21 @@
+{
+  "id": 32100009,
+  "ot": 32,
+  "alias": 0,
+  "type": 2,
+  "setcodes": [
+    321
+  ],
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 262145,
+  "name": "Rikka Vow",
+  "desc": "If you control 6 \"Rikka\" monsters: You can add this card from your Deck to your hand.\nDestroy 6 \"Rikka\" monsters you control, and if you do, inflict 100000 damage to both players.",
+  "strings": [
+    "Add this card from Deck to hand",
+    "Destroy 6 Rikka monsters and inflict 100000 damage"
+  ]
+}

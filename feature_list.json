@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-11",
+  "last_updated": "2026-06-12",
   "note": "Trạng thái: pending(p) | working(w) | review(r) | done(d) | skipped(x). Phản ánh prefix trong docs/queues/<archetype>/",
   "archetypes": {
     "Blue_Eye": {
@@ -348,6 +348,34 @@
           "status": "done",
           "queue_file": "docs/queues/Rikka/d_Rikka_Foliage.jpg",
           "script": "script/c32100005.lua"
+        },
+        {
+          "name": "Cecillia the Rikka Queen",
+          "passcode": "32100006",
+          "status": "done",
+          "queue_file": "docs/queues/Rikka/d_Cecillia_The_Rikka_Queen.jpg",
+          "script": "script/c32100006.lua"
+        },
+        {
+          "name": "Rikka Invitation",
+          "passcode": "32100007",
+          "status": "done",
+          "queue_file": "docs/queues/Rikka/d_Rikka_Invitation.jpg",
+          "script": "script/c32100007.lua"
+        },
+        {
+          "name": "Rikka Siesta",
+          "passcode": "32100008",
+          "status": "done",
+          "queue_file": "docs/queues/Rikka/d_Rikka_Siesta.jpg",
+          "script": "script/c32100008.lua"
+        },
+        {
+          "name": "Rikka Vow",
+          "passcode": "32100009",
+          "status": "done",
+          "queue_file": "docs/queues/Rikka/d_Rikka_Vow.jpg",
+          "script": "script/c32100009.lua"
         }
       ]
     },
