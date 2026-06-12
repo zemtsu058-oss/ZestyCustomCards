@@ -775,6 +775,20 @@
   - `python .\script-test\manage_db.py check-sync` -> **100% OK** (Đồng bộ hoàn hảo giữa DB, Specs JSON và scripts).
   - `.\script-test\validate_scripts.ps1` -> **76 OK, 46 WARN, 0 FAIL** (Biên dịch thành công).
 - **Files/artifacts đã cập nhật:** `custom_cards_zesty.cdb`, [agent-rules.md](file:///d:/TTF/TTFCustomCards/docs/agent-rules.md), [agent-workflow.md](file:///d:/TTF/TTFCustomCards/docs/agent-workflow.md), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
+### Phiên 053 — 2026-06-08
+
+- **Mục tiêu:**
+  - Rà soát sự cần thiết của skill `vibe-card` cũ trong thư mục `.claude/`.
+- **Đã hoàn thành:**
+  - Xác nhận skill `vibe-card` cũ trong `.claude/` đã lỗi thời và xung đột với luồng plaintext JSON Specs & Harness CLI mới (do gọi các script python cũ ghi đè CDB trực tiếp).
+  - Trích xuất tài liệu tra cứu bitmask CDB hữu ích từ skill cũ và di trú sang tài liệu chính thức [cdb-schema.md](file:///d:/TTF/TTFCustomCards/docs/cdb-schema.md).
+  - Xóa bỏ hoàn toàn thư mục `.claude/` để ngăn chặn IDE kích hoạt nhầm skill cũ.
+  - Cập nhật liên kết tài liệu trong [AGENTS.md](file:///d:/TTF/TTFCustomCards/AGENTS.md) và [agent-workflow.md](file:///d:/TTF/TTFCustomCards/docs/agent-workflow.md) để hỗ trợ tra cứu bitmask khi điền JSON specs.
+- **Xác minh đã chạy:**
+  - Thư mục `.claude/` đã được xóa sạch.
+  - `python .\script-test\manage_db.py check-sync` -> **100% OK** (Tương thích đồng bộ hoàn hảo).
+  - `.\script-test\validate_scripts.ps1` -> **76 OK, 46 WARN, 0 FAIL** (Biên dịch thành công).
+- **Files/artifacts đã cập nhật:** [AGENTS.md](file:///d:/TTF/TTFCustomCards/AGENTS.md), [agent-workflow.md](file:///d:/TTF/TTFCustomCards/docs/agent-workflow.md), [cdb-schema.md](file:///d:/TTF/TTFCustomCards/docs/cdb-schema.md), [claude-progress.md](file:///d:/TTF/TTFCustomCards/claude-progress.md)
 
 _Thêm phiên mới theo format trên. Giữ mục "Trạng thái Hiện tại" luôn cập nhật._
 

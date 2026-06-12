@@ -139,9 +139,8 @@ end
 -- ============================================================
 function s.lpcon(e,tp,eg,ep,ev,re,r,rp)
     local main_phase = Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2
-    if Duel.GetTurnPlayer()==tp and main_phase and Duel.GetCurrentChain()==0 then
-        return true
-    end
+    if not main_phase then return false end
+    if Duel.GetTurnPlayer()==tp then return true end
     return Duel.IsExistingMatchingCard(function(c) return c:IsRace(RACE_PLANT) and c:IsMonster() end,
         tp, LOCATION_HAND, 0, 1, nil)
 end

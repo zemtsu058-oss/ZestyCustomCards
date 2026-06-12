@@ -8,8 +8,6 @@
   ],
   "atk": 1800,
   "linkmarkers": [
-    "Left",
-    "Right",
     "Bottom-Left",
     "Bottom-Right"
   ],
