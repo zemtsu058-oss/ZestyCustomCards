@@ -126,7 +126,7 @@ function s.actop(e,tp,eg,ep,ev,re,r,rp)
     local sg=g:Select(tp,1,1,nil)
     if #sg>0 then
         local th=sg:GetFirst()
-        local td=g:Filter(function(c) return c~=th end):GetFirst()
+        local td=g:Filter(function(c) return c~=th end,nil):GetFirst()
         if Duel.SendtoHand(th,nil,REASON_EFFECT)>0 then
             Duel.ConfirmCards(1-tp,th)
             Duel.SendtoDeck(td,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
