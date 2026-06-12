@@ -16,6 +16,17 @@
 > Để giữ file nhật ký gọn gàng và dễ theo dõi, các phiên làm việc cũ đã được chuyển vào file lưu trữ.
 > [Xem lịch sử các phiên trước đó (Phiên 001 - 054) tại đây](file:///d:/TTF/TTFCustomCards/docs/claude-progress-archive.md).
 
+### Phiên 081 — 2026-06-12
+
+- **Mục tiêu:**
+  - Sửa lỗi effect 3 của card "Wandering Fairy in the Castle of Dreams" (`192200015`) không hoạt động.
+- **Đã hoàn thành:**
+  - **Khắc phục lỗi gọi hàm không tồn tại**: Thay thế `Card.GetRelatedHandler(e:GetHandler(), e)` bằng standard API `e:GetHandler()` trong cả `s.spop` và `s.thop`. Hàm này trước đây được tin là có sẵn hoặc định nghĩa trong `constants.lua` nhưng thực tế không tồn tại, gây crash runtime khi kích hoạt hiệu ứng.
+  - **Cập nhật danh sách API ma**: Thêm `Card.GetRelatedHandler` vào `script-test/phantom_apis.txt` để chặn việc sử dụng trong tương lai.
+  - **Tối ưu hóa style**: Bẻ các dòng code quá dài (> 120 ký tự) để đáp ứng yêu cầu của linter.
+  - Chạy verify thành công (`verify 192200015`).
+- **Files/artifacts đã cập nhật:** `script/c192200015.lua`, `script-test/phantom_apis.txt`, `claude-progress.md`
+
 ### Phiên 080 — 2026-06-12
 
 - **Mục tiêu:**
