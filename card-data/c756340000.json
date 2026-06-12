@@ -1,0 +1,16 @@
+{
+  "id": 756340000,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 4129,
+  "atk": 0,
+  "def": 0,
+  "level": 1,
+  "race": 2,
+  "attribute": 16,
+  "category": 0,
+  "name": "Sv Kandy, Master of white dragon ",
+  "desc": "Nếu lá bài này được thêm lên tay bởi hiệu ứng, bạn có thể triệu hồi đặc biệt lá này từ tay.\nNếu lá bài này được triệu hồi đặc biệt bạn có thể tiết lộ một lá bài từ Deck hoặc Extra Deck và áp dụng các hiệu ứng sau ứng với mỗi loại lá bài:\n- Quái thú hiệu ứng: Triệu hồi Đặc biệt quái thú đó.\n- Phép: Nếu có một lá Phép môi trường đang ngửa mặt trên sân, bạn có thể thêm lá đó lên tay, nếu không bạn phải gửi lá này xuống mộ.\n- Bẫy: Nếu có một cạm bẫy vĩnh Cửu đang ngửa mặt trên sân bạn có thể úp trực tiếp lá đó lên sân, nếu không bạn gửi lá bài này xuống mộ.\n- Quái thú Fusion: Thêm một trong các nguyên liệu được đề cập của quái thú đó lên tay hoặc một lá \"Fusion\" lên tay từ Bộ bài.\n- Xyz: Thêm một quái thú có số sao bằng số rank của quái thú đó lên tay từ Bộ bài.\n- Synchro: Thêm một tuner từ Bộ bài lên tay.\n- Link: Rút bài ứng với số link của quái thú đó.\n- Pendulum: Đặt hai quái thú Pendulum bất kỳ từ Bộ bài vào vùng Pendulum zone.\nBạn chỉ có thể sử dụng những hiệu ứng trên của \"Sv Kandy, Master of white dragon\" một lần mỗi trận đấu.",
+  "strings": []
+}

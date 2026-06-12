@@ -1,0 +1,19 @@
+{
+  "id": 78544,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 296,
+  "type": 2,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Witchcrafter in Profusion",
+  "desc": "Fusion Summon 1 Spellcaster Fusion Monster from your Extra Deck, using monsters from your hand or field as Fusion Material. If you Fusion Summon a \"Witchcrafter\" Fusion Monster, you can also use 1 Spell in your hand as 1 of the materials. If a Spell(s) is discarded while this card is in your GY (except during the Damage Step): You can banish this card from your GY, then target 1 Spell in your GY or that is banished; add 1 Spell with the same name as that targeted card from your Deck to your hand. You can only use each effect of \"Witchcrafter in Profusion\" once per turn.",
+  "strings": [
+    "Use 1 Spell in your hand as Fusion Material?",
+    "Use 1 Spell in your hand as Fusion Material?"
+  ]
+}

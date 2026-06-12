@@ -1,0 +1,18 @@
+{
+  "id": 9990204,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 22151464,
+  "type": 97,
+  "atk": 2000,
+  "def": 3800,
+  "level": 10,
+  "race": 2,
+  "attribute": 16,
+  "category": 0,
+  "name": "Witchcrafter Magistus Verre",
+  "desc": "1 Spellcaster monster + 1 LIGHT Spellcaster with 1000 ATK and 2800 DEF\nMust first be Fusion Summoned using the above materials.\nOnce per turn (Quick Effect): You can discard 1 Spell; negate the effects of all face-up cards your opponent currently controls, and if you do, this card gains 1000 ATK/DEF for each card negated by this effect, until the end of this turn.\nIf this card would leave the field by your opponent’s card effect, you can shuffle 1 Spellcaster monster from your banishment into the Deck instead.",
+  "strings": [
+    "Shuffle 1 Spellcaster instead"
+  ]
+}

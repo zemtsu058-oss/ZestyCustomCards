@@ -1,0 +1,16 @@
+{
+  "id": 79846799,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 296,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Verre Magic – Sleep Time!",
+  "desc": "This card is always treated as \"Witchcrafter\" card.\nWhen you active \"Witchcrafter Madame Verre\" effect on the field, you can return it to the hand, and if you do, your opponent can not attack this turn.\nDuring the End Phase, if this card is in your graveyard: You can banish this card, Special Summon 1 \"Witchcrafter Madame Verre' from your hand, and if you do, add \"Magical Dimension\" or \"Witchcrafter\" Spell/Trap from your deck or graveyard to your hand.\nYou can only use each \"Verre Magic - Sleep Time!\" effect once per turn.",
+  "strings": []
+}

@@ -54,7 +54,7 @@ function s.initial_effect(c)
     e1a:SetRange(LOCATION_MZONE)
     e1a:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
     e1a:SetCondition(aux.NOT(s.quickcon))
-    e1a:SetCost(Cost.DetachFromSelf(1))
+    e1a:SetCost(s.detach1cost)
     e1a:SetTarget(s.tg_return)
     e1a:SetOperation(s.op_return)
     c:RegisterEffect(e1a)
@@ -78,7 +78,7 @@ function s.initial_effect(c)
     e2a:SetCode(EVENT_CHAINING)
     e2a:SetRange(LOCATION_MZONE)
     e2a:SetCondition(s.negcon_noq)
-    e2a:SetCost(Cost.DetachFromSelf(1))
+    e2a:SetCost(s.detach1cost)
     e2a:SetTarget(s.negtg)
     e2a:SetOperation(s.negop)
     c:RegisterEffect(e2a)
@@ -98,7 +98,7 @@ function s.initial_effect(c)
     e3a:SetType(EFFECT_TYPE_IGNITION)
     e3a:SetRange(LOCATION_MZONE)
     e3a:SetCondition(aux.NOT(s.quickcon))
-    e3a:SetCost(Cost.DetachFromSelf(2))
+    e3a:SetCost(s.detach2cost)
     e3a:SetTarget(s.tg_wipe)
     e3a:SetOperation(s.op_wipe)
     c:RegisterEffect(e3a)
@@ -111,6 +111,20 @@ function s.initial_effect(c)
     e3b:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E+TIMING_END_PHASE)
     c:RegisterEffect(e3b)
 end
+
+-- ============================================================
+-- Cost Functions
+-- ============================================================
+function s.detach1cost(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
+    e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
+end
+
+function s.detach2cost(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,2,REASON_COST) end
+    e:GetHandler():RemoveOverlayCard(tp,2,2,REASON_COST)
+end
+
 
 -- ============================================================
 -- Alt Xyz Filter — "Teardrop the Rikka Queen" with 2 Plant mats

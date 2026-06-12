@@ -1,0 +1,18 @@
+{
+  "id": 192300002,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 67108897,
+  "atk": 0,
+  "def": 2,
+  "level": 1,
+  "race": 67108864,
+  "attribute": 16,
+  "category": 0,
+  "name": "Setsuna of Bygone Days",
+  "desc": "1 monster\nCannot be used as Link Material. If this card is Link Summoned: You can Special Summon 1 \"Wezaemon the Tombguard\" from your hand or Deck, and if you do, banish all other monsters you control. This effect cannot be negated if you control no monsters in your Main Monster Zones. You can only Special Summon \"Setsuna of Bygone Days\" once per turn.",
+  "strings": [
+    "Special Summon 1 \"Wezaemon the Tombguard\" from your hand or Deck"
+  ]
+}

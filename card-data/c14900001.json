@@ -1,0 +1,16 @@
+{
+  "id": 14900001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 149,
+  "type": 18,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Rank-Up-Magic Rising Force",
+  "desc": "If you control no monster: Special Summon 1 Xyz monster from your GY, then Special Summon 1 Xyz monster with the same Type and Attribute with that monster from your Extra Deck, with higher Rank, using this card and that monster as material (this is treated as Xyz Summon), then you take damage equal to the Rank difference between two monster * 1000.\nYou can only activate 1 \"Rank-Up-Magic Rising Force\" per turn.",
+  "strings": []
+}

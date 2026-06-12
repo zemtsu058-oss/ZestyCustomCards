@@ -1,0 +1,18 @@
+{
+  "id": 79900002,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1929,
+  "type": 33,
+  "atk": 1000,
+  "def": 1000,
+  "level": 4,
+  "race": 16384,
+  "attribute": 16,
+  "category": 0,
+  "name": "Ttf Cat Luna",
+  "desc": "Bạn có thể Triệu hồi Đặc biệt lá bài này (từ tay) bằng cách trục xuất 1 quái thú Thú \"Ttf\" từ Mộ của bạn. Bạn chỉ có thể Triệu hồi Đặc biệt \"Ttf Cat Luna\" một lần mỗi lượt theo cách này.\nNếu lá bài này được Triệu hồi Thường hoặc Đặc biệt: Bạn có thể thêm 1 lá phép \"Cat\" từ Bộ bài của bạn lên tay. Bạn chỉ có thể sử dụng hiệu ứng này của \"Ttf Cat Luna\" một lần mỗi lượt.",
+  "strings": [
+    "Thêm 1 lá phép \"Cat\""
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": 192200005,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 33,
+  "atk": 2500,
+  "def": 2000,
+  "level": 6,
+  "race": 2,
+  "attribute": 32,
+  "category": 271811072,
+  "name": "Morpheus, Dreamspinner of the Castle of Dreams",
+  "desc": "If a monster(s) is Special Summoned from your opponent's Deck and/or Extra Deck: You can Special Summon this card from your hand. You can only Special Summon \"Morpheus, Dreamspinner of the Castle of Dreams\" once per turn this way. If this card is Special Summoned by its own effect: You can place 1 \"Castle of Dreams\" Field Spell from your Deck face-up on your field. Once per turn, when your opponent activates a card or effect, while you control a \"Castle of Dreams\" Field Spell (Quick Effect): You can negate the activation, and if you do, your opponent chooses 1 of these effects for you to apply. (1) Your opponent draws 1, then discards 2 cards. (2) All monsters your opponent controls gain 500 ATK, but change them to Defense Position. (3) Your opponent gains 1000 LP, but takes 2500 damage during the End Phase of this turn.",
+  "strings": [
+    "If a monster(s) is Special Summoned from your opponent's Deck and/or Extra Deck: You can Special Summon this card from your hand.",
+    "If this card is Special Summoned by its own effect: You can place 1 \"Castle of Dreams\" Field Spell from your Deck face-up on your field.",
+    "Once per turn (Quick Effect): Negate opponent activation; opponent chooses effect to apply.",
+    "Your opponent draws 1, then discards 2 cards.",
+    "All monsters your opponent controls gain 500 ATK, but change them to Defense Position.",
+    "Your opponent gains 1000 LP, but takes 2500 damage during the End Phase of this turn."
+  ]
+}

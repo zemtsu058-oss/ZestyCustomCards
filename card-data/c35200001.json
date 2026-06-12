@@ -1,0 +1,19 @@
+{
+  "id": 35200001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 352,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 67240492,
+  "name": "Branded's New Adventure",
+  "desc": "If this card is drawn during the Draw Phase: You must reveal it, and if you do, banish it face-down during the End Phase of this turn, then apply this effect.\n- Level 8 or higher Fusion Monsters you control cannot be targeted or destroyed by your opponent card effects, also your opponent cannot activate cards or effects in response to the activation of your Fusion Spell Card or effect that Fusion Summons a monster until the end of this turn.\nIf this card is added to your hand: Send this card to the GY, and if you do, apply these effects in sequence.\n- Send 1 Spell/Trap from your hand or field to the GY; add 1 \"Branded\" Spell/Trap from your Deck, GY, or banishment to your hand, but you cannot activate it this turn.\n- Fusion Summon 1 Level 8 or higher Fusion Monster from your Extra Deck by banishing materials from your Deck and/or Extra Deck equal to the number of monsters on your opponent field. Monsters used as material for this Summon cannot activate their effects this turn.\nYou can only use each effect of \"Branded's New Adventure\" once per turn.",
+  "strings": [
+    "Reveal this card drawn during the Draw Phase; apply protection and schedule its face-down banish.",
+    "Send this card to the GY; send 1 Spell/Trap, add 1 Branded Spell/Trap, then Fusion Summon."
+  ]
+}

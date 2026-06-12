@@ -1,0 +1,19 @@
+{
+  "id": 34100002,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 398,
+  "type": 262146,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 520,
+  "name": "Mikanko Illusion Dance",
+  "desc": "The equipped monster cannot be destroyed by card effects. You can only use each of the following effects of \"Mikanko Illusion Dance\" once per turn. During your Main Phase, while this card is on the field, in your GY, or banishment: You can return this card to the hand; Special Summon 1 \"Mikanko\" monster from your hand. During your Main Phase, while this card is equipped to a monster: You can return another \"Mikanko\" card on your field to the hand; Special Summon 1 \"Mikanko\" monster from your hand or Deck.",
+  "strings": [
+    "Return this card; Special Summon from hand",
+    "Return another Mikanko; Special Summon from hand/Deck"
+  ]
+}

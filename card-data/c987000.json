@@ -1,0 +1,16 @@
+{
+  "id": 987000,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 131074,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "No Stealing",
+  "desc": "When this card is activated: Return control of all monsters on the field to their owners.\nWhile this card is face-up in the Spell & Trap Zone, it is unaffected by other card effects.\nNeither player can Tribute monsters their opponent owns for a Summon, or use them as Fusion, Synchro, Xyz, or Link Material.\nNeither player can take control of monsters owned by their opponent, nor Special Summon monsters owned by their opponent to their field.",
+  "strings": []
+}

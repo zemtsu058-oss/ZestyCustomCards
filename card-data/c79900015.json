@@ -1,0 +1,18 @@
+{
+  "id": 79900015,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 33,
+  "atk": 2200,
+  "def": 1200,
+  "level": 6,
+  "race": 2,
+  "attribute": 16,
+  "category": 0,
+  "name": "Retfihs Noisnemid",
+  "desc": "If a card(s) is in either GY or banishment (Quick effect): You can banish this card from your hand; until the end of the next turn, any card banished, except from the GY, is sent to the GY instead, also your opponent take 100 damage for each card sent to the GY that way.",
+  "strings": [
+    "Banish from hand to redirect banishment and burn"
+  ]
+}

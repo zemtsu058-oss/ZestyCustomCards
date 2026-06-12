@@ -1,0 +1,16 @@
+{
+  "id": 78533,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 296,
+  "type": 97,
+  "atk": 2300,
+  "def": 2500,
+  "level": 7,
+  "race": 2,
+  "attribute": 8,
+  "category": 0,
+  "name": "Witchcrafter Hisho - Madame",
+  "desc": "​2 Spellcaster monsters, include WIND monsters\nIf this card is Fusion Summoned: You can send 1 \"Witchcrafter\" Spell from your Deck to the GY; this effect becomes that Spell's effect when that card is activated. (Quick Effect): You can target cards on the field, up to the number of \"Witchcrafter\" Spell/Trap cards in your GY; return them and this card to the hand. You can only use each effect of \"Witchcrafter Hisho - Madame\" once per turn.",
+  "strings": []
+}

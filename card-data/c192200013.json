@@ -1,0 +1,19 @@
+{
+  "id": 192200013,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 4,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 513,
+  "name": "Castle of Dreams - Breakout",
+  "desc": "If 3 or more monsters were Special Summoned from your opponent's Deck and/or Extra Deck this turn, while you control a \"Castle of Dreams\" Field Spell: Destroy any number of cards on the field, then you can Special Summon 1 monster from your GY or banishment. You can only activate 1 \"Castle of Dreams - Breakout\" per turn.",
+  "strings": [
+    "Destroy cards on the field, then Special Summon 1 monster",
+    "Special Summon 1 monster from your GY or banishment"
+  ]
+}

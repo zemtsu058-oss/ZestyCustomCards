@@ -1,0 +1,16 @@
+{
+  "id": 90177,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 383,
+  "type": 4,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Labrynth Party",
+  "desc": "You can only activate this card if you have 2 or more Normal Traps in your GY, including a \"Labrynth\" Trap.\nTribute 1 Level 8 Fiend monster; Set Normal Traps from your Deck, up to the number of \"Labrynth\" cards in your GY, with different names from the Traps in your GY.\nDuring Main Phase: You can banish this card from your GY; Set 1 \"Labrynth\" Trap from your GY. It can be activated this turn, but banish it when it leaves the field.\nYou can only use 1 \"Labrynth Party\" effect per turn, and only once that turn.",
+  "strings": []
+}

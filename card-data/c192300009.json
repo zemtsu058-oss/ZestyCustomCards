@@ -1,0 +1,20 @@
+{
+  "id": 192300009,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Ohshike",
+  "desc": "If your LP are 4000 or less, you can activate this card from your hand during your opponent's turn. When your opponent activates a card or effect that targets a card(s) you control, while you control \"Wezaemon the Tombguard\": You can pay 800 LP; negate the activation, and if you do, destroy that card. You can banish this card from your GY; add 1 \"Wezaemon the Tombguard\" from your GY to your hand, then you can Special Summon 1 Zombie monster from your hand. If you do, for the rest of this turn, you cannot activate monster effects on the field or in the GY, except \"Wezaemon the Tombguard\" or monsters that mention it. You can only use each effect of \"Ohshike\" once per turn.",
+  "strings": [
+    "Negate the activation and destroy that card",
+    "Add \"Wezaemon the Tombguard\" from GY + Special Summon Zombie",
+    "Special Summon 1 Zombie monster from your hand?"
+  ]
+}

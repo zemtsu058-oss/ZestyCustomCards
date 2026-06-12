@@ -1,0 +1,22 @@
+{
+  "id": 927680,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 526631,
+  "type": 33,
+  "atk": 1000,
+  "def": 500,
+  "level": 4,
+  "race": 1,
+  "attribute": 16,
+  "category": 0,
+  "name": "Desire HERO Geats - Entry Form",
+  "desc": "​If this card is Normal or Special Summoned: You can add 1 \"Buckle\" Spell from your Deck to your hand, or, if you control \"Desire Grand Prix Invitation\", you can add 1 \"Desire Hero\" monster from your Deck to your hand instead.\nIf this card is equipped with \"Boost Buckle\": You can send that Equip Card to the GY; add 1 \"Desire Grand Prix Invitation\" from your Deck to your hand.\nIf this card is equipped with \"Magnum Buckle\": You can send that Equip Card to the GY; inflict 200 damage to your opponent.\nYou can only use each effect of \"Desire Hero Geats – Entry Form\" once per turn.",
+  "strings": [
+    "Search ",
+    "Search 1 \"Buckle spell\"",
+    "Search 1 \"Desire HERO\" monster ",
+    "Send Boost",
+    "Send Magnum "
+  ]
+}

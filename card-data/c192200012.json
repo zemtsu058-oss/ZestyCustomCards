@@ -1,0 +1,19 @@
+{
+  "id": 192200012,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 4,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 1048577,
+  "name": "Castle of Dreams - Betrayal",
+  "desc": "If 2 or more monsters were Special Summoned from your opponent's Deck and/or Extra Deck this turn, while you control a \"Castle of Dreams\" Field Spell: Take control of 1 monster your opponent controls, then if you took control of an Effect Monster, that monster gains the following effect: Once per turn, when your opponent activates a monster effect: Destroy that monster. You can only activate 1 \"Castle of Dreams - Betrayal\" per turn.",
+  "strings": [
+    "Take control of 1 monster your opponent controls",
+    "Once per turn, when your opponent activates a monster effect: Destroy that monster."
+  ]
+}

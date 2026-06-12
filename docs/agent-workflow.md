@@ -1,123 +1,128 @@
-# Workflow Tạo Card Mới
+# Hướng Dẫn Quy Trình Vận Hành & Kiểm QA (Card Operations)
 
-> Đọc file này khi: nhận yêu cầu tạo card mới từ user.
-
----
-
-## Bước 1: Nhận yêu cầu
-
-User cung cấp thông tin:
-- Tên card, loại (Monster/Spell/Trap), sub-type (Effect/Fusion/Synchro/...)
-- Attribute, Level/Rank/Link, ATK/DEF, Race
-- Effect text (tiếng Anh hoặc tiếng Việt)
+Tài liệu này bao gồm toàn bộ quy trình từ lúc khởi tạo card mới, gỡ lỗi, kiểm QA và test trực tiếp trong game EDOPro.
 
 ---
 
-## Bước 2: Phân tích effect → chọn template
+## 1. Quy Trình Tạo Card Mới (Harness CLI)
 
-Đọc effect text, xác định loại effect và chọn template tương ứng:
+Mọi card mới bắt buộc phải được quản lý thông qua **Harness CLI** để tự động hóa việc rename artwork, đăng ký feature list và kiểm tra cú pháp.
 
-| Mô tả effect | Loại | Template |
-|-------------|------|----------|
-| "If/When ... is Normal/Special Summoned: You can..." | Trigger O | `template_effect_monster.lua` |
-| "Once per turn: You can..." (Main Phase) | Ignition | `template_effect_monster.lua` |
-| "(Quick Effect): You can..." | Quick | `template_hand_trap.lua` |
-| "When your opponent activates..." (negate từ tay) | Quick Hand | `template_hand_trap.lua` |
-| Spell Card activation | Normal Spell | `template_normal_spell.lua` |
-| Trap Card activation | Normal Trap | `template_normal_trap.lua` |
-| Fusion Monster + effect | Fusion | `template_fusion_monster.lua` |
-| Synchro Monster + effect | Synchro | `template_synchro_monster.lua` |
-| Xyz Monster + detach effect | Xyz | `template_xyz_monster.lua` |
-| Link Monster + effect | Link | `template_link_monster.lua` |
-| Pendulum (scale + monster effect) | Pendulum | `template_pendulum_monster.lua` |
-| Field Spell (activation + continuous + phase trigger) | Field | `template_field_spell.lua` |
-| "All ... gain ATK/DEF" | Continuous | `template_synchro_monster.lua` (Effect 2) |
-| Target + destroy | Destroy | `template_effect_monster.lua` (Effect 2) |
-| Search/add từ Deck | Search | `template_effect_monster.lua` (Effect 1) |
-| SS từ GY/Deck | Special Summon | `template_synchro_monster.lua` (Effect 1) |
-
-Nếu card có nhiều effect, chọn template có số effect phù hợp nhất, rồi thêm/bớt effect block.
-
-Chi tiết hơn: xem [`template-card/README.md`](../template-card/README.md)
-
----
-
-## Bước 3: Copy template → điền placeholder
-
+### Bước 0: Quét hàng đợi và Đăng ký (Định kỳ hoặc Khi có ảnh mới)
+Nếu trong hàng đợi (thư mục `docs/queues/`) xuất hiện các file ảnh có tiền tố `p_` (ví dụ: `p_Kanzashi_The_Rikka_Flower.jpg`), hãy chạy lệnh quét tự động để hệ thống phân tích, gán passcode và đăng ký chúng vào `feature_list.json` ở trạng thái `"pending"`:
 ```powershell
-Copy-Item template-card\template_xxx.lua script\c<PASSCODE>.lua
+python .\script-test\manage_harness.py scan
 ```
+Sau đó, các card này đã sẵn sàng trong `feature_list.json` để bạn khởi tạo phát triển ở các bước tiếp theo.
 
-Thay thế tất cả `<<PLACEHOLDER>>`:
-- `<<CARD_NAME>>` → tên card
-- `<<PASSCODE>>` → passcode (số 9 chữ số, xem [`docs/agent-constants.md`](agent-constants.md))
-- `<<SETCODE>>` → archetype hex (xem [`docs/agent-constants.md`](agent-constants.md))
-- `<<LEVEL>>`, `<<RANK>>`, `<<ATK>>`, `<<DEF>>` → chỉ số
-- `<<ATK_VALUE>>`, `<<LP_AMOUNT>>` → giá trị hiệu ứng
-- `<<LINK_COUNT>>`, `<<MIN_MATERIAL>>`, `<<MATERIAL_COUNT>>` → chỉ số summon
+### Bước 1: Nhận yêu cầu và Chọn Template
+Đọc effect text của card để chọn loại template tương ứng cho việc sinh mã nguồn:
 
-**Quan trọng**: Giữ nguyên header comment (`-- ============================================================`) và cập nhật effect text.
+| Mô tả effect | Loại card / Effect đặc trưng | Tên template |
+|-------------|-----------------------------|--------------|
+| "If/When ... is Summoned..." | Trigger Monster | `effect_monster` |
+| "Once per turn: You can..." (Main Phase) | Ignition Monster | `effect_monster` |
+| "(Quick Effect): You can..." | Hand Trap / Quick Effect | `hand_trap` |
+| Spell Card kích hoạt thông thường | Normal Spell | `normal_spell` |
+| Trap Card kích hoạt thông thường | Normal Trap | `normal_trap` |
+| Field Spell (activation + continuous) | Field Spell | `field_spell` |
+| Fusion Monster + effect | Fusion | `fusion_monster` |
+| Synchro Monster + effect | Synchro | `synchro_monster` |
+| Xyz Monster + detach effect | Xyz | `xyz_monster` |
+| Link Monster + effect | Link | `link_monster` |
+| Pendulum (scale + monster effect) | Pendulum | `pendulum_monster` |
 
----
+*Xác định Passcode:* Passcode gồm **9 chữ số** (Xem hướng dẫn tại [docs/agent-rules.md](agent-rules.md)).
 
-## Bước 4: Tùy chỉnh effect
+### Bước 1.5: Tìm và tham khảo card official tương tự
+Trước khi sinh (gen) card hoặc viết code, bắt buộc phải:
+1. Tìm kiếm và liệt kê 1-2 card official có hiệu ứng tương đồng (cùng cơ chế triệu hồi, cùng điều kiện kích hoạt, hoặc cùng loại trigger/ignition/quick effect).
+2. Chạy công cụ tải script mẫu về thư mục tham chiếu:
+   ```powershell
+   .\script-test\fetch_official.ps1 <passcode_official>
+   ```
+3. Đọc kỹ và tham khảo cấu trúc code của card official tại `docs/official-reference/c<passcode_official>.lua` để áp dụng/sao chép sang card custom của bạn. Điều này đảm bảo tính chính xác về mặt timing và logic của game.
 
-- Nếu card chỉ có 1 effect: xóa block effect 2 + tất cả function liên quan
-- Nếu card có 3+ effect: copy block `Effect.CreateEffect` → `RegisterEffect` và tăng số (`e3`, `e4`)
-- Nếu effect khác pattern trong template: sửa trực tiếp logic trong target/operation function
-- Ánh xạ `aux.Stringid(id,N)` — N=0 cho effect 1, N=1 cho effect 2, v.v.
-
-Khi template không đủ → xem [`docs/agent-bugfix.md`](agent-bugfix.md) mục "Khi template không đủ".
-
----
-
-## Bước 5: Validate
-
+### Bước 2: Khởi tạo bằng Harness CLI
+Chạy lệnh sau để CLI tự động thiết lập khung dự án cho card mới:
 ```powershell
-.\script-test\validate_scripts.ps1
+python .\script-test\manage_harness.py start <passcode> "<tên_card>" <tên_template>
 ```
+*Tác vụ tự động:* Tạo `script/c<passcode>.lua`, tạo `card-data/c<passcode>.json` (skeleton dùng field thân thiện `setcodes`/`linkmarkers`/`lscale`/`rscale` theo template), đổi tên ảnh queue sang làm việc `w_`, đăng ký `"working"` trong `feature_list.json`, và **in checklist các field bắt buộc phải điền**.
 
-Sửa tất cả lỗi FAIL và WARN trước khi báo cáo hoàn thành.
+*An toàn:* `start` từ chối ghi đè file đã tồn tại và kiểm tra template hợp lệ trước khi tạo bất kỳ file nào. Lệnh trả về exit code 1 khi fail.
+
+### Bước 3: Hoàn thiện logic & điền Specs JSON
+1. **Specs JSON (`card-data/c<passcode>.json`):** Mở file specs JSON vừa tạo và điền các thuộc tính thực tế (ATK, DEF, Level, Race, Attribute, Type, Category). *Tra cứu bitmask thập phân tại [docs/agent-rules.md](agent-rules.md).*
+2. **Logic Lua (`script/c<passcode>.lua`):** Viết logic hiệu ứng trong tệp Lua.
+
+### Bước 4: Xác thực và Hoàn thành bằng Harness CLI
+Khi viết xong code, chạy lệnh verify để chạy đường ống kiểm tra tự động:
+```powershell
+python .\script-test\manage_harness.py verify <passcode>
+```
+*Các bước tự động của pipeline:*
+- **Step 0 — Pre-flight:** chặn ngay nếu thiếu file JSON/Lua, `desc` còn placeholder `"Mô tả hiệu ứng..."`, Lua còn `<<PLACEHOLDER>>`/`XXXXXXXXX`, hoặc artwork mang đuôi `.jpeg` (EDOPro không load); cảnh báo nếu chưa có `pics/<passcode>.jpg|.png`.
+- **Step 1:** Validate toàn bộ specs theo chuẩn Datacorn rồi biên dịch CDB (atomic).
+- **Step 2:** Validate cú pháp/cấu trúc Lua của riêng card này.
+- **Step 3:** Kiểm tra linter style.
+- **Step 4:** Check-sync toàn project (bao gồm so sánh nội dung CDB với specs để phát hiện CDB stale).
+- **Step 5-6:** Đổi trạng thái `done`, đổi ảnh queue sang `d_`, archive nhật ký phiên.
+
+Nếu verify đạt `SUCCESS` thì exit code = 0; mọi bước fail đều trả exit code 1 — bắt buộc sửa cho đến khi `SUCCESS`.
 
 ---
 
-## Bước 6: Cập nhật database
+## 2. Quy Trình Sửa Lỗi Nhanh (Bug Fix Workflow)
 
-Công cụ CLI:
-```powershell
-# Xem thông tin card
-python .\script-test\manage_db.py query <passcode_hoặc_tên>
+Khi nhận báo cáo lỗi hiệu ứng, hãy thực hiện theo quy trình cơ học sau:
 
-# Kiểm tra đồng bộ
-python .\script-test\manage_db.py check-sync
-
-# Cập nhật text/mô tả
-python .\script-test\manage_db.py update-text <passcode> --desc "Văn bản"
-```
-
-Hoặc dùng DataEditorX mở `custom_cards_zesty.cdb`:
-- Thêm entry mới với passcode, stats, effect text
-- **BẮT BUỘC** đặt cột `ot` = 32 (Custom format)
-- Nếu có custom archetype mới: thêm vào `constants.lua` và `strings.conf`
+1. **Xác định card lỗi và card tham khảo:** Tìm 1-2 lá bài **official** có hiệu ứng tương đồng nhất với hiệu ứng đang bị lỗi.
+2. **Tải script official:** Sử dụng công cụ tải script mẫu về tham khảo:
+   ```powershell
+   .\script-test\fetch_official.ps1 <passcode_official>
+   ```
+   *Vị trí file tải về:* `docs/official-reference/c<passcode_official>.lua`
+3. **So sánh logic (Mechanical Diff):** Đối chiếu cấu trúc:
+   - **Condition (`con`):** Cách lọc điều kiện, kiểm tra vị trí.
+   - **Target (`tg`):** Cách check legality (`chk==0`), gán Category.
+   - **Operation (`op`):** Cách gọi các hàm API của EDOPro.
+4. **Sửa đổi và Chạy CLI Verify:** Sau khi sửa xong script, chạy lệnh xác thực:
+   ```powershell
+   python .\script-test\manage_harness.py verify <passcode>
+   ```
+   Bắt buộc sửa cho đến khi verify báo `SUCCESS` mới được báo hoàn thành.
 
 ---
 
-## Checklist hoàn thành
+## 3. Checklist QA của Agent (Bắt buộc trước khi báo DONE)
 
-Trước khi báo DONE, chạy đủ 4 lệnh:
+CLI verify tự động kiểm tra cú pháp và cấu trúc, nhưng bạn bắt buộc phải tự review bằng mắt các điểm logic sau:
+* [ ] **ATK/DEF, Level/Rank/Link/Pendulum Scale** trong Specs JSON đã khớp chính xác với effect text gốc.
+* [ ] **HOPT vs SOPT:** Đã sử dụng đúng `EFFECT_COUNT_CODE_OATH` kèm ID của card (`{id, N}`) cho Hard Once Per Turn (HOPT)?
+* [ ] **Legality check:** Target function bắt buộc phải có `if chk==0 then return ... end`.
+* [ ] **Operation Info:** Đã khai báo đúng `Duel.SetOperationInfo` trong target.
+* [ ] **Handler Safety:** Trong operation của trigger/continuous effect đã dùng mẫu chuẩn `local c=e:GetHandler()` + kiểm tra `c:IsRelateToEffect(e)` (kèm `c:IsFaceup()` nếu cần) trước khi áp dụng hiệu ứng.
+* [ ] **constants.lua Dependency:** Nếu script dùng định danh từ `script/constants.lua` (`SET_*`, `COUNTER_*`, helper tự chế), đã có `Duel.LoadScript("constants.lua")` ở đầu file (EDOPro **không** tự load file này).
+* [ ] **API thật:** Mọi hàm API được gọi đều xuất hiện trong script official tham khảo (`docs/official-reference/`) — không gọi hàm "bịa" (xem danh sách đen `script-test/phantom_apis.txt`).
+* [ ] **Zone Safety:** Đã kiểm tra `Duel.GetLocationCount` (hoặc `GetMZoneCount`) > 0 trước khi Special Summon.
+* [ ] **Effect Description:** Đã gán đúng `aux.Stringid(id, N)` tương ứng trong `strings` của Specs JSON.
 
-```powershell
-# 1. Validate cú pháp + cấu trúc
-.\script-test\validate_scripts.ps1
+---
 
-# 2. Linter kiểm tra style
-.\script-test\lint_scripts.ps1
+## 4. Kiểm Thử Trong Game (EDOPro Test Setup)
 
-# 3. Đồng bộ database
-python .\script-test\manage_db.py check-sync
+### 4.1 Setup Deck Test
+1. Mở EDOPro client → Chọn **Deck Edit**.
+2. Tạo deck mới, thêm card custom cần test (Tích chọn ô **"Alternate format"** ở bộ lọc tìm kiếm để game hiển thị các custom card).
+3. Vào **AI mode** hoặc mở phòng **LAN mode** (Local) để bắt đầu duel thử nghiệm.
 
-# 4. Xác nhận file tồn tại
-Test-Path script\c<PASSCODE>.lua
+### 4.2 Sử dụng Debug Console trong game
+Nhấn phím backtick `` ` `` (nằm dưới phím ESC) trong trận đấu để mở debug console của EDOPro và gõ các lệnh Lua trực tiếp để kiểm tra trạng thái:
+```lua
+-- In ra danh sách card đang có trên Monster Zone của bạn (tp)
+=Duel.GetFieldGroup(tp,LOCATION_MZONE,0)
+
+-- Kiểm tra xem trong Deck của bạn có tồn tại card có ID cụ thể hay không
+=Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_DECK,0,1,nil,12345678)
 ```
-
-Nếu validate hoặc check-sync báo lỗi → **sửa ngay, không báo DONE**.

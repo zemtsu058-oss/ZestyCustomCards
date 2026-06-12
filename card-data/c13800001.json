@@ -1,0 +1,19 @@
+{
+  "id": 13800001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 138,
+  "type": 18,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Return of the Red Ant",
+  "desc": "Special Summon 1 EARTH Insect or Plant monster from your hand, GY, or banishment. If a \"Hole\" Normal Trap Card(s) is destroyed and sent to the GY: You can banish this card from your GY; Set as many as possible \"Hole\" Normal Trap Cards from your GY to your field, they can be activated this turn, but banish them when they leave the field. You can only use each effect of \"Return of the Red Ant\" once per turn.",
+  "strings": [
+    "Special Summon 1 EARTH Insect/Plant monster",
+    "Set 'Hole' Normal Traps from GY?"
+  ]
+}

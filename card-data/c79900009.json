@@ -1,0 +1,16 @@
+{
+  "id": 79900009,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 33,
+  "atk": 3000,
+  "def": 2500,
+  "level": 8,
+  "race": 8,
+  "attribute": 32,
+  "category": 0,
+  "name": "Chambermaid of the Silver Castle",
+  "desc": "When your opponent activates a card or effect in response to the activation of your \"Labrynth\" card or Normal Trap (Quick Effect): You can send this card from your hand to the GY; negate that effect.\nWhen the effect of a \"Labrynth\" monster is activated while this card is in your hand or GY: You can Special Summon this card in Defense Position.\nWhile this card is in Defense Position, Set cards you control cannot be destroyed by card effects.\nYou can only use each effect of \"Chambermaid of the Silver Castle\" once per turn.",
+  "strings": []
+}

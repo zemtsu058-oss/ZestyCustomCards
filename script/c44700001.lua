@@ -103,7 +103,7 @@ function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end
     
     -- Store hand activation flag
-    if e:GetHandler():IsPreviousLocation(LOCATION_HAND) then
+    if e:GetHandler():IsStatus(STATUS_ACT_FROM_HAND) then
         e:SetLabel(1)
     else
         e:SetLabel(0)

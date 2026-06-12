@@ -1,0 +1,18 @@
+{
+  "id": 192300004,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 2,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Challenge to Tombguard",
+  "desc": "Add 1 \"Wezaemon the Tombguard\" or 1 Spell/Trap that mentions it from your Deck to your hand. This effect cannot be negated if you control no monsters. For the rest of this turn, you cannot activate monster effects on the field or in the GY, except \"Wezaemon the Tombguard\" or monsters that mention it. You can only activate 1 \"Challenge to Tombguard\" per turn.",
+  "strings": [
+    "Add 1 \"Wezaemon the Tombguard\" or 1 Spell/Trap that mentions it to your hand"
+  ]
+}

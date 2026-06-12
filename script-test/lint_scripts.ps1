@@ -18,6 +18,9 @@ param(
     [switch]$Fix = $false
 )
 
+$OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 $ErrorActionPreference = "Continue"
 
 Write-Host ""

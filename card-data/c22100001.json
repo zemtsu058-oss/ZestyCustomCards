@@ -1,0 +1,21 @@
+{
+  "id": 22100001,
+  "ot": 32,
+  "alias": 0,
+  "type": 65538,
+  "setcodes": [
+    221
+  ],
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 512,
+  "name": "Blue Eye Flute of Summoning Dragon",
+  "desc": "Each player can Special Summon 1 LIGHT Warrior or Spellcaster monster from their hand or Deck, then, if your Summoned monster mentions \"Blue-Eyes White Dragon\" on its text, you can Special Summon up to 2 \"Blue-Eyes White Dragon\" from your hand or Deck, otherwise, the Summoned monsters' effects are negated. You can only activate 1 \"Blue-Eyes Flute of Summoning Dragon\" per turn.",
+  "strings": [
+    "Special Summon 1 LIGHT Warrior/Spellcaster",
+    "Special Summon \"Blue-Eyes White Dragon\""
+  ]
+}

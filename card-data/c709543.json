@@ -1,0 +1,16 @@
+{
+  "id": 709543,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 2,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Monster Redie",
+  "desc": "Destroy all monsters on the field that were Special Summoned from the GY, and if you do, banish them face-down.",
+  "strings": []
+}

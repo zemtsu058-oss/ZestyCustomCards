@@ -1,0 +1,16 @@
+{
+  "id": 79900005,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 125896585,
+  "type": 97,
+  "atk": 3500,
+  "def": 2500,
+  "level": 8,
+  "race": 16384,
+  "attribute": 32,
+  "category": 0,
+  "name": "Ttf Cat Squad",
+  "desc": "[\"Ttf\" Beast monsters with 3 different Attributes]\nPhải được Triệu hồi Dung hợp.\n\n(1) Khi đối thủ kích hoạt 1 hiệu ứng (Hiệu ứng Nhanh): Bạn có thể hiến tế lá bài này; vô hiệu hóa hiệu ứng đó, sau đó, nếu có thể, phá hủy lá bài đó.\n(2) Nếu lá bài này được gửi xuống Mộ, và “Ttf Holy Sanctuary” đang ngửa mặt trên sân của bạn: Bạn có thể gửi 1 lá bài bất kỳ từ tay hoặc sân xuống Mộ; Triệu hồi Đặc biệt lá bài này, sau đó tăng gấp đôi ATK của nó.\nBạn chỉ có thể sử dụng mỗi hiệu ứng của “Ttf Cat Squad” một lần mỗi lượt.",
+  "strings": []
+}

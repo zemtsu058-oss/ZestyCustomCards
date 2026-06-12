@@ -1,0 +1,19 @@
+{
+  "id": 90178,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 383,
+  "type": 4,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Farewell Labrynth",
+  "desc": "While you control a \"Labrynth\" monster, this turn, each player must send 1 card from their hand to the GY to activate a card or effect. If a player has no cards in their hand during the Main Phase, it becomes the End Phase. You can banish this card from your GY; return 1 banished card to the GY.\nYou can only use 1 \"Farewell Labrynth\" effect per turn, and only once that turn.",
+  "strings": [
+    "While you control a \"Labrynth\" monster, this turn, each player must send 1 card from their hand to the GY to activate a card or effect. If a player has no cards in their hand, it becomes the End Phase.",
+    "Banish this card from your GY; return 1 banished card to the GY."
+  ]
+}

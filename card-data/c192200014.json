@@ -1,0 +1,19 @@
+{
+  "id": 192200014,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 4,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 131104,
+  "name": "Castle of Dreams - Fall",
+  "desc": "If 3 or more monsters were Special Summoned from your opponent's Deck and/or Extra Deck this turn, while you control a \"Castle of Dreams\" Field Spell: Your opponent sends cards from their hand or Extra Deck to the GY equal to the number of cards in their GY, then you can place 1 Field Spell from your Deck, GY, or banishment face-up on your field. You can only activate 1 \"Castle of Dreams - Fall\" per turn.",
+  "strings": [
+    "Opponent sends cards from hand or Extra Deck to GY",
+    "Place 1 Field Spell from Deck, GY, or banishment face-up"
+  ]
+}

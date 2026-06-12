@@ -1,0 +1,16 @@
+{
+  "id": 927681,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 131074,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Desire Grand Prix Invitation",
+  "desc": "​If this card is activated: You can add 1 \"Buckle\" Spell or 1 \"Desire Driver\" from your Deck to your hand.\nOnce per turn: You can halve your LP; discard 1 \"Buckle\" Spell from your hand, and send 1 \"Desire Hero\" monster from your Deck or face-up field to the GY, then Special Summon 1 Level 6 \"Desire Hero\" Fusion Monster from your Extra Deck.\n\"Desire Hero\" monsters you control cannot be targeted by your opponent's card effects while they are equipped with a \"Buckle\" Spell.\nYou can only activate 1 \"Desire Grand Prix Invitation\" per turn.",
+  "strings": []
+}

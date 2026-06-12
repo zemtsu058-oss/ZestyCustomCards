@@ -1,0 +1,18 @@
+{
+  "id": 79900017,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 4129,
+  "atk": 0,
+  "def": 1800,
+  "level": 3,
+  "race": 1048576,
+  "attribute": 16,
+  "category": 33,
+  "name": "Ghost Ogre & Rabbit Spirit",
+  "desc": "When your opponent activates a monster effect in their hand or field (Quick Effect): You can send this card from your hand or field to the GY; destroy that monster, then if that monster is not destroyed, your opponent must send it to the GY. You can only use this effect of \"Ghost Ogre & Rabbit Spirit\" once per turn.",
+  "strings": [
+    "Send to GY to destroy opponent's monster"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": 8790671,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 4,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Quadratic Equation Cannon",
+  "desc": "Show your opponent your extra deck and let them banish one monster that have level from it, you also banish one monster from your extra deck that have level. Declare a whole number from 1 to 6, square it then multiply by the level of that monster banished by your opponent, also multiply the declared number by the level of that monster banished by you. Sum the two results and subtract the number of card on field and graveyard. The apply there effect base on the last result.\n0: Shuffle all card your opponent control and in their graveyard to the deck.\nNot 0: Shuffle all card you control to the deck.",
+  "strings": []
+}

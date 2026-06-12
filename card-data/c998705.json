@@ -1,0 +1,18 @@
+{
+  "id": 998705,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 256,
+  "type": 67108897,
+  "atk": 1500,
+  "def": 258,
+  "level": 2,
+  "race": 2,
+  "attribute": 32,
+  "category": 0,
+  "name": "Witchcrafter Unit Jeweler",
+  "desc": "2 Spellcaster monsters, include a level 5 or higher monster\nYou can only Special Summon 1 \"Witchcrafter Unit Jeweler\" per turn.\nIf this card is Special Summoned: add 1 \"Witchcrafter\" Spell/Trap from your Deck to your hand, then you can destroy 1 card on field.\n(Quick Effect): Tribute this card, then Special Summon up to 2 Spellcaster monsters in your GY, include a \"Witchcrafter\" monster.",
+  "strings": [
+    "Destroy 1 card on the field"
+  ]
+}

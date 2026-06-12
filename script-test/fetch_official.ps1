@@ -6,6 +6,9 @@ param (
     [switch]$Force
 )
 
+$OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 $destDir = Join-Path $PSScriptRoot "..\docs\official-reference"
 if (-not (Test-Path $destDir)) {
     New-Item -ItemType Directory -Force -Path $destDir | Out-Null

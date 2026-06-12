@@ -1,0 +1,18 @@
+{
+  "id": 92047,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 97,
+  "atk": "?",
+  "def": "?",
+  "level": 10,
+  "race": 8192,
+  "attribute": 32,
+  "category": 0,
+  "name": "Pollux, Netherwing Husk, Ferry of Souls",
+  "desc": "2 monsters in the GY and/or Special Summoned from the GY.\nThe original ATK/DEF of this card becomes the combined original ATK/DEF of the materials used for its Fusion Summon. You can only control 1 \"Pollux, Netherwing Husk, Ferry of Souls\". Unaffected by your opponent's card effects while \"Dragonbone City Styxia\" is in your Field Zone. If you would lose LP, you can make this card lose DEF equal to half of the LP lost instead. If this card leaves the field: Return it to the Extra Deck; gain LP equal to the original DEF it had on the field, then if it leaves the field because of an opponent's card, destroy all monsters your opponent controls with ATK less than the original ATK it had on the field.",
+  "strings": [
+    "Lose DEF instead of LP?"
+  ]
+}

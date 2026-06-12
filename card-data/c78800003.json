@@ -1,0 +1,16 @@
+{
+  "id": 78800003,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 125896585,
+  "type": 67108897,
+  "atk": 1900,
+  "def": 5,
+  "level": 2,
+  "race": 16384,
+  "attribute": 16,
+  "category": 0,
+  "name": "Ttf Cat Zesty",
+  "desc": "2 quái thú \"Ttf\" khác Hệ\n\nMột lần mỗi lượt: Bạn có thể gửi 1 quái thú \"Ttf\" bất kỳ từ Bộ bài của bạn xuống Mộ.\n\nNếu lá bài này bị Trục xuất: Bạn có thể úp 1 lá Phép hoặc Bẫy \"Ttf\" từ Bộ bài của bạn lên sân.\n\nBạn chỉ có thể sử dụng mỗi hiệu ứng của \"Ttf Cat Zesty\" một lần mỗi lượt.",
+  "strings": []
+}

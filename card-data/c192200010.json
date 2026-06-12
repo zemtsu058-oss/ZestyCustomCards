@@ -1,0 +1,19 @@
+{
+  "id": 192200010,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 2,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 196608,
+  "name": "Castle of Dreams - Dream Show",
+  "desc": "Add 1 \"Castle of Dreams\" card from your Deck to your hand, except \"Castle of Dreams - Dream Show\", then if your opponent controls a monster that was Special Summoned from their Deck or Extra Deck, you can draw 1 card. You can only activate 1 \"Castle of Dreams - Dream Show\" per turn.",
+  "strings": [
+    "Add 1 \"Castle of Dreams\" card from Deck to hand",
+    "Draw 1 card"
+  ]
+}

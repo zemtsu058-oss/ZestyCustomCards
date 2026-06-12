@@ -1,0 +1,16 @@
+{
+  "id": 37711110,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 8,
+  "type": 67108897,
+  "atk": 300,
+  "def": 2,
+  "level": 1,
+  "race": 1,
+  "attribute": 1,
+  "category": 0,
+  "name": "Xtra HERO Wonderkid",
+  "desc": "1 \"HERO\" or \"Neo-Spacian\" monster\nMonsters this card points to are treated as \"Elemental HERO\" monsters.\nIf this card is Link Summoned: You can add 1 \"HERO\" monster, or 1 monster that mentions \"Polymerization\", from your Deck to your hand, then discard 1 card.\nYou can banish this card and 1 other \"HERO\" monster from your GY; add 1 monster with 1000 or less ATK from your GY to your hand.\nYou can only use each effect of \"Xtra HERO Wonderkid\" once per turn.",
+  "strings": []
+}

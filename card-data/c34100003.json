@@ -1,0 +1,20 @@
+{
+  "id": 34100003,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 398,
+  "type": 262146,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 544,
+  "name": "Mikanko Fire Soul",
+  "desc": "The equipped monster cannot be destroyed by card effects. During the Main Phase: You can send this card and the monster equipped with this card to the GY; Special Summon up to 2 \"Mikanko\" monsters from your Deck and/or GY (max. 1 from your Deck and 1 from your GY). You can only use this effect of \"Mikanko Fire Soul\" once per turn.",
+  "strings": [
+    "Send equipped cards; Special Summon",
+    "Special Summon from Deck?",
+    "Special Summon from GY?"
+  ]
+}

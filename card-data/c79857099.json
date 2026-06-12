@@ -1,0 +1,21 @@
+{
+  "id": 79857099,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 296,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Witchcrafter Wishes",
+  "desc": "You can use 1 of these effects (but you can only use each effect once per turn):\n(1) Target monsters your opponent controls, up to the number of \"Witchcrafter\" monsters you control; change their ATK to 0.\n(2) Send cards from the top of your Deck to the GY, up to the number of monsters your opponent controls, then return any of them that are not Spell Cards to the Deck.\n(3) Target cards in your GY and/or banishment, up to the number of \"Witchcrafter\" Spell Cards in your hand and GY; return them to the Deck, then draw 1 card for every 2 cards returned to the Deck by this effect.",
+  "strings": [
+    "",
+    "ATK to 0",
+    "Send Cards",
+    "Return cards"
+  ]
+}

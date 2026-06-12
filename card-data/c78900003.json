@@ -1,0 +1,16 @@
+{
+  "id": 78900003,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1921,
+  "type": 2,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Cat Squad Founding Day",
+  "desc": "Triệu hồi Dung hợp 1 quái thú “Ttf” từ Extra Deck của bạn, bằng cách trục xuất các nguyên liệu Dung hợp được liệt kê của nó từ sân hoặc Mộ của bạn.\n\nNếu 1 quái thú “Ttf” được Triệu hồi từ Extra Deck của bạn sắp rời khỏi sân vì hiệu ứng hoặc bị phá hủy:\nBạn có thể trục xuất lá bài này từ Mộ của bạn; thay thế việc phá hủy đó.\n\nBạn chỉ có thể sử dụng mỗi hiệu ứng của “Cat Squad Founding Day” một lần mỗi lượt.",
+  "strings": []
+}

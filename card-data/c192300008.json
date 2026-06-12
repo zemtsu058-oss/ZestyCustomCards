@@ -1,0 +1,19 @@
+{
+  "id": 192300008,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Nyudogumo",
+  "desc": "If you control only \"Wezaemon the Tombguard\": You can pay 800 LP, then target up to 2 monsters your opponent controls, or target all monsters your opponent controls if they control 5 or more monsters; halve their ATK, then destroy all Attack Position monsters your opponent controls with ATK less than the ATK of \"Wezaemon the Tombguard\" you control. You can banish this card from your GY; add up to 1 \"Tachikaze\" and up to 1 \"Raisho\" from your GY and/or banishment to your hand. You can only use each effect of \"Nyudogumo\" once per turn.",
+  "strings": [
+    "Halve ATK and destroy weaker monsters",
+    "Add \"Tachikaze\" and/or \"Raisho\" from GY/banishment"
+  ]
+}

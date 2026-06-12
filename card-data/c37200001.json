@@ -1,0 +1,16 @@
+{
+  "id": 37200001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 372,
+  "type": 8388641,
+  "atk": 2800,
+  "def": 2800,
+  "level": 8,
+  "race": 1,
+  "attribute": 16,
+  "category": 0,
+  "name": "Exosister Nunctis",
+  "desc": "2 Rank 4 \"Exosister\" Xyz Monsters\nMust be Xyz Summoned with the above materials. The first time a card(s) you control would be destroyed by battle or card effect each turn, it is not destroyed.\nOnce per turn (Quick Effect): You can detach 1 material from this card; return 1 card your opponent controls or in their GY to the hand.\n(Quick Effect): You can return this card and all Xyz Monsters from your GY into Extra Deck; set 1 \"Exosister\" Trap from your Deck. It can be activated this turn.",
+  "strings": []
+}

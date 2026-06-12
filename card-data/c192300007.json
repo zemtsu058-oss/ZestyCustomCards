@@ -1,0 +1,19 @@
+{
+  "id": 192300007,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Raisho",
+  "desc": "If you control only \"Wezaemon the Tombguard\": You can pay 800 LP, then target up to 2 monsters your opponent controls, or target up to 5 monsters your opponent controls if they control 5 or more monsters; place them in your opponent's Spell & Trap Zone as Continuous Spell Cards, and banish them when they leave the field. You can banish this card from your GY; Set 1 \"Nyudogumo\" or \"Tachikaze\" directly from your Deck. It can be activated this turn. You can only use each effect of \"Raisho\" once per turn.",
+  "strings": [
+    "Place opponent's monsters as Continuous Spell Cards",
+    "Set 1 \"Nyudogumo\" or \"Tachikaze\" from your Deck"
+  ]
+}

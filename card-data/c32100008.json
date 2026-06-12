@@ -1,0 +1,22 @@
+{
+  "id": 32100008,
+  "ot": 32,
+  "alias": 0,
+  "type": 2,
+  "setcodes": [
+    321
+  ],
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 524384,
+  "name": "Rikka Siesta",
+  "desc": "When you activate a card or effect that mentions \"Rikka\" (except \"Rikka Siesta\"): You can reveal this card in your GY or Deck; add this card to your hand.\nGain 1000 LP, then you can target 1 \"Rikka\" Spell and 1 Plant monster in your banishment; add 1 of them to your hand, and if you do, place the other on the bottom of your Deck.\nYou can banish this card from your GY face-down; gain 8000 LP, also you cannot activate cards or effects until the Standby Phase of your opponent's turn. You must have a Plant monster in your hand to activate this effect, unless it is your Main Phase.\nYou can only use each effect of \"Rikka Siesta\" once per turn.",
+  "strings": [
+    "Add this card from Deck/GY to hand",
+    "Gain 1000 LP and retrieve banished",
+    "Banish face-down from GY to gain 8000 LP"
+  ]
+}

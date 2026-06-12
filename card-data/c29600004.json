@@ -1,0 +1,20 @@
+{
+  "id": 29600004,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 22151464,
+  "type": 1048580,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Verre Magic Mastery",
+  "desc": "This card is always treated as a \"Witchcrafter\" and \"Magistus\" card.\nWhen a monster effect is activated, while you control a LIGHT Spellcaster monster with 2800 DEF: Negate the activation, then take control of that monster (if it was on the field), and if you do, its Type becomes Spellcaster, then immediately after this effect resolves, Fusion Summon 1 monster, using monsters you control as materials.\nDuring the Main Phase, while this card is in your GY: You can banish this card; add 1 \"Verre Magic\" card from your Deck to your hand, except \"Verre Magic Mastery\".\nYou can only use 1 effect of \"Verre Magic Mastery\" per turn, and only once that turn.",
+  "strings": [
+    "[Quick] Negate effect, take control, then Fusion Summon",
+    "[GY] Banish to search a Verre Magic Spell/Trap",
+    "[Quick] Fusion Summon 1 monster"
+  ]
+}
