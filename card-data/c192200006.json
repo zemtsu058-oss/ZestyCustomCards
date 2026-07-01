@@ -1,0 +1,19 @@
+{
+  "id": 192200006,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 67108897,
+  "atk": 2600,
+  "def": 6,
+  "level": 2,
+  "race": 2,
+  "attribute": 32,
+  "category": 147968,
+  "name": "Morpheus, Corruptor of the Castle of Dreams",
+  "desc": "2 monsters, including a \"Castle of Dreams\" Spellcaster monster. If this card is Link Summoned: Set 2 \"Castle of Dreams\" Traps from your Deck, GY and/or banishment to your field. (Quick Effect): You can Tribute this card, then Special Summon 2 non-Link \"Castle of Dreams\" monsters from your hand, GY and/or banishment. You can only use 1 effect of \"Morpheus, Corruptor of the Castle of Dreams\" per turn, and only once that turn.",
+  "strings": [
+    "Set 2 Castle of Dreams Traps from Deck, GY, or banishment",
+    "Tribute to SS 2 non-Link Castle of Dreams monsters"
+  ]
+}

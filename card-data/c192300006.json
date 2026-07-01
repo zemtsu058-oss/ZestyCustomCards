@@ -1,0 +1,19 @@
+{
+  "id": 192300006,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Tachikaze",
+  "desc": "If you control only \"Wezaemon the Tombguard\": You can pay 800 LP, then target 1 monster your opponent controls; destroy it. You can banish this card from your GY; Set 1 \"Tachikaze\" or \"Raisho\" directly from your Deck. It can be activated this turn. You can only use this effect of \"Tachikaze\" once per turn.",
+  "strings": [
+    "Destroy 1 monster your opponent controls",
+    "Set 1 \"Tachikaze\" or \"Raisho\" from your Deck"
+  ]
+}

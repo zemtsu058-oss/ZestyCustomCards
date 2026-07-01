@@ -1,0 +1,24 @@
+{
+  "id": 32100006,
+  "ot": 32,
+  "alias": 0,
+  "type": 67108897,
+  "setcodes": [
+    321
+  ],
+  "atk": 1800,
+  "linkmarkers": [
+    "Bottom-Left",
+    "Bottom-Right"
+  ],
+  "level": 2,
+  "race": 1024,
+  "attribute": 2,
+  "category": 68157440,
+  "name": "Cecilia the Rikka Queen",
+  "desc": "2 Plant monsters\nIf this card is Link Summoned using a \"Rikka\" monster as material: You can target 1 \"Rikka\" monster in your GY; Special Summon it.\nYou can Tribute 1 monster that mentions \"Rikka\" from your Deck and 1 monster that mentions \"Rikka\" on your field, then target 1 \"Rikka\" Xyz Monster on your field; attach 2 cards from your GY or banishment to that monster as materials, also that monster gains ATK equal to this monster's ATK until your opponent's End Phase.\nYou can only use each effect of \"Cecilia the Rikka Queen\" once per turn.",
+  "strings": [
+    "Special Summon 1 \"Rikka\" monster from GY",
+    "Attach materials and boost ATK"
+  ]
+}

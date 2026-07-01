@@ -1,0 +1,16 @@
+{
+  "id": 76900007,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1929,
+  "type": 33,
+  "atk": 1500,
+  "def": 800,
+  "level": 4,
+  "race": 2,
+  "attribute": 32,
+  "category": 0,
+  "name": "Ttf Hanako",
+  "desc": "Nếu bạn điều khiển một quái thú \"Ttf\" hệ NƯỚC bạn có thể Triệu hồi Đặc biệt lá bài này từ mộ.Nếu lá bài này được Triệu hồi Thường hoặc Đặc biệt, bạn có thể thêm một lá bài \"Ttf\" từ mộ hoặc vùng trục xuất lên tay.Bạn chỉ có thể sử dụng mỗi hiệu ứng phía trên của \"Ttf Hanako\" một lần mỗi lượt. Nếu lá bài này làm nguyên liệu cho quái thú Xyz, quái thú đó nhận hiệu ứng sau:\n● Đối thủ không thể chỉ định quái thú này bằng hiệu ứng.",
+  "strings": []
+}

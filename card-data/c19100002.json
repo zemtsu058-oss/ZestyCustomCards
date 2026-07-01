@@ -1,0 +1,18 @@
+{
+  "id": 19100002,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 191,
+  "type": 18,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Blessing of the Fire Charmer",
+  "desc": "Send 1 FIRE monster from your Deck to the GY; until the end of the next turn, FIRE monsters you control cannot be destroyed by battle or by your opponent's card effects. You can only activate 1 \"Blessing of the Fire Charmer\" per turn.",
+  "strings": [
+    "Send 1 FIRE monster to GY to apply protection"
+  ]
+}

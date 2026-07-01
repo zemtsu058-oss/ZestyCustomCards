@@ -1,0 +1,20 @@
+{
+  "id": 29600001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 296,
+  "type": 4,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Witchcrafter Trick",
+  "desc": "If you control a Spellcaster monster: reveal 1 Spell in your hand; this effect become that Spell's effect when that Spell is activated. During either player's turn, except the turn this card was sent to the GY: You can banish this card in your GY, target 1 Spell in your GY; this effect becomes that Spell's effect when that Spell is activated. You can only use each effect of \"Witchcrafter Trick\" once per turn. You cannot activate monster effects the turn you activate this card effects, except Spellcaster monsters.",
+  "strings": [
+    "[Field] Copy Spell in hand",
+    "[GY] Copy Spell in GY",
+    "[Restriction] Cannot activate non-Spellcaster monster effects"
+  ]
+}

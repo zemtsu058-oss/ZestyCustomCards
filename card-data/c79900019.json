@@ -1,0 +1,18 @@
+{
+  "id": 79900019,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 2,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 131128,
+  "name": "The Journeying Three Magi",
+  "desc": "Reveal 3 Level 4 Spellcaster monsters with different Attributes from your Deck; your opponent chooses 1 of them to add to your hand, then you choose 1 of the rest to send to the GY, and shuffle the other into the Deck. You can only activate 1 \"The Journeying Three Magi\" per turn.",
+  "strings": [
+    "Reveal 3 Level 4 Spellcasters with different Attributes"
+  ]
+}

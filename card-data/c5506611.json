@@ -1,0 +1,16 @@
+{
+  "id": 5506611,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 197,
+  "type": 131074,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Void Invasion",
+  "desc": "You can send up to 2 cards from your hand to the GY; Set that many \"Void\" Spell/Trap from your Deck.\nDuring the Main Phase: You can banish this card from your GY; place 1 \"Void\" Continuous Spell face-up in your Spell/Trap Zone.\nYou can only use each effect of \"Void Invasion\" once per turn.",
+  "strings": []
+}

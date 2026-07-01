@@ -1,0 +1,18 @@
+{
+  "id": 192200011,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 2,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 512,
+  "name": "Castle of Dreams - Iris's Necklace",
+  "desc": "Special Summon 1 \"Castle of Dreams\" Illusion monster from your Deck or GY, or if your opponent controls a monster that was Special Summoned from their Deck or Extra Deck, you can Special Summon 1 \"Castle of Dreams\" Spellcaster monster instead. You can only activate 1 \"Castle of Dreams - Iris's Necklace\" per turn.",
+  "strings": [
+    "Special Summon 1 Castle of Dreams Illusion or Spellcaster monster"
+  ]
+}

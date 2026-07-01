@@ -1,0 +1,20 @@
+{
+  "id": 192200002,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 33,
+  "atk": 1600,
+  "def": 1800,
+  "level": 4,
+  "race": 33554432,
+  "attribute": 8,
+  "category": 67248128,
+  "name": "Cautus, Keeper of the Castle of Dreams",
+  "desc": "If you control only Spellcaster and/or Illusion monsters, you can Special Summon this card from your hand. If this card is Normal or Special Summoned: You can excavate the top 6 cards of your Deck, then if you excavated a \"Castle of Dreams\" card(s), you can add 1 of them to your hand, also place the rest on the top of your Deck in any order. If a Field Spell card you control would be destroyed, you can banish this card from your GY instead. You can only use each effect of \"Cautus, Keeper of the Castle of Dreams\" once per turn.",
+  "strings": [
+    "Excavate top 6, add 1 Castle of Dreams card, reorder rest",
+    "Add 1 \"Castle of Dreams\" card to your hand",
+    "Banish from GY to protect Field Spell from destruction"
+  ]
+}

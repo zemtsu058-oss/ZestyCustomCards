@@ -1,0 +1,21 @@
+{
+  "id": 79900014,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Guided by the Stars",
+  "desc": "Special Summon 1 Synchro Monster from your Extra Deck by banishing 1 Tuner and 1 or more non-Tuner monsters from your hand, field and/or GY whose total Levels equal the Level of that monster. (This is treated as a Synchro Summon.) If \"Stardust Dragon\" was used as material, that monster is unaffected by your opponent's card effects until the end of the next turn.\nYou can banish this card from your GY; add to your hand 1 Tuner and 1 \"Junk\" monster, or Special Summon 1 \"Stardust Dragon\" from your GY or banishment, but banish it when it leaves the field.\nYou can only use each effect of \"Guided by the Stars\" once per turn.",
+  "strings": [
+    "Special Summon 1 Synchro Monster",
+    "Banish from GY to search or Special Summon",
+    "Add 1 Tuner and 1 \"Junk\" monster from Deck to hand",
+    "Special Summon 1 \"Stardust Dragon\" from GY/banish"
+  ]
+}

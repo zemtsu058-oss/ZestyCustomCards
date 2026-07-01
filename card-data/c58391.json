@@ -1,0 +1,16 @@
+{
+  "id": 58391,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 155,
+  "type": 131074,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Melodious Fusion",
+  "desc": "When this card is activated: Fusion Summon 1 \"Melodious\" Fusion Monster from your Extra Deck, by shuffling its Fusion Materials from your GY, your banishment, and/or your Pendulum Zones into the Deck or Extra Deck.\nWhen your opponent activates a card or effect (Quick Effect): You can negate that activation, and if you do, destroy that card.\nIf you activated this effect, the next time you activate the effect of a \"Melodious\" monster this turn, after that effect resolves, banish 3 \"Melodious\" monsters you control; otherwise, negate that effect.",
+  "strings": []
+}

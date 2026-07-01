@@ -1,0 +1,21 @@
+{
+  "id": 32100001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 321,
+  "type": 8388641,
+  "atk": 4000,
+  "def": 3500,
+  "level": 12,
+  "race": 1024,
+  "attribute": 2,
+  "category": 0,
+  "name": "Teardrop the Rikka Fairy",
+  "desc": "2 Level 12 monsters\nYou can also Xyz Summon this card by using your \"Teardrop the Rikka Queen\" with 2 Plant materials.\nThis card is unaffected by other card effects except Rikka effects.\nYou can detach 1 material from this card, then return 1 Plant monster in the Banished Zone/GY/Field to the hand. After that effect resolves, look at your opponent's hand, destroy 2 cards in their hand or their field. This effect is treated as a Quick Effect if you have a Plant monster as material. You can only use this effect once per turn.\nIf your opponent activates a card or effect: You can detach 1 material from this card; negate that effect, then banish that card. This effect is treated as a Quick Effect if you have a Plant monster as material.\nYou can detach 2 materials from this card; destroy all cards on your opponent's field. This effect is treated as a Quick Effect if you have a Plant monster as material.",
+  "strings": [
+    "Xyz Summon using \"Teardrop the Rikka Queen\" with 2 Plant materials",
+    "Return 1 Plant to hand, then look at opponent's hand and destroy 2 cards",
+    "Negate the activation and banish that card",
+    "Destroy all cards on your opponent's field"
+  ]
+}

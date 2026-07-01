@@ -1,0 +1,19 @@
+{
+  "id": 192200001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 33,
+  "atk": 1600,
+  "def": 1800,
+  "level": 4,
+  "race": 33554432,
+  "attribute": 2,
+  "category": 67239936,
+  "name": "Bena, Guardian of the Castle of Dreams",
+  "desc": "If this card is Normal or Special Summoned: You can Set 1 \"Castle of Dreams\" Normal Spell/Trap from your Deck to your field. If a Field Spell card you control would be destroyed, you can banish this card from your GY instead. You can only use each effect of \"Bena, Guardian of the Castle of Dreams\" once per turn.",
+  "strings": [
+    "Set 1 Castle of Dreams Normal Spell/Trap from Deck to field",
+    "Banish from GY to protect Field Spell from destruction"
+  ]
+}

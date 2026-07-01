@@ -1,0 +1,19 @@
+{
+  "id": 13800002,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 138,
+  "type": 18,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Seventh Traptrix",
+  "desc": "Reveal 1 \"Traptrix\" Xyz monster in your Extra Deck and discard 1 Level 4 Insect or Plant, or 1 Normal Trap; Special Summon 1 Level 4 EARTH monster with the same Type as the revealed monster from your Deck, then if you Special Summoned a \"Traptrix\" monster by this effect, you can Set 1 \"Hole\" Normal Trap from your Deck to your field. You cannot Special Summon from your Extra Deck for the rest of this turn, except Xyz and Link monsters. You can only activate 1 \"Seventh Traptrix\" per turn.",
+  "strings": [
+    "Special Summon 1 EARTH monster matching the Type of the revealed monster",
+    "Set 1 'Hole' Normal Trap?"
+  ]
+}

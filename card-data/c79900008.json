@@ -1,0 +1,16 @@
+{
+  "id": 79900008,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 125831049,
+  "type": 33,
+  "atk": 1500,
+  "def": 1200,
+  "level": 4,
+  "race": 4,
+  "attribute": 2,
+  "category": 0,
+  "name": "Ttf Atermis",
+  "desc": "(1) Bạn có thể gửi lá bài này từ tay xuống Mộ; gửi 1 quái thú “TTF” từ Bộ bài xuống Mộ.\n(2) Nếu lá bài này được gửi xuống Mộ: Bạn có thể Triệu hồi Đặc biệt nó.\n(3) Nếu lá bài này được Triệu hồi Đặc biệt: Bạn có thể gửi tối đa 2 quái thú “TTF” khác tên từ Bộ bài xuống Mộ, sau đó thêm 1 lá “TTF” từ Bộ bài lên tay.\nBạn chỉ có thể sử dụng mỗi hiệu ứng của “TTF Atermis” một lần mỗi lượt.",
+  "strings": []
+}

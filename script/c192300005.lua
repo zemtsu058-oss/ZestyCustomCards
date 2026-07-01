@@ -51,6 +51,7 @@ function s.initial_effect(c)
     e2:SetCategory(CATEGORY_TOHAND)
     e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
     e2:SetCode(EVENT_LEAVE_FIELD)
+    e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
     e2:SetRange(LOCATION_GRAVE)
     e2:SetCountLimit(1,{id,1},EFFECT_COUNT_CODE_OATH)
     e2:SetCondition(s.leavcon)
@@ -168,10 +169,9 @@ function s.leavcon(e,tp,eg,ep,ev,re,r,rp)
     return eg:IsExists(s.leavfilter,1,nil,tp)
 end
 
--- SỬA TẠI ĐÂY: Thay c:IsCode bằng c:GetPreviousCode() để check danh tính trước khi vào vùng khuất
 function s.leavfilter(c,tp)
-    return c:GetPreviousCode()==192300001 
-        and c:IsPreviousControler(tp) 
+    return c:GetPreviousCodeOnField()==192300001
+        and c:IsPreviousControler(tp)
         and c:IsPreviousLocation(LOCATION_MZONE)
 end
 

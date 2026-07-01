@@ -1,0 +1,16 @@
+{
+  "id": 78950,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 296,
+  "type": 67108897,
+  "atk": 1500,
+  "def": 5,
+  "level": 2,
+  "race": 2,
+  "attribute": 16,
+  "category": 0,
+  "name": "Witchcrafter Unit Appeler",
+  "desc": "2 Spellcaster monsters with different Attributes\nOnce per turn, if you would discard a Spell Card(s) to activate the effect of another \"Witchcrafter\" monster you control, you can send that many \"Witchcrafter\" Spell Cards from your Deck to the GY instead.\nOnce per turn: You can discard 1 Spell Card; Special Summon 1 \"Witchcrafter\" monster from your Deck, but it cannot be used as Link Material.\nYou can only Special Summon \"Witchcrafter Unit Appeler\" once per turn.",
+  "strings": []
+}

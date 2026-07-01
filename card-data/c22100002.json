@@ -1,0 +1,22 @@
+{
+  "id": 22100002,
+  "ot": 32,
+  "alias": 0,
+  "type": 97,
+  "setcodes": [
+    221
+  ],
+  "atk": 4000,
+  "def": 2500,
+  "level": 8,
+  "race": 8192,
+  "attribute": 16,
+  "category": 270663689,
+  "name": "Purple Eyes Ultra Max Dragon",
+  "desc": "\"Red-Eyes Black Dragon\" or 1 Dragon Effect Monster + \"Blue-Eyes White Dragon\"\nMust be Fusion Summoned. Cannot be destroyed by card effects. Unaffected by other cards' effects during the Battle Phase. If this card is Fusion Summoned: You can add 1 Spell/Trap that mentions \"Blue-Eyes White Dragon\" or \"Red-Eyes Black Dragon\" from your Deck to your hand. When a card or effect is activated (Quick Effect): You can negate the activation, and if you do, destroy that card. You can use this effect up to a number of times per turn equal to the number of Normal Monsters used as Fusion Material for this card. This card can make a second attack during each Battle Phase. Gains 500 ATK for each monster your opponent controls that is destroyed.",
+  "strings": [
+    "Search Spell/Trap mentioning BEWD or REBD",
+    "Negate activation",
+    "Opponent monster destroyed: Gain 500 ATK"
+  ]
+}

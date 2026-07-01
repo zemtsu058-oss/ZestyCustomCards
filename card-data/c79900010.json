@@ -1,0 +1,26 @@
+{
+  "id": 79900010,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 67108897,
+  "atk": 3100,
+  "def": 135,
+  "level": 4,
+  "race": 2,
+  "attribute": 16,
+  "category": 25089,
+  "name": "Monica, The Legendary Witch",
+  "desc": "2+ Spellcaster monsters\nIf this card is Link Summoned: You can Special Summon all material used for this card's Summon in your GY to the zone(s) this card points to, and if you do, you cannot Summon monsters for the rest of this Duel, except Spellcaster monsters. You can only Special Summon 1 \"Monica, The Legendary Witch\" per turn.\nOnce per Chain (Quick effect): you can tribute 1 other Spellcaster monster you control or discard 1 Spell Card, apply 1 of these effects:\n(1) Negate the effect of 1 face up card your opponent controls.\n(2) Destroy all cards your opponent controls.\n(3) Take control of 1 monster your opponent controls.\nYou can only use this effect of \"Monica, The Legendary Witch\" twice per turn.",
+  "strings": [
+    "[Link] Special Summon materials",
+    "Tribute 1 Spellcaster monster",
+    "Discard 1 Spell Card",
+    "(1) Negate effect of 1 face-up card opponent controls",
+    "(2) Destroy all cards opponent controls",
+    "(3) Take control of 1 monster opponent controls",
+    "Special Summon to your field",
+    "Special Summon to opponent's field",
+    "[Quick] Tribute/Discard: disable, destroy, or control"
+  ]
+}

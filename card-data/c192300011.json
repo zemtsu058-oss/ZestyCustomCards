@@ -1,0 +1,19 @@
+{
+  "id": 192300011,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 131076,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Seiten Taisei",
+  "desc": "While your LP are 3000 or less, \"Wezaemon the Tombguard\" you control is unaffected by your opponent's activated effects, also it cannot leave the field while an effect is resolving. You take no effect damage while you control \"Wezaemon the Tombguard\". \"Wezaemon the Tombguard\" you control inflicts piercing battle damage. If \"Wezaemon the Tombguard\" you control destroys an opponent's monster by battle: You gain LP equal to half the ATK or DEF (whichever is higher) of that monster. Once per turn: You can pay 800 LP; Set 1 Spell/Trap that mentions \"Wezaemon the Tombguard\" from your GY or Banished. It can be activated this turn. You can only control 1 \"Seiten Taisei\".",
+  "strings": [
+    "Gain LP equal to half ATK or DEF of destroyed monster",
+    "Set 1 Spell/Trap from GY or Banished"
+  ]
+}

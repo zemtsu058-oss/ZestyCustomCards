@@ -1,0 +1,16 @@
+{
+  "id": 927683,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 789,
+  "type": 262146,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Magnum Buckle",
+  "desc": "The equipped monster can make 2 attacks during each Battle Phase.\nIf this card is sent to the GY from the hand, or by the effect of an equipped \"Desire Hero\" monster: You can send 1 \"Desire Hero\" monster from your Extra Deck to the GY, then add it to your hand.\nYou can only use this effect of \"Magnum Buckle\" once per turn.",
+  "strings": []
+}

@@ -1,0 +1,20 @@
+{
+  "id": 42600001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 426,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 67239944,
+  "name": "Whispers of the White Forest",
+  "desc": "If you control a Spellcaster monster: You can add 1 Spell from your Deck or GY to your hand that mentions \"White Forest\" or \"Sinful Spoils\".\nIf a Spell/Trap Card(s) is sent to the GY by a monster effect: You can banish this card from your GY, then target 1 of those cards; Set it to your field. If it is a Quick-Play Spell or Trap, and you control a \"Diabell\" or \"White Forest\" monster, it can be activated this turn.\nIf this card is sent to the GY to activate a monster effect: You can Set this card.\nYou can only use each effect of \"Whispers of the White Forest\" once per turn.",
+  "strings": [
+    "Add 1 Spell mentioning White Forest or Sinful Spoils",
+    "Set 1 S/T sent to GY by monster effect",
+    "Set this card"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": 90076,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 4753,
+  "type": 33,
+  "atk": 1300,
+  "def": 1000,
+  "level": 4,
+  "race": 1,
+  "attribute": 16,
+  "category": 0,
+  "name": "Hyperdimension CPU Neptune",
+  "desc": "When this card is Normal Summoned: You can add 1 \"Hyperdimension\" monster from your Deck to your hand.\nYou can only use this effect of \"Hyperdimension CPU Neptune\" once per turn.",
+  "strings": []
+}

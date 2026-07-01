@@ -1,0 +1,16 @@
+{
+  "id": 78900001,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 125896585,
+  "type": 33,
+  "atk": 1500,
+  "def": 2000,
+  "level": 5,
+  "race": 16384,
+  "attribute": 2,
+  "category": 0,
+  "name": "Ttf Cat \"Nah\"",
+  "desc": "Nếu bạn không điều khiển quái thú nào (Hiệu ứng Nhanh): Bạn có thể Triệu hồi Đặc biệt lá bài này từ tay của bạn.\n\nNếu lá bài này được Triệu hồi Thường hoặc Triệu hồi Đặc biệt: Bạn có thể thêm 1 quái thú “Ttf” có Cấp 4 hoặc thấp hơn từ Bộ bài của bạn lên tay.\nBạn chỉ có thể sử dụng hiệu ứng này của “Ttf Cat ‘Nah’” một lần mỗi lượt.\n\nMột lần mỗi lượt: Bạn có thể phá huỷ lá bài này; nếu làm vậy, bạn có thể úp 1 lá Phép “Ttf” trực tiếp từ Bộ bài của bạn lên Sân của bạn.",
+  "strings": []
+}

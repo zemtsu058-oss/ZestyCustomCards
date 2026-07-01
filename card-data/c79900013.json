@@ -1,0 +1,18 @@
+{
+  "id": 79900013,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Green Reboot",
+  "desc": "If your opponent activate a Spell Card or effect: negate the activation, and if you do, your opponent set as many Spell Cards from their hand to their field as possible. Neither player can activate Set Spell Card until the end of the next turn.\nNeither player can activate Spell Card or effect in response to this card activation.",
+  "strings": [
+    "Negate opponent's Spell activation/effect"
+  ]
+}

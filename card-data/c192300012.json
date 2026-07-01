@@ -1,0 +1,18 @@
+{
+  "id": 192300012,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 1048580,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "Tenshei",
+  "desc": "If your LP are 2000 or less, you can activate this card from your hand, also the activation and effect of this card cannot be negated. When your opponent activates a card or effect while you control \"Wezaemon the Tombguard\": Negate that effect, and if you do, banish all cards your opponent controls in the same column as that card, then gain 800 LP for each card banished by this effect. You can only activate 1 \"Tenshei\" per turn.",
+  "strings": [
+    "Negate and banish cards in the same column"
+  ]
+}

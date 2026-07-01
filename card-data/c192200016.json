@@ -1,0 +1,19 @@
+{
+  "id": 192200016,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1922,
+  "type": 65538,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 65576,
+  "name": "Iris Wand - Dream Magical!",
+  "desc": "Apply 1 of these effects (but you can only use each effect once per turn):\n● Send 1 LIGHT Fairy monster from your Extra Deck to the GY; return 1 card your opponent controls to the hand.\n● If your opponent controls a monster that was Special Summoned from the Deck or Extra Deck: Draw 2 cards.",
+  "strings": [
+    "Send 1 LIGHT Fairy from Extra Deck to GY; return 1 opponent card to hand",
+    "Draw 2 cards"
+  ]
+}

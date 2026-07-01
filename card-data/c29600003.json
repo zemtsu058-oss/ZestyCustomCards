@@ -1,0 +1,19 @@
+{
+  "id": 29600003,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 296,
+  "type": 67108897,
+  "atk": 1500,
+  "def": 130,
+  "level": 2,
+  "race": 2,
+  "attribute": 2,
+  "category": 0,
+  "name": "Witchcrafter Unit Furnacer",
+  "desc": "2 Spellcaster monsters, including a \"Witchcrafter\" monster\nDuring your Main Phase: You can discard 1 card; draw 2 cards.\nDuring your Main Phase: You can discard 1 card; send 1 \"Witchcrafter\" card from your Deck to the GY.\nYou can only use each effect of \"Witchcrafter Unit Furnacer\" once per turn.",
+  "strings": [
+    "[Monster] Discard 1 card, draw 2 cards",
+    "[Monster] Discard 1 card, send 1 Witchcrafter card from Deck to GY"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": 32100002,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 321,
+  "type": 8388641,
+  "atk": 3000,
+  "def": 2500,
+  "level": 8,
+  "race": 1024,
+  "attribute": 2,
+  "category": 268632090,
+  "name": "Kanzashi the Rikka Flower",
+  "desc": "2+ level 8 monster\n(You can also xyz summon this card by using your kanzashi the rikka queen)\nYou can return 3 Rikka monster in your GY, draw 2 card\nDetach 2 materials: When you opponent active a card effect, negate that effect then tribute 1 random card in your opponent hand. This is a quick effect if this card has a plant monster as material.\nDetach 1 materials from this card, add from you deck to your hand 1 Rikka card.",
+  "strings": [
+    "Xyz Summon using Kanzashi the Rikka Queen",
+    "Return 3 Rikka monsters to draw 2",
+    "Negate effect and Tribute 1 card in opponent's hand",
+    "Search 1 Rikka card from Deck"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": 99009,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 33,
+  "atk": 0,
+  "def": 0,
+  "level": 4,
+  "race": 32,
+  "attribute": 32,
+  "category": 0,
+  "name": "Cây Súng Ngàn Năm",
+  "desc": "When your opponent activates a card or effect while this card is in your hand (Quick Effect): You can pay 1000 LP; negate the activation, and if you do, destroy that card. Then, look at your opponent's hand, and if you do, choose 1 card from it and discard it.\nIf this activated card's effect is negated by your opponent's card effect: You win the Duel.\nYou can only activate 1 \"Cây Súng Ngàn Năm\" per turn.",
+  "strings": []
+}

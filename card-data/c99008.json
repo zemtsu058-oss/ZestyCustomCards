@@ -1,0 +1,16 @@
+{
+  "id": 99008,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 0,
+  "type": 33,
+  "atk": 0,
+  "def": 0,
+  "level": 1,
+  "race": 16384,
+  "attribute": 1,
+  "category": 0,
+  "name": "A VERY HUMANITY SLIME",
+  "desc": "(Quick Effect): You can discard this card; make your opponent reveal 1 LIGHT Dragon Normal monster with 3000 ATK/2500 DEF from their hand or Deck, and if they do, you can add 1 \"Droll & Lock Bird\" from your Deck to your hand, also your \"Droll & Lock Bird\" effect cannot be negated this turn. Cards and effects cannot be activated in response to this effect's activation. You can only use this effect of \"A very humanity Slime\" once per Duel.",
+  "strings": []
+}

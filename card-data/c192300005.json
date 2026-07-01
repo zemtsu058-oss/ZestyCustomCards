@@ -1,0 +1,21 @@
+{
+  "id": 192300005,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 1923,
+  "type": 130,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 0,
+  "name": "The End of Greatest Warrior",
+  "desc": "When this card is activated: You can activate 1 of these effects.\n● If you control no \"Wezaemon the Tombguard\": Special Summon 1 \"Wezaemon the Tombguard\" from your Deck.\n● If you control \"Wezaemon the Tombguard\": Set 1 Spell/Trap that mentions \"Wezaemon the Tombguard\" directly from your Deck. It can be activated this turn.\nFor the rest of this turn after this effect resolves, you cannot activate monster effects on the field or in the GY, except \"Wezaemon the Tombguard\" or monsters that mention it. If a \"Wezaemon the Tombguard\" you control leaves the field: You can pay 800 LP and banish this card from your GY; add 1 \"Wezaemon the Tombguard\" from your Deck or GY to your hand. You can only use each effect of \"The End of Greatest Warrior\" once per turn.",
+  "strings": [
+    "Activate an effect",
+    "Add 1 \"Wezaemon the Tombguard\" from your Deck or GY",
+    "Special Summon 1 \"Wezaemon the Tombguard\" from your Deck",
+    "Set 1 Spell/Trap that mentions \"Wezaemon the Tombguard\" from your Deck"
+  ]
+}

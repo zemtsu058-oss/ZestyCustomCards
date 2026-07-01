@@ -1,0 +1,21 @@
+{
+  "id": 32100005,
+  "ot": 32,
+  "alias": 0,
+  "setcode": 321,
+  "type": 131074,
+  "atk": 0,
+  "def": 0,
+  "level": 0,
+  "race": 0,
+  "attribute": 0,
+  "category": 6423072,
+  "name": "Rikka Foliage",
+  "desc": "When this card is activated: You can add 1 \"Rikka\" monster from your Deck or GY to your hand. You can only use this effect of \"Rikka Foliage\" once per turn.\nIf this card is sent to the GY: You can target 2 \"Rikka\" monsters in your GY; return them to the Deck, then add this card to your hand. You can only use this effect of \"Rikka Foliage\" once per turn.\nPlant monsters you control gain 1200 ATK and 1000 DEF.\n(Quick Effect): You can Tribute this card, then target 1 \"Rikka\" monster you control; Special Summon 1 \"Rikka\" monster with the same Level from your Deck, then you can Xyz Summon 1 \"Rikka\" monster, and if you do, that Xyz monster is unaffected by card effects this turn.",
+  "strings": [
+    "Add 1 Rikka monster from Deck or GY",
+    "Recycle 2 Rikka monsters to return to hand",
+    "Tribute this card to SS and Xyz Summon",
+    "Xyz Summon 1 Rikka monster"
+  ]
+}
