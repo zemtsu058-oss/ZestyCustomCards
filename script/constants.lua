@@ -8,5 +8,7 @@ SET_HYPERDIMENSION                = 0x1291
 SET_CASTLE_OF_DREAMS               = 0x782
 SET_WEZAEMON                       = 0x783
 SET_FLOWER_SPIRIT                = 0x702
+SET_HALOVIAN                       = 0x987
+SET_STAR_RAIL                      = 0x986
 -- Custom counter
 COUNTER_MANA                      = 0x177
