@@ -1,8 +1,28 @@
---Little Princess of the Nightbloom
+-- ============================================================
+-- Card Name: Little Princess of the Nightbloom
+-- Passcode : 730115
+-- Type     : Spell / Normal
+-- Archetype: Nightbloom (0xb24), Flower Spirit (0x702)
+-- ============================================================
+-- Effect 0: Always treated as a "Flower Spirit" card.
+-- Effect 1: Cannot be Set. You can activate this card from your
+--           hand during your opponent's turn.
+-- Effect 2: If this card is activated during your turn: Look at your
+--           opponent's Extra Deck, banish 1 card from it face-down,
+--           then add 1 "Nightbloom" Spell from your Deck to your hand.
+-- Effect 3: If this card is activated during your opponent's turn:
+--           Place 1 Field Spell from your Deck in your Field Zone,
+--           then destroy 1 card your opponent controls.
+-- Oath    : You can only activate 1 "Little Princess of the Nightbloom" per turn.
+-- Restriction: You cannot use cards in your Deck, except Spell Cards.
+-- ============================================================
+
 local s,id=GetID()
 
 function s.initial_effect(c)
-	--Always treated as a "Flower Spirit" card
+	-- ============================================================
+	-- Effect 0 — Always treated as a "Flower Spirit" card
+	-- ============================================================
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
@@ -10,39 +30,64 @@ function s.initial_effect(c)
 	e0:SetValue(0x702)
 	c:RegisterEffect(e0)
 
-	--Cannot be Set
+	-- ============================================================
+	-- Effect 1 — Cannot be Set
+	-- ============================================================
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_CANNOT_SSET)
 	c:RegisterEffect(e1)
 
-	--Your turn: Normal Spell activation
+	-- ============================================================
+	-- Effect 1b — Activate from hand during opponent's turn
+	-- ============================================================
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_REMOVE+CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e2:SetType(EFFECT_TYPE_ACTIVATE)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetCountLimit(1,id+EFFECT_COUNT_CODE_OATH)
-	e2:SetCondition(s.selfcon)
-	e2:SetCost(s.cost)
-	e2:SetTarget(s.selftg)
-	e2:SetOperation(s.selfop)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e2:SetCode(EFFECT_BECOME_QUICK)
+	e2:SetRange(LOCATION_HAND)
 	c:RegisterEffect(e2)
 
-	--Opponent's turn: Quick Effect from hand
 	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_DESTROY)
-	e3:SetType(EFFECT_TYPE_QUICK_O)
-	e3:SetCode(EVENT_FREE_CHAIN)
+	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e3:SetCode(EFFECT_QP_ACT_IN_NTPHAND)
 	e3:SetRange(LOCATION_HAND)
-	e3:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
-	e3:SetCountLimit(1,id+EFFECT_COUNT_CODE_OATH)
-	e3:SetCondition(s.oppcon)
-	e3:SetCost(s.oppcost)
-	e3:SetTarget(s.opptg)
-	e3:SetOperation(s.oppop)
 	c:RegisterEffect(e3)
+
+	-- ============================================================
+	-- Effect 2 — Your turn: Normal Spell activation
+	-- ============================================================
+	local e4=Effect.CreateEffect(c)
+	e4:SetCategory(CATEGORY_REMOVE+CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e4:SetType(EFFECT_TYPE_ACTIVATE)
+	e4:SetCode(EVENT_FREE_CHAIN)
+	e4:SetCountLimit(1,id+EFFECT_COUNT_CODE_OATH)
+	e4:SetCondition(s.selfcon)
+	e4:SetCost(s.cost)
+	e4:SetTarget(s.selftg)
+	e4:SetOperation(s.selfop)
+	c:RegisterEffect(e4)
+
+	-- ============================================================
+	-- Effect 3 — Opponent's turn: Activation from hand onto field
+	-- ============================================================
+	local e5=Effect.CreateEffect(c)
+	e5:SetCategory(CATEGORY_DESTROY)
+	e5:SetType(EFFECT_TYPE_ACTIVATE)
+	e5:SetCode(EVENT_FREE_CHAIN)
+	e5:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_MAIN_END)
+	e5:SetCountLimit(1,id+EFFECT_COUNT_CODE_OATH)
+	e5:SetCondition(s.oppcon)
+	e5:SetCost(s.cost)
+	e5:SetTarget(s.opptg)
+	e5:SetOperation(s.oppop)
+	c:RegisterEffect(e5)
 end
 
+-- ============================================================
+-- Deck Restriction: Lock Deck cards except Spell Cards
+-- ============================================================
 function s.lock_deck(c,tp)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
@@ -67,24 +112,34 @@ function s.lock_deck(c,tp)
 
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_RANGE)
 	e3:SetCode(EFFECT_CANNOT_TO_GRAVE)
 	e3:SetTargetRange(LOCATION_DECK,0)
-	e3:SetTarget(function(e,tc) return not tc:IsType(TYPE_SPELL) end)
+	e3:SetTarget(function(e,tc)
+		return tc:IsLocation(LOCATION_DECK) and tc:IsControler(e:GetHandlerPlayer()) and not tc:IsType(TYPE_SPELL)
+	end)
 	e3:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e3,tp)
 
-	local e4=e3:Clone()
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_FIELD)
+	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e4:SetCode(EFFECT_CANNOT_REMOVE)
+	e4:SetTargetRange(1,0)
+	e4:SetTarget(function(e,tc,p)
+		return tc:IsLocation(LOCATION_DECK) and tc:IsControler(e:GetHandlerPlayer()) and not tc:IsType(TYPE_SPELL)
+	end)
+	e4:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e4,tp)
 
-	local e5=e3:Clone()
+	local e5=Effect.CreateEffect(c)
+	e5:SetType(EFFECT_TYPE_FIELD)
 	e5:SetCode(EFFECT_CANNOT_TO_HAND)
+	e5:SetTargetRange(LOCATION_DECK,0)
+	e5:SetTarget(function(e,tc)
+		return tc:IsLocation(LOCATION_DECK) and tc:IsControler(e:GetHandlerPlayer()) and not tc:IsType(TYPE_SPELL)
+	end)
+	e5:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e5,tp)
-end
-
-function s.selfcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()==tp
 end
 
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -92,12 +147,19 @@ function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	s.lock_deck(e:GetHandler(),tp)
 end
 
+-- ============================================================
+-- Effect 2: Your Turn Logic
+-- ============================================================
+function s.selfcon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()==tp
+end
+
 function s.thfilter(c)
 	return c:IsSetCard(0xb24) and c:IsType(TYPE_SPELL) and c:IsAbleToHand()
 end
 
 function s.selftg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_EXTRA)>0 end
+	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_EXTRA)>0 and Duel.IsPlayerCanRemove(tp) end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_EXTRA)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
@@ -109,6 +171,7 @@ function s.selfop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local sg=g:FilterSelect(tp,Card.IsAbleToRemove,1,1,nil,tp,POS_FACEDOWN)
 	if #sg>0 and Duel.Remove(sg,POS_FACEDOWN,REASON_EFFECT)>0 then
+		Duel.ShuffleExtra(1-tp)
 		local thg=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_DECK,0,nil)
 		if #thg>0 then
 			Duel.BreakEffect()
@@ -117,18 +180,16 @@ function s.selfop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.SendtoHand(hg,nil,REASON_EFFECT)
 			Duel.ConfirmCards(1-tp,hg)
 		end
+	else
+		Duel.ShuffleExtra(1-tp)
 	end
 end
 
+-- ============================================================
+-- Effect 3: Opponent's Turn Logic
+-- ============================================================
 function s.oppcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp
-end
-
-function s.oppcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsAbleToGraveAsCost() end
-	Duel.SendtoGrave(c,REASON_COST)
-	s.lock_deck(c,tp)
 end
 
 function s.fieldfilter(c,tp)
